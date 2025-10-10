@@ -1,0 +1,51 @@
+{
+  "name": "backend",
+  "$schema": "../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "backend/src",
+  "projectType": "application",
+  "tags": ["type:app", "scope:backend", "language:kotlin"],
+  "targets": {
+    "build": {
+      "executor": "nx:run-commands",
+      "outputs": ["{projectRoot}/build"],
+      "options": {
+        "command": "./gradlew build -x test",
+        "cwd": "backend"
+      },
+      "configurations": {
+        "production": {
+          "command": "./gradlew build"
+        }
+      }
+    },
+    "dev": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "./gradlew quarkusDev",
+        "cwd": "backend"
+      }
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "outputs": ["{projectRoot}/build/test-results"],
+      "options": {
+        "command": "./gradlew test",
+        "cwd": "backend"
+      }
+    },
+    "clean": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "./gradlew clean",
+        "cwd": "backend"
+      }
+    },
+    "dependencies": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "./gradlew dependencies",
+        "cwd": "backend"
+      }
+    }
+  }
+}

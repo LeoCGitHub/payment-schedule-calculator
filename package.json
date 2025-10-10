@@ -1,0 +1,40 @@
+{
+  "name": "payment-schedule-calculator",
+  "version": "1.0.0",
+  "description": "Calculateur d'échéancier de paiement avec interface React.",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nx run-many --target=dev --projects=frontend,backend --parallel=2",
+    "dev:frontend": "nx dev frontend",
+    "dev:backend": "nx dev backend",
+    "build": "nx run-many --target=build --all --parallel=2",
+    "build:frontend": "nx build frontend",
+    "build:backend": "nx build backend",
+    "test": "nx run-many --target=test --all --parallel=2",
+    "test:frontend": "nx test frontend",
+    "test:backend": "nx test backend",
+    "lint": "nx run-many --target=lint --all",
+    "format": "nx run-many --target=format --all",
+    "graph": "nx graph",
+    "affected": "nx affected",
+    "affected:build": "nx affected --target=build",
+    "affected:test": "nx affected --target=test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LeoCGitHub/payment-schedule-calculator.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/LeoCGitHub/payment-schedule-calculator/issues"
+  },
+  "homepage": "https://github.com/LeoCGitHub/payment-schedule-calculator#readme",
+  "devDependencies": {
+    "@nx/js": "^21.6.4",
+    "@nx/vite": "^21.6.4",
+    "nx": "^21.6.4"
+  }
+}
