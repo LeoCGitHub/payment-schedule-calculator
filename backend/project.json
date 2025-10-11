@@ -46,6 +46,27 @@
         "command": "./gradlew dependencies",
         "cwd": "backend"
       }
+    },
+    "docker:build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "docker build -t payment-schedule-backend:latest .",
+        "cwd": "backend"
+      }
+    },
+    "docker:run": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "docker run -p 8080:8080 --name payment-schedule-backend payment-schedule-backend:latest",
+        "cwd": "backend"
+      }
+    },
+    "docker:stop": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "docker stop payment-schedule-backend && docker rm payment-schedule-backend",
+        "cwd": "backend"
+      }
     }
   }
 }

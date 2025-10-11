@@ -28,6 +28,22 @@
     },
     "dev": {
       "cache": false
+    },
+    "docker:build": {
+      "cache": true,
+      "dependsOn": ["build"],
+      "inputs": ["production", "^production"]
+    },
+    "docker:up": {
+      "cache": false,
+      "dependsOn": ["docker:build"]
+    },
+    "docker:down": {
+      "cache": false
+    },
+    "deploy": {
+      "cache": false,
+      "dependsOn": ["build", "test", "lint"]
     }
   },
   "plugins": []

@@ -1,0 +1,221 @@
+.schedule-container {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.schedule-summary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  flex-shrink: 0;
+}
+
+.schedule-summary h3 {
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+}
+
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+}
+
+.summary-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.summary-label {
+  font-size: 0.875rem;
+  opacity: 0.9;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.summary-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.summary-value.highlight {
+  color: #ffd700;
+}
+
+.schedule-table-wrapper {
+  background: white;
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.table-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.table-header h3 {
+  margin: 0;
+  color: #333;
+  flex-shrink: 0;
+}
+
+.summary-inline {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.summary-inline-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0.8rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 6px;
+  color: white;
+  font-size: 0.85rem;
+  white-space: nowrap;
+}
+
+.summary-inline-label {
+  font-weight: 500;
+  opacity: 0.95;
+}
+
+.summary-inline-value {
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+.summary-inline-value.highlight {
+  color: #ffd700;
+}
+
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.schedule-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+  min-width: 1400px;
+}
+
+.schedule-table thead {
+  background-color: #f8f9fa;
+}
+
+.schedule-table th {
+  padding: 1rem 0.75rem;
+  text-align: left;
+  font-weight: 600;
+  color: #555;
+  border-bottom: 2px solid #dee2e6;
+  white-space: nowrap;
+}
+
+.schedule-table td {
+  padding: 0.5rem 0.25rem;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.schedule-table tbody tr:hover {
+  background-color: #f8f9fa;
+  transition: background-color 0.2s;
+}
+
+.schedule-table tbody tr:last-child {
+  font-weight: 600;
+  background-color: #f1f3f5;
+}
+
+.schedule-table .amount {
+  text-align: right;
+  font-family: 'Courier New', monospace;
+}
+
+.schedule-table .interest {
+  color: #e74c3c;
+}
+
+.schedule-table .balance {
+  color: #27ae60;
+  font-weight: 600;
+}
+
+@media (max-width: 1200px) {
+  .summary-inline {
+    gap: 0.75rem;
+  }
+
+  .summary-inline-item {
+    font-size: 0.8rem;
+    padding: 0.35rem 0.6rem;
+  }
+
+  .summary-inline-value {
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .table-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .summary-inline {
+    width: 100%;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.5rem;
+  }
+
+  .summary-inline-item {
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .schedule-summary {
+    padding: 1.5rem;
+  }
+
+  .summary-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .schedule-table-wrapper {
+    padding: 1rem;
+  }
+
+  .schedule-table {
+    font-size: 0.85rem;
+  }
+
+  .schedule-table th,
+  .schedule-table td {
+    padding: 0.5rem 0.25rem;
+  }
+
+  .summary-value {
+    font-size: 1.25rem;
+  }
+}

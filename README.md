@@ -213,6 +213,83 @@ Le JAR sera généré dans `build/quarkus-app/`
 ./gradlew dependencies       # Afficher l'arbre des dépendances
 ```
 
+## 📝 Utilisation de l'application
+
+### Interface utilisateur
+
+1. Ouvrez le frontend dans votre navigateur (http://localhost:5173 en dev ou http://localhost:3000 en prod)
+2. Remplissez le formulaire de calcul d'échéancier :
+   - **Montant du prêt (€)** : Le montant total à emprunter (ex: 10000)
+   - **Taux d'intérêt annuel (%)** : Le taux annuel en pourcentage (ex: 3.5)
+   - **Nombre de mensualités** : Le nombre de paiements mensuels (ex: 24)
+   - **Date de début** : La date du premier paiement (par défaut: aujourd'hui)
+3. Cliquez sur **"Calculer l'échéancier"**
+4. Visualisez les résultats :
+   - **Résumé** : Montant total, principal et intérêts totaux
+   - **Tableau détaillé** : Pour chaque mensualité
+     - Numéro de paiement
+     - Date
+     - Montant de la mensualité
+     - Part de principal
+     - Part d'intérêts
+     - Solde restant
+
+### API REST
+
+L'API backend expose un endpoint pour calculer l'échéancier.
+
+#### Endpoint : POST `/api/payment-schedule/calculate`
+
+**Request Body :**
+```json
+{
+  "amount": 10000,
+  "interestRate": 3.5,
+  "numberOfPayments": 24,
+  "startDate": "2025-10-10"
+}
+```
+
+**Response :**
+```json
+{
+  "payments": [
+    {
+      "paymentNumber": 1,
+      "date": "2025-10-10",
+      "paymentAmount": 432.10,
+      "principal": 402.93,
+      "interest": 29.17,
+      "remainingBalance": 9597.07
+    },
+    {
+      "paymentNumber": 2,
+      "date": "2025-11-10",
+      "paymentAmount": 432.10,
+      "principal": 404.10,
+      "interest": 28.00,
+      "remainingBalance": 9192.97
+    }
+    // ... 22 autres mensualités
+  ],
+  "totalAmount": 10370.40,
+  "totalInterest": 370.40,
+  "totalPrincipal": 10000.00
+}
+```
+
+**Exemple avec curl :**
+```bash
+curl -X POST http://localhost:8080/api/payment-schedule/calculate \
+  -H "Content-Type: application/json" \
+  -d '{
+    "amount": 10000,
+    "interestRate": 3.5,
+    "numberOfPayments": 24,
+    "startDate": "2025-10-10"
+  }'
+```
+
 ## Déploiement Docker
 
 L'application complète (Frontend + Backend + PostgreSQL) peut être déployée avec Docker.

@@ -27,6 +27,13 @@
         "cwd": "frontend"
       }
     },
+    "test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "echo 'No tests configured yet for frontend'",
+        "cwd": "frontend"
+      }
+    },
     "lint": {
       "executor": "nx:run-commands",
       "options": {
@@ -45,6 +52,27 @@
       "executor": "nx:run-commands",
       "options": {
         "command": "prettier --check \"src/**/*.{js,jsx,ts,tsx,json,css,scss,md}\"",
+        "cwd": "frontend"
+      }
+    },
+    "docker:build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "docker build -t payment-schedule-frontend:latest .",
+        "cwd": "frontend"
+      }
+    },
+    "docker:run": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "docker run -p 3000:80 --name payment-schedule-frontend payment-schedule-frontend:latest",
+        "cwd": "frontend"
+      }
+    },
+    "docker:stop": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "docker stop payment-schedule-frontend && docker rm payment-schedule-frontend",
         "cwd": "frontend"
       }
     }
