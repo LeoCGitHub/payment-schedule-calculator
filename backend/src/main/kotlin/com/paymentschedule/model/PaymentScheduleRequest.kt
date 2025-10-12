@@ -7,7 +7,7 @@ import java.time.LocalDate
 data class PaymentScheduleRequest(
     val periodicity: Int,
     val contractDuration: Int,
-    val assetValue: BigDecimal,
+    val assetAmount: BigDecimal,
     val purchaseOptionAmount: BigDecimal,
     @param:JsonFormat(pattern = "dd/MM/yyyy")
     val firstPaymentDate: LocalDate,

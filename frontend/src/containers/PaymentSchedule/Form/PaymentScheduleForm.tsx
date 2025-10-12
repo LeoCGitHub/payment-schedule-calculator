@@ -1,28 +1,40 @@
-import { useState, useEffect } from 'react';
-import './PaymentScheduleForm.css';
+import { useState, useEffect, ChangeEvent, FormEvent } from 'react';
+import './PaymentScheduleForm.scss';
 import {
   convertToFrench,
   convertToISO,
 } from '../../../utils/formatter/DateFormatter';
+import {
+  FormData,
+  FormErrors,
+  PaymentScheduleRequest,
+} from '../../../types/payment.types';
+
+export interface PaymentScheduleFormProps {
+  onSubmit: (request: PaymentScheduleRequest) => void;
+  loading: boolean;
+  initialData?: FormData;
+  onDataChange?: (data: FormData) => void;
+}
 
 export default function PaymentScheduleForm({
   onSubmit,
   loading,
   initialData,
   onDataChange,
-}) {
-  const [formData, setFormData] = useState(
+}: PaymentScheduleFormProps): React.JSX.Element {
+  const [formData, setFormData] = useState<FormData>(
     initialData || {
       periodicity: 'Trimestriel',
       contractDuration: '48',
       assetValue: '150000',
-      purchaseOptionAmount: '1500',
+      purchaseOptionValue: '1500',
       firstPaymentDate: '17/09/2025',
       rentAmount: '10000',
     }
   );
 
-  const [errors, setErrors] = useState({});
+  const [errors, setErrors] = useState<FormErrors>({});
 
   useEffect(() => {
     if (initialData) {
@@ -30,7 +42,9 @@ export default function PaymentScheduleForm({
     }
   }, [initialData]);
 
-  const handleChange = e => {
+  const handleChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ): void => {
     const { name, value } = e.target;
 
     let processedValue = value;
@@ -39,7 +53,7 @@ export default function PaymentScheduleForm({
       processedValue = convertToFrench(value);
     }
 
-    const newFormData = {
+    const newFormData: FormData = {
       ...formData,
       [name]: processedValue,
     };
@@ -53,8 +67,8 @@ export default function PaymentScheduleForm({
     validateField(name, processedValue);
   };
 
-  const validateField = (name, value) => {
-    const newErrors = { ...errors };
+  const validateField = (name: string, value: string): void => {
+    const newErrors: FormErrors = { ...errors };
 
     switch (name) {
       case 'contractDuration':
@@ -87,12 +101,12 @@ export default function PaymentScheduleForm({
           delete newErrors.firstPaymentDate;
         }
         break;
-      case 'purchaseOptionAmount':
+      case 'purchaseOptionValue':
         if (!value) {
-          newErrors.purchaseOptionAmount =
+          newErrors.purchaseOptionValue =
             "Le montant de l'option d'achat est requis";
         } else {
-          delete newErrors.purchaseOptionAmount;
+          delete newErrors.purchaseOptionValue;
         }
         break;
       default:
@@ -102,8 +116,8 @@ export default function PaymentScheduleForm({
     setErrors(newErrors);
   };
 
-  const validate = () => {
-    const newErrors = {};
+  const validate = (): boolean => {
+    const newErrors: FormErrors = {};
 
     if (
       !formData.contractDuration ||
@@ -125,8 +139,8 @@ export default function PaymentScheduleForm({
         'La date de la première échéance est requise';
     }
 
-    if (!formData.purchaseOptionAmount) {
-      newErrors.purchaseOptionAmount =
+    if (!formData.purchaseOptionValue) {
+      newErrors.purchaseOptionValue =
         "Le montant de l'option d'achat est requis";
     }
 
@@ -134,39 +148,38 @@ export default function PaymentScheduleForm({
     return Object.keys(newErrors).length === 0;
   };
 
-  const isFormValid = () => {
+  const isFormValid = (): boolean => {
     return (
-      formData.contractDuration &&
+      !!formData.contractDuration &&
       parseInt(formData.contractDuration) > 0 &&
-      formData.assetValue &&
+      !!formData.assetValue &&
       parseFloat(formData.assetValue) > 0 &&
-      formData.rentAmount &&
+      !!formData.rentAmount &&
       parseFloat(formData.rentAmount) > 0 &&
-      formData.firstPaymentDate &&
-      formData.purchaseOptionAmount &&
+      !!formData.firstPaymentDate &&
       Object.keys(errors).length === 0
     );
   };
 
-  const handleSubmit = e => {
+  const handleSubmit = (e: FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
 
     if (!validate()) {
       return;
     }
 
-    const periodicityMap = {
+    const periodicityMap: Record<string, number> = {
       Mensuel: 1,
       Trimestriel: 3,
       Semestriel: 6,
       Annuel: 12,
     };
 
-    const request = {
+    const request: PaymentScheduleRequest = {
       periodicity: periodicityMap[formData.periodicity] || 3,
       contractDuration: parseInt(formData.contractDuration),
-      assetValue: parseFloat(formData.assetValue),
-      purchaseOptionAmount: parseFloat(formData.purchaseOptionAmount),
+      assetAmount: parseFloat(formData.assetValue),
+      purchaseOptionAmount: parseFloat(formData.purchaseOptionValue),
       firstPaymentDate: formData.firstPaymentDate,
       rentAmount: parseFloat(formData.rentAmount),
     };
@@ -269,22 +282,22 @@ export default function PaymentScheduleForm({
         </div>
 
         <div className="form-group">
-          <label htmlFor="purchaseOptionAmount">
+          <label htmlFor="purchaseOptionValue">
             Valeur de l&apos;option d&apos;achat
           </label>
           <input
             type="number"
-            id="purchaseOptionAmount"
-            name="purchaseOptionAmount"
-            value={formData.purchaseOptionAmount}
+            id="purchaseOptionValue"
+            name="purchaseOptionValue"
+            value={formData.purchaseOptionValue}
             onChange={handleChange}
             step="1"
             min="0"
             disabled={loading}
             className={errors.assetValue ? 'input-error' : ''}
           />
-          {errors.purchaseOptionAmount && (
-            <span className="error">{errors.purchaseOptionAmount}</span>
+          {errors.purchaseOptionValue && (
+            <span className="error">{errors.purchaseOptionValue}</span>
           )}
         </div>
 

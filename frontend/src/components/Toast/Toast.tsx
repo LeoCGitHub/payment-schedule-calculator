@@ -1,12 +1,21 @@
 import { useEffect } from 'react';
-import './Toast.css';
+import './Toast.scss';
+
+export type ToastType = 'error' | 'success' | 'info';
+
+export interface ToastProps {
+  message: string;
+  type?: ToastType;
+  onClose?: () => void;
+  duration?: number;
+}
 
 export default function Toast({
   message,
   type = 'error',
   onClose,
   duration = 5000,
-}) {
+}: ToastProps): React.JSX.Element | null {
   useEffect(() => {
     if (duration && onClose) {
       const timer = setTimeout(() => {

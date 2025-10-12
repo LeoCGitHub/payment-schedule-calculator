@@ -3,33 +3,43 @@ import PaymentScheduleForm from '../containers/PaymentSchedule/Form/PaymentSched
 import PaymentScheduleTable from '../containers/PaymentSchedule/Table/PaymentScheduleTable';
 import Toast from '../components/Toast/Toast';
 import { paymentScheduleApi } from '../services/api';
-import './App.css';
+import {
+  PaymentScheduleRequest,
+  FormData,
+  PaymentScheduleResponse,
+} from '../types/payment.types';
+import './App.scss';
 
-function App() {
-  const [schedule, setSchedule] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const [formData, setFormData] = useState({
+function App(): React.JSX.Element {
+  const [schedule, setSchedule] = useState<PaymentScheduleResponse | null>(
+    null
+  );
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
+  const [formData, setFormData] = useState<FormData>({
     periodicity: 'Trimestriel',
     contractDuration: '48',
     assetValue: '150000',
-    purchaseOptionAmount: '1500',
+    purchaseOptionValue: '1500',
     firstPaymentDate: '17/09/2025',
     rentAmount: '10000',
   });
 
-  const handleSubmit = async request => {
+  const handleSubmit = async (
+    request: PaymentScheduleRequest
+  ): Promise<void> => {
     setLoading(true);
     setError(null);
 
     try {
       const result = await paymentScheduleApi.calculateSchedule(request);
-      setSchedule(result);
+      setSchedule(result as unknown as PaymentScheduleResponse);
     } catch (err) {
-      setError(
-        err.message || "Une erreur est survenue lors du calcul de l'échéancier"
-      );
-      console.error('Error calculating schedule:', err);
+      const errorMessage =
+        err instanceof Error
+          ? err.message
+          : "Une erreur est survenue lors du calcul de l'échéancier";
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }

@@ -50,21 +50,28 @@
     "docker:build": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "docker build -t payment-schedule-backend:latest .",
+        "command": "docker build -t payment-schedule-calculator-backend:latest -f Dockerfile .",
+        "cwd": "backend"
+      }
+    },
+    "docker:build-native": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "docker build -t payment-schedule-calculator-backend:latest -f Dockerfile.native .",
         "cwd": "backend"
       }
     },
     "docker:run": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "docker run -p 8080:8080 --name payment-schedule-backend payment-schedule-backend:latest",
+        "command": "docker run -p 8080:8080 --name payment-schedule-calculator-backend payment-schedule-calculator-backend:latest",
         "cwd": "backend"
       }
     },
     "docker:stop": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "docker stop payment-schedule-backend && docker rm payment-schedule-backend",
+        "command": "docker stop payment-schedule-calculator-backend && docker rm payment-schedule-calculator-backend",
         "cwd": "backend"
       }
     }

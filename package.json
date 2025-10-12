@@ -25,8 +25,7 @@
     "docker:up": "docker-compose up -d",
     "docker:down": "docker-compose down",
     "docker:logs": "docker-compose logs -f",
-    "deploy:local": "npm run build && npm run docker:build && npm run docker:up",
-    "check:backend": "./check-backend.sh"
+    "deploy:local": "npm run build && npm run docker:build && npm run docker:up"
   },
   "repository": {
     "type": "git",

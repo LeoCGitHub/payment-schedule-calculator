@@ -5,10 +5,6 @@ FROM node:20-alpine AS builder
 
 WORKDIR /app
 
-# Build argument for API URL
-ARG VITE_API_URL=http://localhost:9090/api
-ENV VITE_API_URL=${VITE_API_URL}
-
 # Copy package files
 COPY package*.json ./
 
@@ -30,8 +26,12 @@ COPY --from=builder /app/dist /usr/share/nginx/html
 # Copy custom nginx configuration
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
+COPY scripts/dockerfile-env.sh /usr/local/bin/dockerfile-env.sh
+RUN chmod +x /usr/local/bin/dockerfile-env.sh
+
 # Expose port 80
 EXPOSE 80
 
+ENTRYPOINT ["/usr/local/bin/dockerfile-env.sh"]
 # Start nginx
 CMD ["nginx", "-g", "daemon off;"]

@@ -19,7 +19,7 @@ class PaymentScheduleService {
         var totalInterestAmount = BigDecimal.ZERO
         var totalRepaymentAmount = BigDecimal.ZERO
         var actualizedTotalAmount = BigDecimal.ZERO
-        var debtBeginningPeriodAmount = request.assetValue
+        var debtBeginningPeriodAmount = request.assetAmount
         val paymentScheduleLines = mutableListOf<PaymentScheduleLine>()
 
         val totalPeriods = CalculatorUtils.calculateTotalPeriods(request.contractDuration, request.periodicity)
@@ -27,7 +27,7 @@ class PaymentScheduleService {
         val actualizedRate = CalculatorUtils.calculateInternalRateOfReturn(
             request.rentAmount,
             request.purchaseOptionAmount,
-            request.assetValue,
+            request.assetAmount,
             totalPeriods
         )
 

@@ -1,11 +1,21 @@
-import './PaymentScheduleTable.css';
+import './PaymentScheduleTable.scss';
 import {
   formatCurrency,
   formatPercentage,
 } from '../../../utils/formatter/NumberFormatter';
 import { convertToFrench } from '../../../utils/formatter/DateFormatter';
+import {
+  PaymentScheduleResponse,
+  PaymentScheduleLine,
+} from '../../../types/payment.types';
 
-export default function PaymentScheduleTable({ schedule }) {
+export interface PaymentScheduleTableProps {
+  schedule: PaymentScheduleResponse | null;
+}
+
+export default function PaymentScheduleTable({
+  schedule,
+}: PaymentScheduleTableProps): React.JSX.Element | null {
   if (!schedule) {
     return null;
   }
@@ -30,44 +40,48 @@ export default function PaymentScheduleTable({ schedule }) {
               </tr>
             </thead>
             <tbody>
-              {schedule.paymentScheduleLines.map(paymentScheduleLine => (
-                <tr key={paymentScheduleLine.period}>
-                  <td>{paymentScheduleLine.period}</td>
-                  <td>{convertToFrench(paymentScheduleLine.dueDate)}</td>
-                  <td className="amount">
-                    {formatCurrency(paymentScheduleLine.rentAmount)}
-                  </td>
-                  <td className="amount">
-                    {formatPercentage(paymentScheduleLine.periodRate)}
-                  </td>
-                  <td className="amount">
-                    {formatPercentage(paymentScheduleLine.annualReferenceRate)}
-                  </td>
-                  <td className="amount interest">
-                    {formatCurrency(
-                      paymentScheduleLine.financialInterestAmount
-                    )}
-                  </td>
-                  <td className="amount">
-                    {formatCurrency(paymentScheduleLine.repaymentAmount)}
-                  </td>
-                  <td className="amount">
-                    {formatCurrency(
-                      paymentScheduleLine.debtBeginningPeriodAmount
-                    )}
-                  </td>
-                  <td className="amount balance">
-                    {formatCurrency(paymentScheduleLine.debtEndPeriodAmount)}
-                  </td>
-                  <td className="amount">
-                    {formatCurrency(
-                      paymentScheduleLine.actualizedCashFlowAmount
-                    )}
-                  </td>
-                </tr>
-              ))}
+              {schedule.paymentScheduleLines.map(
+                (paymentScheduleLine: PaymentScheduleLine) => (
+                  <tr key={paymentScheduleLine.period}>
+                    <td>{paymentScheduleLine.period}</td>
+                    <td>{convertToFrench(paymentScheduleLine.dueDate)}</td>
+                    <td className="amount">
+                      {formatCurrency(paymentScheduleLine.rentAmount)}
+                    </td>
+                    <td className="amount">
+                      {formatPercentage(paymentScheduleLine.periodRate)}
+                    </td>
+                    <td className="amount">
+                      {formatPercentage(
+                        paymentScheduleLine.annualReferenceRate
+                      )}
+                    </td>
+                    <td className="amount interest">
+                      {formatCurrency(
+                        paymentScheduleLine.financialInterestAmount
+                      )}
+                    </td>
+                    <td className="amount">
+                      {formatCurrency(paymentScheduleLine.repaymentAmount)}
+                    </td>
+                    <td className="amount">
+                      {formatCurrency(
+                        paymentScheduleLine.debtBeginningPeriodAmount
+                      )}
+                    </td>
+                    <td className="amount balance">
+                      {formatCurrency(paymentScheduleLine.debtEndPeriodAmount)}
+                    </td>
+                    <td className="amount">
+                      {formatCurrency(
+                        paymentScheduleLine.actualizedCashFlowAmount
+                      )}
+                    </td>
+                  </tr>
+                )
+              )}
               <tr key="purchaseOption">
-                <td colSpan="2">Option d'achat</td>
+                <td colSpan={2}>Option d'achat</td>
                 <td className="amount">
                   {formatCurrency(
                     schedule.purchaseOptionTotals.purchaseOptionAmount
@@ -90,7 +104,7 @@ export default function PaymentScheduleTable({ schedule }) {
                 </td>
               </tr>
               <tr key="paymentTotals" className="summary-inline-item">
-                <td colSpan="2" className="summary-inline-label highlight">
+                <td colSpan={2} className="summary-inline-label highlight">
                   Total
                 </td>
                 <td className="amount summary-inline-value highlight">

@@ -1,69 +1,241 @@
-# backend
+# Backend - Payment Schedule Calculator API
 
-This project uses Quarkus, the Supersonic Subatomic Java Framework.
+API REST pour le calcul d'échéanciers de paiement de contrats de location-financement.
 
-If you want to learn more about Quarkus, please visit its website: <https://quarkus.io/>.
+## 🚀 Technologies
 
-## Running the application in dev mode
+- **Quarkus 3.x** - Framework supersonic subatomic
+- **Kotlin 2.2** - Langage de programmation moderne
+- **Gradle Kotlin DSL** - Build tool
+- **BigDecimal** - Calculs financiers de haute précision
+- **Jakarta REST** - API REST annotations
+- **Jackson** - Sérialisation JSON
 
-You can run your application in dev mode that enables live coding using:
+## 📦 Structure
 
-```shell script
+```
+backend/
+├── src/
+│   ├── main/
+│   │   ├── kotlin/com/paymentschedule/
+│   │   │   ├── model/           # Data classes (Request/Response)
+│   │   │   ├── resource/         # REST endpoints
+│   │   │   ├── service/          # Business logic
+│   │   │   └── utils/            # Utilitaires (calculs financiers)
+│   │   └── resources/
+│   │       └── application.properties
+│   └── test/
+│       └── kotlin/               # Tests unitaires
+├── build.gradle.kts
+└── gradle/
+```
+
+## 🎯 Quick Start
+
+### Prérequis
+
+- **Java** 21+
+- **Gradle** 8+ (ou utiliser le wrapper `./gradlew`)
+
+### Démarrage en mode dev
+
+#### Avec Gradle
+
+```bash
+# Mode dev avec live reload
 ./gradlew quarkusDev
+
+# Ou depuis la racine avec NX
+npx nx serve backend
 ```
 
-> **_NOTE:_**  Quarkus now ships with a Dev UI, which is available in dev mode only at <http://localhost:8080/q/dev/>.
+L'API sera disponible sur http://localhost:9090
 
-## Packaging and running the application
+#### Avec Docker
 
-The application can be packaged using:
+```bash
+# Builder l'image
+npx nx docker-build backend
 
-```shell script
+# Ou directement avec Docker
+docker build -t payment-schedule-calculator-backend .
+
+# Démarrer le conteneur
+docker run -p 9090:9090 payment-schedule-calculator-backend
+```
+
+### Build de production
+
+```bash
+# Build du JAR
 ./gradlew build
+
+# Ou avec NX
+npx nx build backend
+
+# Le JAR sera dans build/quarkus-app/
 ```
 
-It produces the `quarkus-run.jar` file in the `build/quarkus-app/` directory.
-Be aware that it’s not an _über-jar_ as the dependencies are copied into the `build/quarkus-app/lib/` directory.
+## 📝 API Endpoints
 
-The application is now runnable using `java -jar build/quarkus-app/quarkus-run.jar`.
+### POST `/api/payment-schedule/calculate`
 
-If you want to build an _über-jar_, execute the following command:
+Calcule un échéancier de paiement.
 
-```shell script
-./gradlew build -Dquarkus.package.jar.type=uber-jar
+**Request Body:**
+```json
+{
+  "periodicity": 3,
+  "contractDuration": 48,
+  "assetValue": 150000,
+  "purchaseOptionValue": 1500,
+  "firstPaymentDate": "17/09/2025",
+  "rentAmount": 10000
+}
 ```
 
-The application, packaged as an _über-jar_, is now runnable using `java -jar build/*-runner.jar`.
-
-## Creating a native executable
-
-You can create a native executable using:
-
-```shell script
-./gradlew build -Dquarkus.native.enabled=true
+**Response:**
+```json
+{
+  "paymentScheduleLines": [
+    {
+      "period": 1,
+      "dueDate": "2025-09-17",
+      "repaymentAmount": 8523.45,
+      "debtBeginningPeriodAmount": 150000,
+      "debtEndPeriodAmount": 141476.55,
+      "periodRate": 0.014765,
+      "financialInterestAmount": 1476.55,
+      "rentAmount": 10000,
+      "annualReferenceRate": 0.060512,
+      "actualizedCashFlowAmount": 9854.23
+    }
+    // ... autres périodes
+  ],
+  "paymentScheduleTotals": {
+    "totalAmount": 160000,
+    "totalInterestAmount": 11500,
+    "totalRepaymentAmount": 148500,
+    "totalActualizedCashFlowsAmount": 149852.34
+  },
+  "purchaseOptionTotals": {
+    "purchaseOptionAmount": 1500,
+    "actualizedPurchaseOptionAmount": 1147.66
+  }
+}
 ```
 
-Or, if you don't have GraalVM installed, you can run the native executable build in a container using:
+## 🔧 Configuration
 
-```shell script
-./gradlew build -Dquarkus.native.enabled=true -Dquarkus.native.container-build=true
+Fichier `src/main/resources/application.properties` :
+
+```properties
+# HTTP
+quarkus.http.port=9090
+quarkus.http.cors=true
+quarkus.http.cors.origins=http://localhost:3100
+
+# Logging
+quarkus.log.level=INFO
+quarkus.log.category."com.paymentschedule".level=DEBUG
+
+# Swagger UI
+quarkus.swagger-ui.enable=true
+quarkus.swagger-ui.path=/q/swagger-ui
 ```
 
-You can then execute your native executable with: `./build/backend-1.0.0-SNAPSHOT-runner`
+## 🧪 Tests
 
-If you want to learn more about building native executables, please consult <https://quarkus.io/guides/gradle-tooling>.
+```bash
+# Lancer tous les tests
+./gradlew test
 
-## Related Guides
+# Ou avec NX
+npx nx test backend
 
-- SmallRye OpenAPI ([guide](https://quarkus.io/guides/openapi-swaggerui)): Document your REST APIs with OpenAPI - comes with Swagger UI
-- Kotlin ([guide](https://quarkus.io/guides/kotlin)): Write your services in Kotlin
-- REST Jackson ([guide](https://quarkus.io/guides/rest#json-serialisation)): Jackson serialization support for Quarkus REST. This extension is not compatible with the quarkus-resteasy extension, or any of the extensions that depend on it
-- Hibernate ORM with Panache and Kotlin ([guide](https://quarkus.io/guides/hibernate-orm-panache-kotlin)): Define your persistent model in Hibernate ORM with Panache
+# Tests avec coverage
+./gradlew test jacocoTestReport
+```
 
-## Provided Code
+## 📐 Algorithmes Financiers
 
-### REST
+### Calcul du Taux Implicite (TRI)
 
-Easily start your REST Web Services
+Le backend utilise une méthode de dichotomie (bisection) pour calculer le taux de rendement interne (TRI) :
 
-[Related guide section...](https://quarkus.io/guides/getting-started-reactive#reactive-jax-rs-resources)
+```kotlin
+fun calculateInternalRateOfReturn(
+    rentAmount: BigDecimal,
+    purchaseOptionValue: BigDecimal,
+    assetValue: BigDecimal,
+    contractDuration: Int
+): BigDecimal
+```
+
+**Formule NPV** :
+```
+NPV = Σ(loyer_i / (1+r)^i) + (option_achat / (1+r)^n) - valeur_actif = 0
+```
+
+### Calculs de Précision
+
+- Utilisation exclusive de `BigDecimal` avec `MathContext.DECIMAL128`
+- Précision de 34 chiffres décimaux
+- Arrondi: `RoundingMode.HALF_UP`
+
+## 🐳 Docker
+
+### Build de l'image
+
+```bash
+# Image JVM
+docker build -f src/main/docker/Dockerfile.jvm -t payment-schedule-calculator-backend:jvm .
+
+# Ou avec NX
+npx nx docker-build backend
+```
+
+### Variables d'environnement
+
+```bash
+# Port personnalisé
+docker run -e QUARKUS_HTTP_PORT=8080 -p 8080:8080 payment-schedule-calculator-backend
+
+# Profil de configuration
+docker run -e QUARKUS_PROFILE=prod payment-schedule-calculator-backend
+```
+
+## 📚 Documentation API
+
+Swagger UI disponible en mode dev :
+- http://localhost:9090/q/swagger-ui
+
+## 🔍 Debugging
+
+### Mode dev avec debug
+
+```bash
+./gradlew quarkusDev -Ddebug=5005
+```
+
+Puis connecter votre IDE au port 5005.
+
+### Logs
+
+```bash
+# Augmenter le niveau de log
+./gradlew quarkusDev -Dquarkus.log.level=DEBUG
+```
+
+## 🚀 Performance
+
+Quarkus offre :
+- **Démarrage rapide** : < 1 seconde
+- **Faible empreinte mémoire** : ~30MB
+- **Hot reload** : modifications instantanées en mode dev
+
+## 📖 Ressources
+
+- [Quarkus Documentation](https://quarkus.io/)
+- [Kotlin Documentation](https://kotlinlang.org/)
+- [Gradle Kotlin DSL](https://docs.gradle.org/current/userguide/kotlin_dsl.html)

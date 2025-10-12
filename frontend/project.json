@@ -58,21 +58,21 @@
     "docker:build": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "docker build -t payment-schedule-frontend:latest .",
+        "command": "docker build -t payment-schedule-calculator-frontend:latest .",
         "cwd": "frontend"
       }
     },
     "docker:run": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "docker run -p 3000:80 --name payment-schedule-frontend payment-schedule-frontend:latest",
+        "command": "docker run -p 3000:80 --name payment-schedule-calculator-frontend payment-schedule-calculator-frontend:latest",
         "cwd": "frontend"
       }
     },
     "docker:stop": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "docker stop payment-schedule-frontend && docker rm payment-schedule-frontend",
+        "command": "docker stop payment-schedule-calculator-frontend && docker rm payment-schedule-calculator-frontend",
         "cwd": "frontend"
       }
     }

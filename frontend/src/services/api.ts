@@ -1,10 +1,9 @@
 import {
   PaymentScheduleRequest,
   PaymentScheduleResponse,
-} from '../types/paymentSchedule';
+} from '../types/payment.types';
 
-const API_BASE_URL =
-  import.meta.env.VITE_API_URL || 'http://localhost:9090/api';
+const API_BASE_URL = import.meta.env.VITE_API_URL;
 
 export const paymentScheduleApi = {
   async calculateSchedule(
