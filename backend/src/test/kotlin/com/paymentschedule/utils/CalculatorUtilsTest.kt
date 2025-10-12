@@ -10,7 +10,7 @@ class CalculatorUtilsTest {
     fun testFindActualizedRateWithMethod1() {
         val rate = CalculatorUtils.calculateInternalRateOfReturn(
             rentAmount = BigDecimal("10000.0"),
-            purchaseOptionValue = BigDecimal("1500.0"),
+            purchaseOptionAmount = BigDecimal("1500.0"),
             assetValue = BigDecimal("150000.0"),
             contractDuration = 16
         )
@@ -29,7 +29,7 @@ class CalculatorUtilsTest {
     fun testFindActualizedRateWithMethod2() {
         val rate = CalculatorUtils.calculateImplicitRateBasedOnResidualDebt(
             rentAmount = BigDecimal("10000.0"),
-            purchaseOptionValue = BigDecimal("1500.0"),
+            purchaseOptionAmount = BigDecimal("1500.0"),
             assetValue = BigDecimal("150000.0"),
             period = 16
         )
@@ -47,18 +47,18 @@ class CalculatorUtilsTest {
     @Suppress("DEPRECATION")  // Intentional usage for cross-validation of methods
     fun testBothMethodsGiveSameResult() {
         val rentAmount = BigDecimal("10000.0")
-        val purchaseOptionValue = BigDecimal("1500.0")
+        val purchaseOptionAmount = BigDecimal("1500.0")
         val assetValue = BigDecimal("150000.0")
         val periods = 16
 
         // Method 1: Closed-form formula (sum of discounted cash flows)
         val rate1 = CalculatorUtils.calculateInternalRateOfReturn(
-            rentAmount, purchaseOptionValue, assetValue, periods
+            rentAmount, purchaseOptionAmount, assetValue, periods
         )
 
         // Method 2: Residual debt (deprecated but used for validation)
         val rate2 = CalculatorUtils.calculateImplicitRateBasedOnResidualDebt(
-            rentAmount, purchaseOptionValue, assetValue, periods
+            rentAmount, purchaseOptionAmount, assetValue, periods
         )
 
         println("Method 1 (discounted cash flows): $rate1")

@@ -269,10 +269,6 @@ services:
     environment:
       QUARKUS_DATASOURCE_PASSWORD: ${DB_PASSWORD}  # Utiliser des variables d'environnement
       QUARKUS_HTTP_CORS_ORIGINS: https://votre-domaine.com
-
-  postgres:
-    environment:
-      POSTGRES_PASSWORD: ${DB_PASSWORD}
 ```
 
 ## 📊 Monitoring

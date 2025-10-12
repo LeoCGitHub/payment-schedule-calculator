@@ -56,7 +56,7 @@ En haut du tableau, affichage des totaux :
   "knownRightOfUse": true,
   "eoa": true,
   "assetValue": 150000,
-  "purchaseOptionValue": 1500,
+  "purchaseOptionAmount": 1500,
   "interestRate": 0,
   "firstPaymentDate": "17/09/2025",
   "rentType": "Loyer unique",

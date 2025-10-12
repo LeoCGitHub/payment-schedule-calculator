@@ -54,7 +54,7 @@
   background: white;
   padding: 1rem;
   border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  height: 100%;
 }
 
 .table-header {
@@ -72,36 +72,17 @@
   flex-shrink: 0;
 }
 
-.summary-inline {
-  display: flex;
-  gap: 1.5rem;
-  align-items: center;
-  flex-wrap: wrap;
-}
-
 .summary-inline-item {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.4rem 0.8rem;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  border-radius: 6px;
-  color: white;
-  font-size: 0.85rem;
-  white-space: nowrap;
 }
 
 .summary-inline-label {
-  font-weight: 500;
-  opacity: 0.95;
-}
-
-.summary-inline-value {
   font-weight: 700;
   font-size: 0.9rem;
 }
 
-.summary-inline-value.highlight {
+.summary-inline-value.highlight,
+.summary-inline-label.highlight {
   color: #ffd700;
 }
 

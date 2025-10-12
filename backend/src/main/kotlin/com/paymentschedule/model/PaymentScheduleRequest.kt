@@ -8,8 +8,8 @@ data class PaymentScheduleRequest(
     val periodicity: Int,
     val contractDuration: Int,
     val assetValue: BigDecimal,
-    val purchaseOptionValue: BigDecimal,
-    @JsonFormat(pattern = "dd/MM/yyyy")
+    val purchaseOptionAmount: BigDecimal,
+    @param:JsonFormat(pattern = "dd/MM/yyyy")
     val firstPaymentDate: LocalDate,
     val rentAmount: BigDecimal
 )

@@ -1,11 +1,9 @@
 package com.paymentschedule.utils
 
 import java.math.BigDecimal
-import java.math.MathContext
-import java.math.RoundingMode
+import java.time.LocalDate
 
 object CalculatorUtils {
-    private val MATH_CONTEXT = MathContext.DECIMAL128
 
     /**
      * Method 1 (RECOMMENDED): Calculate implicit discount rate using annuity formula
@@ -30,7 +28,7 @@ object CalculatorUtils {
      * 5. Repeat until convergence
      *
      * @param rentAmount Periodic rent amount
-     * @param purchaseOptionValue Purchase option value (residual value)
+     * @param purchaseOptionAmount Purchase option value (residual value)
      * @param assetValue Asset value (financed amount)
      * @param contractDuration Number of contract periods
      * @param precision Convergence precision (default 1e-5)
@@ -41,9 +39,9 @@ object CalculatorUtils {
      */
     fun calculateInternalRateOfReturn(
         rentAmount: BigDecimal,
-        purchaseOptionValue: BigDecimal,
+        purchaseOptionAmount: BigDecimal,
         assetValue: BigDecimal,
-        contractDuration: Int,
+        totalPeriods: Int,
         precision: BigDecimal = BigDecimal.valueOf(1e-5),
         maxIterations: Int = 1000
     ): BigDecimal {
@@ -54,13 +52,13 @@ object CalculatorUtils {
         var iteration = 0
 
         while (iteration < maxIterations) {
-            mid = (low + high).divide(BigDecimal.valueOf(2), MATH_CONTEXT)
+            mid = (low + high).divide(BigDecimal.valueOf(2), BigDecimalUtils.MATH_CONTEXT)
 
             val value = calculateNetPresentValue(
                 rentAmount,
-                purchaseOptionValue,
+                purchaseOptionAmount,
                 assetValue,
-                contractDuration,
+                totalPeriods,
                 mid
             )
 
@@ -75,7 +73,7 @@ object CalculatorUtils {
             iteration++
         }
 
-        return (low + high).divide(BigDecimal.valueOf(2), MATH_CONTEXT)
+        return (low + high).divide(BigDecimal.valueOf(2), BigDecimalUtils.MATH_CONTEXT)
     }
 
     /**
@@ -111,12 +109,12 @@ object CalculatorUtils {
     @Deprecated(
         message = "Use calculateInternalRateOfReturn for better performance. " +
                 "This method is kept only for testing and validation purposes.",
-        replaceWith = ReplaceWith("calculateInternalRateOfReturn(rentAmount, purchaseOptionValue, assetValue, period)"),
+        replaceWith = ReplaceWith("calculateInternalRateOfReturn(rentAmount, purchaseOptionAmount, assetValue, period)"),
         level = DeprecationLevel.WARNING
     )
     fun calculateImplicitRateBasedOnResidualDebt(
         rentAmount: BigDecimal,
-        purchaseOptionValue: BigDecimal,
+        purchaseOptionAmount: BigDecimal,
         assetValue: BigDecimal,
         period: Int,
         precision: BigDecimal = BigDecimal.valueOf(1e-5)
@@ -126,19 +124,19 @@ object CalculatorUtils {
         var mid: BigDecimal
 
         while ((high - low) > precision) {
-            mid = (low + high).divide(BigDecimal.valueOf(2), MATH_CONTEXT)
+            mid = (low + high).divide(BigDecimal.valueOf(2), BigDecimalUtils.MATH_CONTEXT)
 
             var currentDebt = assetValue
 
             for (t in 1..period) {
-                val interestForPeriod = currentDebt.multiply(mid, MATH_CONTEXT)
+                val interestForPeriod = currentDebt.multiply(mid, BigDecimalUtils.MATH_CONTEXT)
 
                 val principalRepayment = rentAmount.subtract(interestForPeriod)
 
                 currentDebt = currentDebt.subtract(principalRepayment)
             }
 
-            val diff = currentDebt.subtract(purchaseOptionValue)
+            val diff = currentDebt.subtract(purchaseOptionAmount)
 
             if (diff > BigDecimal.ZERO) {
                 high = mid
@@ -147,14 +145,14 @@ object CalculatorUtils {
             }
         }
 
-        return (low + high).divide(BigDecimal.valueOf(2), MATH_CONTEXT)
+        return (low + high).divide(BigDecimal.valueOf(2), BigDecimalUtils.MATH_CONTEXT)
     }
 
-    fun calculateDiscountedCashFlows(periodIndex: Int, periodRate: BigDecimal, rentAmount: BigDecimal): BigDecimal {
-        val onePlusRate = BigDecimal.ONE.add(periodRate)
-        val discountFactor = bigDecimalPow(onePlusRate, -periodIndex)
+    fun calculateActualizedCashFlows(periodIndex: Int, actualizedRate: BigDecimal, rentAmount: BigDecimal): BigDecimal {
+        val onePlusRate = BigDecimal.ONE.add(actualizedRate)
+        val discountFactor = BigDecimalUtils.bigDecimalPow(onePlusRate, -periodIndex)
 
-        return roundingHalfUp(rentAmount.multiply(discountFactor, MATH_CONTEXT), 2)
+        return rentAmount.multiply(discountFactor, BigDecimalUtils.MATH_CONTEXT)
     }
 
     /**
@@ -166,7 +164,7 @@ object CalculatorUtils {
      * and the asset value. When this equals zero, we've found the Internal Rate of Return.
      *
      * @param rentAmount Periodic rent payment
-     * @param purchaseOptionValue Purchase option at end of contract
+     * @param purchaseOptionAmount Purchase option at end of contract
      * @param assetValue Initial asset value (amount financed)
      * @param contractDuration Number of periods
      * @param estimatedRate Rate being tested
@@ -174,22 +172,22 @@ object CalculatorUtils {
      */
     fun calculateNetPresentValue(
         rentAmount: BigDecimal,
-        purchaseOptionValue: BigDecimal,
+        purchaseOptionAmount: BigDecimal,
         assetValue: BigDecimal,
-        contractDuration: Int,
+        totalPeriods: Int,
         estimatedRate: BigDecimal
     ): BigDecimal {
         val onePlusRate = BigDecimal.ONE + estimatedRate
-        val numerator = BigDecimal.ONE - bigDecimalPow(onePlusRate, -contractDuration)
+        val numerator = BigDecimal.ONE - BigDecimalUtils.bigDecimalPow(onePlusRate, -totalPeriods)
 
         val presentValueOfRents = rentAmount.multiply(
-            numerator.divide(estimatedRate, MATH_CONTEXT),
-            MATH_CONTEXT
+            numerator.divide(estimatedRate, BigDecimalUtils.MATH_CONTEXT),
+            BigDecimalUtils.MATH_CONTEXT
         )
 
-        val presentValueOfOption = purchaseOptionValue.divide(
-            bigDecimalPow(onePlusRate, contractDuration),
-            MATH_CONTEXT
+        val presentValueOfOption = purchaseOptionAmount.divide(
+            BigDecimalUtils.bigDecimalPow(onePlusRate, totalPeriods),
+            BigDecimalUtils.MATH_CONTEXT
         )
 
         return presentValueOfRents + presentValueOfOption - assetValue
@@ -210,24 +208,42 @@ object CalculatorUtils {
      */
     fun calculatePresentValue(cashFlow: BigDecimal, discountRate: BigDecimal, period: Int): BigDecimal {
         val onePlusRate = BigDecimal.ONE.add(discountRate)
-        val discountFactor = bigDecimalPow(onePlusRate, period)
+        val discountFactor = BigDecimalUtils.bigDecimalPow(onePlusRate, period)
 
-        return cashFlow.divide(discountFactor, MATH_CONTEXT)
+        return cashFlow.divide(discountFactor, BigDecimalUtils.MATH_CONTEXT)
     }
 
-    fun roundingHalfUp(number: BigDecimal, scale: Int): BigDecimal {
-        return number.setScale(scale, RoundingMode.HALF_UP)
-    }
+    fun calculateAnnualReferenceRate(periodicity: Int, actualizedRate: BigDecimal): BigDecimal {
+        var result = BigDecimal.ZERO;
+        val periodsPerYear = 12.div(periodicity)
 
-    /**
-     * Calculate base^exponent for BigDecimal values
-     * Handles both negative and positive exponents
-     */
-    fun bigDecimalPow(base: BigDecimal, exponent: Int, mc: MathContext = MATH_CONTEXT): BigDecimal {
-        return if (exponent >= 0) {
-            base.pow(exponent, mc)
-        } else {
-            BigDecimal.ONE.divide(base.pow(-exponent, mc), mc)
+        if (actualizedRate > BigDecimal.ZERO) {
+            result = BigDecimalUtils.bigDecimalPow(BigDecimal.ONE.add(actualizedRate), periodsPerYear)
+                .subtract(BigDecimal.ONE)
         }
+
+        return result
     }
+
+    fun calculateFinancialInterest(debtBeginningPeriod: BigDecimal, actualizedRate: BigDecimal): BigDecimal {
+        return debtBeginningPeriod.multiply(actualizedRate)
+    }
+
+    fun calculateRepayment(rentAmount: BigDecimal, financialInterest: BigDecimal): BigDecimal {
+        return rentAmount.subtract(financialInterest)
+    }
+
+    fun calculateDebtEndPeriod(debtBeginningPeriod: BigDecimal, repayment: BigDecimal): BigDecimal {
+        return debtBeginningPeriod.subtract(repayment)
+    }
+
+    fun calculatePaymentDate(periodIndex: Int, periodicity: Int, firstPaymentDate: LocalDate): LocalDate {
+        val monthsToAdd = (periodIndex - 1) * periodicity
+        return firstPaymentDate.plusMonths(monthsToAdd.toLong())
+    }
+
+    fun calculateTotalPeriods(contractDuration: Int, periodicity: Int): Int {
+        return contractDuration.div(periodicity)
+    }
+
 }

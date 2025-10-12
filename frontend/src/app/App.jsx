@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import PaymentScheduleForm from '../components/PaymentScheduleForm';
-import PaymentScheduleTable from '../components/PaymentScheduleTable';
-import Toast from '../components/Toast';
+import PaymentScheduleForm from '../containers/PaymentSchedule/Form/PaymentScheduleForm';
+import PaymentScheduleTable from '../containers/PaymentSchedule/Table/PaymentScheduleTable';
+import Toast from '../components/Toast/Toast';
 import { paymentScheduleApi } from '../services/api';
 import './App.css';
 
@@ -13,7 +13,7 @@ function App() {
     periodicity: 'Trimestriel',
     contractDuration: '48',
     assetValue: '150000',
-    purchaseOptionValue: '1500',
+    purchaseOptionAmount: '1500',
     firstPaymentDate: '17/09/2025',
     rentAmount: '10000',
   });
@@ -38,7 +38,9 @@ function App() {
   return (
     <div className="app">
       <header className="app-header">
-        <h1>Calculateur d&apos;échéancier de paiement d'un contrat bail</h1>
+        <h1>
+          Calculateur d&apos;échéancier d'un contrat de location-financement
+        </h1>
       </header>
 
       <main className="app-main">
@@ -58,7 +60,7 @@ function App() {
             ) : (
               <div className="placeholder">
                 <div className="placeholder-icon">📊</div>
-                <h3>Tableau d'amortissement</h3>
+                <h3>Echéancier</h3>
                 <p>
                   Remplissez le formulaire et cliquez sur "Calculer
                   l'échéancier" pour voir les résultats
@@ -77,10 +79,6 @@ function App() {
           duration={5000}
         />
       )}
-
-      {/* <footer className="app-footer">
-        <p>© 2025 Payment Schedule Calculator</p>
-      </footer> */}
     </div>
   );
 }
