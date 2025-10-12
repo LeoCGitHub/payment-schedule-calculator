@@ -7,16 +7,12 @@ import java.math.RoundingMode
 object BigDecimalUtils {
     val MATH_CONTEXT: MathContext = MathContext.DECIMAL128
 
-    fun roundingHalfUpTwoScale(number: BigDecimal): BigDecimal {
-        return roundingHalfUp(number, 2)
+    fun BigDecimal.roundingHalfUpFiveScale(scale: Int = 5, roundingMode: RoundingMode = RoundingMode.HALF_UP): BigDecimal {
+        return this.setScale(scale, roundingMode)
     }
 
-    fun roundingHalfUpFiveScale(number: BigDecimal): BigDecimal {
-        return roundingHalfUp(number, 5)
-    }
-
-    fun roundingHalfUp(number: BigDecimal, scale: Int): BigDecimal {
-        return number.setScale(scale, RoundingMode.HALF_UP)
+    fun BigDecimal.roundingHalfUpTwoScale(scale: Int = 2, roundingMode: RoundingMode = RoundingMode.HALF_UP): BigDecimal {
+        return this.setScale(scale, roundingMode)
     }
 
     /**

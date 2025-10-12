@@ -5,11 +5,11 @@ import com.paymentschedule.model.PaymentScheduleRequest
 import com.paymentschedule.model.PaymentScheduleResponse
 import com.paymentschedule.model.PaymentScheduleTotals
 import com.paymentschedule.model.PurchaseOptionTotals
-import com.paymentschedule.utils.BigDecimalUtils
+import com.paymentschedule.utils.BigDecimalUtils.roundingHalfUpFiveScale
+import com.paymentschedule.utils.BigDecimalUtils.roundingHalfUpTwoScale
 import com.paymentschedule.utils.CalculatorUtils
 import jakarta.enterprise.context.ApplicationScoped
 import java.math.BigDecimal
-import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 @ApplicationScoped
@@ -20,104 +20,84 @@ class PaymentScheduleService {
         var totalRepaymentAmount = BigDecimal.ZERO
         var actualizedTotalAmount = BigDecimal.ZERO
         var debtBeginningPeriodAmount = request.assetAmount
+        val contractDuration = request.contractDuration
+        val periodicity = request.periodicity
+        val rentAmount =  request.rentAmount
+        val purchaseOptionAmount =  request.purchaseOptionAmount
+        val firstPaymentDate =  request.firstPaymentDate
         val paymentScheduleLines = mutableListOf<PaymentScheduleLine>()
 
-        val totalPeriods = CalculatorUtils.calculateTotalPeriods(request.contractDuration, request.periodicity)
+        val totalPeriods = CalculatorUtils.calculateTotalPeriods(contractDuration, periodicity)
 
         val actualizedRate = CalculatorUtils.calculateInternalRateOfReturn(
-            request.rentAmount,
-            request.purchaseOptionAmount,
-            request.assetAmount,
+            rentAmount,
+            purchaseOptionAmount,
+            debtBeginningPeriodAmount,
             totalPeriods
         )
 
-        val annualReferenceRate = CalculatorUtils.calculateAnnualReferenceRate(request.periodicity, actualizedRate)
+        val annualReferenceRate = CalculatorUtils.calculateAnnualReferenceRate(periodicity, actualizedRate)
 
         for (periodIndex in 1..totalPeriods) {
-            val actualizedCashFlow = CalculatorUtils.calculateActualizedCashFlows(
+            val actualizedCashFlowAmount = CalculatorUtils.calculateActualizedCashFlows(
                 periodIndex,
                 actualizedRate,
-                request.rentAmount
+                rentAmount
             )
 
-            val financialInterestAmount = CalculatorUtils.calculateFinancialInterest(debtBeginningPeriodAmount, actualizedRate);
+            val financialInterestAmount =
+                CalculatorUtils.calculateFinancialInterest(debtBeginningPeriodAmount, actualizedRate);
 
-            val repaymentAmount = CalculatorUtils.calculateRepayment(request.rentAmount, financialInterestAmount);
+            val repaymentAmount = CalculatorUtils.calculateRepayment(rentAmount, financialInterestAmount);
 
-            val debtEndPeriodAmount = CalculatorUtils.calculateDebtEndPeriod(debtBeginningPeriodAmount, repaymentAmount);
+            val debtEndPeriodAmount =
+                CalculatorUtils.calculateDebtEndPeriod(debtBeginningPeriodAmount, repaymentAmount);
+
+            val paymentDate =
+                CalculatorUtils.calculatePaymentDate(periodIndex, periodicity, firstPaymentDate);
 
             paymentScheduleLines.add(
-                createPayment(
-                    request.periodicity,
-                    periodIndex,
-                    request.firstPaymentDate,
-                    request.rentAmount,
-                    repaymentAmount,
-                    financialInterestAmount,
-                    debtEndPeriodAmount,
-                    debtBeginningPeriodAmount,
-                    actualizedRate,
-                    annualReferenceRate
+                PaymentScheduleLine(
+                    period = periodIndex,
+                    dueDate = paymentDate.format(DateTimeFormatter.ISO_LOCAL_DATE),
+                    repaymentAmount = repaymentAmount.roundingHalfUpTwoScale(),
+                    debtBeginningPeriodAmount = debtBeginningPeriodAmount.roundingHalfUpTwoScale(),
+                    debtEndPeriodAmount = debtEndPeriodAmount.roundingHalfUpTwoScale(),
+                    periodRate = actualizedRate.roundingHalfUpFiveScale(),
+                    financialInterestAmount = financialInterestAmount.roundingHalfUpTwoScale(),
+                    rentAmount = request.rentAmount.roundingHalfUpTwoScale(),
+                    annualReferenceRate = annualReferenceRate.roundingHalfUpFiveScale(),
+                    actualizedCashFlowAmount = actualizedCashFlowAmount.roundingHalfUpTwoScale()
                 )
             )
 
             totalInterestAmount = totalInterestAmount.add(financialInterestAmount)
             totalRepaymentAmount = totalRepaymentAmount.add(repaymentAmount)
-            actualizedTotalAmount = actualizedTotalAmount.add(actualizedCashFlow)
+            actualizedTotalAmount = actualizedTotalAmount.add(actualizedCashFlowAmount)
             debtBeginningPeriodAmount = debtEndPeriodAmount
         }
 
-        val actualizedPurchaseOptionAmount =
-            CalculatorUtils.calculateActualizedCashFlows(
-                totalPeriods,
-                actualizedRate,
-                request.purchaseOptionAmount
-            )
+        val actualizedPurchaseOptionAmount = CalculatorUtils.calculateActualizedCashFlows(
+            totalPeriods,
+            actualizedRate,
+            purchaseOptionAmount
+        )
 
-        val paymentTotals =
-            createPaymentTotals(totalRepaymentAmount, totalInterestAmount, actualizedTotalAmount, request.purchaseOptionAmount,actualizedPurchaseOptionAmount);
-        val purchaseOptions = PurchaseOptionTotals(
-            request.purchaseOptionAmount,
+        val paymentScheduleTotals = createPaymentTotals(
+            totalRepaymentAmount,
+            totalInterestAmount,
+            actualizedTotalAmount,
+            purchaseOptionAmount,
             actualizedPurchaseOptionAmount
         );
 
+        val purchaseOptionTotals = PurchaseOptionTotals(
+            purchaseOptionAmount,
+            actualizedPurchaseOptionAmount.roundingHalfUpTwoScale()
+        );
+
         return PaymentScheduleResponse(
-            paymentScheduleLines, paymentTotals, purchaseOptions,
-        )
-    }
-
-    fun createPayment(
-        periodicity: Int,
-        periodIndex: Int,
-        firstPaymentDate: LocalDate,
-        rentAmount: BigDecimal,
-        repaymentAmount: BigDecimal,
-        financialInterestAmount: BigDecimal,
-        debtEndPeriodAmount: BigDecimal,
-        debtBeginningPeriodAmount: BigDecimal,
-        actualizedRate: BigDecimal,
-        annualReferenceRate: BigDecimal
-    ): PaymentScheduleLine {
-        val actualizedCashFlowAmount = CalculatorUtils.calculateActualizedCashFlows(
-            periodIndex,
-            actualizedRate,
-            rentAmount
-        )
-
-        val paymentDate =
-            CalculatorUtils.calculatePaymentDate(periodIndex, periodicity, firstPaymentDate);
-
-        return PaymentScheduleLine(
-            period = periodIndex,
-            dueDate = paymentDate.format(DateTimeFormatter.ISO_LOCAL_DATE),
-            debtBeginningPeriodAmount = BigDecimalUtils.roundingHalfUpTwoScale(debtBeginningPeriodAmount),
-            repaymentAmount = BigDecimalUtils.roundingHalfUpTwoScale(repaymentAmount),
-            debtEndPeriodAmount = BigDecimalUtils.roundingHalfUpTwoScale(debtEndPeriodAmount),
-            periodRate = BigDecimalUtils.roundingHalfUpFiveScale(actualizedRate),
-            financialInterestAmount = financialInterestAmount,
-            rentAmount = rentAmount,
-            annualReferenceRate = BigDecimalUtils.roundingHalfUpFiveScale(annualReferenceRate),
-            actualizedCashFlowAmount = actualizedCashFlowAmount
+            paymentScheduleLines, paymentScheduleTotals, purchaseOptionTotals,
         )
     }
 
@@ -128,14 +108,11 @@ class PaymentScheduleService {
         purchaseOptionAmount: BigDecimal,
         actualizedPurchaseOptionAmount: BigDecimal
     ): PaymentScheduleTotals {
-        val totalAmount = BigDecimalUtils.roundingHalfUpTwoScale(
-            totalRepayment.add(totalInterest).add(purchaseOptionAmount)
-        )
-        val totalInterestAmount = BigDecimalUtils.roundingHalfUpTwoScale(totalInterest)
-        val totalRepaymentAmount = BigDecimalUtils.roundingHalfUpTwoScale(totalRepayment.add(purchaseOptionAmount))
-        val totalActualizedCashFlowsAmount = BigDecimalUtils.roundingHalfUpTwoScale(
-            actualizedTotalAmount.add(actualizedPurchaseOptionAmount)
-        )
+        val totalAmount = totalRepayment.add(totalInterest).add(purchaseOptionAmount).roundingHalfUpTwoScale()
+        val totalInterestAmount = totalInterest.roundingHalfUpTwoScale()
+        val totalRepaymentAmount = totalRepayment.add(purchaseOptionAmount).roundingHalfUpTwoScale()
+        val totalActualizedCashFlowsAmount =
+            actualizedTotalAmount.add(actualizedPurchaseOptionAmount).roundingHalfUpTwoScale()
 
         return PaymentScheduleTotals(
             totalAmount,

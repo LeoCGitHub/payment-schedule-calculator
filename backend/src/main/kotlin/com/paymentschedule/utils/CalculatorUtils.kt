@@ -40,7 +40,7 @@ object CalculatorUtils {
     fun calculateInternalRateOfReturn(
         rentAmount: BigDecimal,
         purchaseOptionAmount: BigDecimal,
-        assetValue: BigDecimal,
+        assetAmount: BigDecimal,
         totalPeriods: Int,
         precision: BigDecimal = BigDecimal.valueOf(1e-5),
         maxIterations: Int = 1000
@@ -57,7 +57,7 @@ object CalculatorUtils {
             val value = calculateNetPresentValue(
                 rentAmount,
                 purchaseOptionAmount,
-                assetValue,
+                assetAmount,
                 totalPeriods,
                 mid
             )
@@ -165,15 +165,15 @@ object CalculatorUtils {
      *
      * @param rentAmount Periodic rent payment
      * @param purchaseOptionAmount Purchase option at end of contract
-     * @param assetValue Initial asset value (amount financed)
-     * @param contractDuration Number of periods
+     * @param assetAmount Initial asset value (amount financed)
+     * @param totalPeriods Number of periods
      * @param estimatedRate Rate being tested
      * @return NPV difference (zero when rate is correct)
      */
     fun calculateNetPresentValue(
         rentAmount: BigDecimal,
         purchaseOptionAmount: BigDecimal,
-        assetValue: BigDecimal,
+        assetAmount: BigDecimal,
         totalPeriods: Int,
         estimatedRate: BigDecimal
     ): BigDecimal {
@@ -190,7 +190,7 @@ object CalculatorUtils {
             BigDecimalUtils.MATH_CONTEXT
         )
 
-        return presentValueOfRents + presentValueOfOption - assetValue
+        return presentValueOfRents + presentValueOfOption - assetAmount
     }
 
     /**
