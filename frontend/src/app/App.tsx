@@ -2,13 +2,10 @@ import { useState } from 'react';
 import PaymentScheduleForm from '../containers/PaymentSchedule/Form/PaymentScheduleForm';
 import PaymentScheduleTable from '../containers/PaymentSchedule/Table/PaymentScheduleTable';
 import Toast from '../components/Toast/Toast';
-import { paymentScheduleApi } from '../services/api';
-import {
-  PaymentScheduleRequest,
-  FormData,
-  PaymentScheduleResponse,
-} from '../types/payment.types';
+import { paymentScheduleApiService } from '../api/PaymentScheduleApi';
 import './App.scss';
+import { PaymentScheduleResponse } from '@/types/payment-schedule/response/PaymentScheduleResponse';
+import { PaymentScheduleRequest } from '@/types/payment-schedule/request/PaymentScheduleRequest';
 
 function App(): React.JSX.Element {
   const [schedule, setSchedule] = useState<PaymentScheduleResponse | null>(
@@ -16,14 +13,6 @@ function App(): React.JSX.Element {
   );
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
-  const [formData, setFormData] = useState<FormData>({
-    periodicity: 'Trimestriel',
-    contractDuration: '48',
-    assetValue: '150000',
-    purchaseOptionValue: '1500',
-    firstPaymentDate: '17/09/2025',
-    rentAmount: '10000',
-  });
 
   const handleSubmit = async (
     request: PaymentScheduleRequest
@@ -32,13 +21,13 @@ function App(): React.JSX.Element {
     setError(null);
 
     try {
-      const result = await paymentScheduleApi.calculateSchedule(request);
+      const result = await paymentScheduleApiService.calculateSchedule(request);
       setSchedule(result as unknown as PaymentScheduleResponse);
     } catch (err) {
       const errorMessage =
         err instanceof Error
           ? err.message
-          : "Une erreur est survenue lors du calcul de l'échéancier";
+          : 'An error occurred while calculating the payment schedule';
       setError(errorMessage);
     } finally {
       setLoading(false);
@@ -56,12 +45,7 @@ function App(): React.JSX.Element {
       <main className="app-main">
         <div className="main-layout">
           <div className="form-section">
-            <PaymentScheduleForm
-              onSubmit={handleSubmit}
-              loading={loading}
-              initialData={formData}
-              onDataChange={setFormData}
-            />
+            <PaymentScheduleForm onSubmit={handleSubmit} loading={loading} />
           </div>
 
           <div className="table-section">
