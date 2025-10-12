@@ -11,8 +11,10 @@ export default function PurchaseOptionRow({
   purchaseOptionTotals,
 }: PurchaseOptionRowProps): React.JSX.Element {
   return (
-    <tr>
-      <TableCell colSpan={2}>{TABLE_LABELS.purchaseOption}</TableCell>
+    <tr className="purchase-option-line">
+      <TableCell colSpan={2} className="purchase-option-label">
+        {TABLE_LABELS.purchaseOption}
+      </TableCell>
       <TableCell className="amount">
         {formatCurrency(purchaseOptionTotals.purchaseOptionAmount)}
       </TableCell>

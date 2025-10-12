@@ -81,41 +81,6 @@ $letter-spacing: 0.5px;
   }
 }
 
-.schedule-table tbody tr:last-child {
-  font-weight: 600;
-  background-color: white;
-}
-
-.totals-row {
-  background: linear-gradient(
-    135deg,
-    $primary-gradient-start 0%,
-    $primary-gradient-end 100%
-  );
-  font-weight: $font-weight-bold;
-  font-size: $font-size-md;
-}
-
-.totals-row-label {
-  font-weight: $font-weight-bold;
-  font-size: $font-size-md;
-
-  &.highlight {
-    color: $highlight-color;
-  }
-}
-
-.totals-row-value {
-  &.highlight {
-    color: $highlight-color;
-  }
-}
-
-.table-responsive {
-  width: 100%;
-  overflow-x: auto;
-}
-
 .schedule-table {
   width: 100%;
   border-collapse: collapse;
@@ -147,16 +112,14 @@ $letter-spacing: 0.5px;
         transition: background-color $transition-duration;
       }
 
-      &:last-child {
-        font-weight: $font-weight-semibold;
-        background-color: $bg-lighter;
+      &:last-child td {
+        border-bottom: 2px solid $border-color;
       }
     }
   }
 
   .amount {
     text-align: right;
-    font-family: $font-weight-semibold;
   }
 
   .interest {
@@ -166,6 +129,40 @@ $letter-spacing: 0.5px;
   .balance {
     color: $success-color;
     font-weight: $font-weight-semibold;
+  }
+
+  .purchase-option-label {
+    font-weight: $font-weight-semibold;
+  }
+
+  .totals-row-line {
+    background: linear-gradient(
+      135deg,
+      $primary-gradient-start 0%,
+      $primary-gradient-end 100%
+    );
+    font-weight: $font-weight-bold;
+    font-size: $font-size-md;
+  }
+
+  .totals-row-label {
+    font-weight: $font-weight-bold;
+    font-size: $font-size-md;
+
+    &.highlight {
+      color: $highlight-color;
+    }
+  }
+
+  .totals-row-value {
+    &.highlight {
+      color: $highlight-color;
+    }
+  }
+
+  .table-responsive {
+    width: 100%;
+    overflow-x: auto;
   }
 }
 

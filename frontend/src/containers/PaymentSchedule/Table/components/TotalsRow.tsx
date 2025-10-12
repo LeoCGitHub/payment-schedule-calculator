@@ -11,7 +11,7 @@ export default function TotalsRow({
   totals,
 }: TotalsRowProps): React.JSX.Element {
   return (
-    <tr className="totals-row">
+    <tr className="totals-row-line">
       <TableCell colSpan={2} className="totals-row-value highlight">
         {TABLE_LABELS.total}
       </TableCell>
