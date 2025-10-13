@@ -247,11 +247,11 @@ object CalculatorUtils {
      * Calculate repayment
      *
      * @param rentAmount
-     * @param financialInterest
+     * @param financialInterestAmount
      * @return
      */
-    fun calculateRepayment(rentAmount: BigDecimal, financialInterest: BigDecimal): BigDecimal {
-        return rentAmount.subtract(financialInterest)
+    fun calculateRepayment(rentAmount: BigDecimal, financialInterestAmount: BigDecimal): BigDecimal {
+        return rentAmount.subtract(financialInterestAmount)
     }
 
     /**

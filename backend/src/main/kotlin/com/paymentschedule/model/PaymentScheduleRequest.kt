@@ -40,7 +40,7 @@ data class PaymentScheduleRequest(
     val purchaseOptionAmount: BigDecimal,
 
     @field:NotNull(message = "First payment date is required")
-    @field:FutureOrPresent(message = "First payment date must be today or in the future")
+    @param:JsonFormat(pattern = "dd/MM/yyyy")
     val firstPaymentDate: LocalDate,
 
     @field:NotNull(message = "Rent amount is required")

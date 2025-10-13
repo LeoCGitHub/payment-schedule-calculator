@@ -1,8 +1,6 @@
 package com.paymentschedule.service
 
 import com.paymentschedule.model.*
-import com.paymentschedule.utils.BigDecimalUtils.roundFinancial
-import com.paymentschedule.utils.BigDecimalUtils.roundRate
 import com.paymentschedule.utils.CalculatorUtils
 import jakarta.enterprise.context.ApplicationScoped
 import org.jboss.logging.Logger
@@ -62,31 +60,31 @@ class PaymentScheduleService {
 
     private fun createScheduleLine(
         period: Int,
-        debtBeginning: BigDecimal,
+        debtBeginningPeriodAmount: BigDecimal,
         config: ScheduleConfig
     ): PaymentScheduleLine {
-        val actualizedCashFlow = CalculatorUtils.calculateActualizedCashFlows(
+        val actualizedCashFlowAmount = CalculatorUtils.calculateActualizedCashFlows(
             period,
             config.actualizedRate,
             config.rentAmount
         )
 
-        val financialInterest = CalculatorUtils.calculateFinancialInterest(
-            debtBeginning,
+        val financialInterestAmount = CalculatorUtils.calculateFinancialInterest(
+            debtBeginningPeriodAmount,
             config.actualizedRate
         )
 
-        val repayment = CalculatorUtils.calculateRepayment(
+        val repaymentAmount = CalculatorUtils.calculateRepayment(
             config.rentAmount,
-            financialInterest
+            financialInterestAmount
         )
 
-        val debtEnd = CalculatorUtils.calculateDebtEndPeriod(
-            debtBeginning,
-            repayment
+        val debtEndPeriodAmount = CalculatorUtils.calculateDebtEndPeriod(
+            debtBeginningPeriodAmount,
+            repaymentAmount
         )
 
-        val paymentDate = CalculatorUtils.calculatePaymentDate(
+        val dueDate = CalculatorUtils.calculatePaymentDate(
             period,
             config.periodicity,
             config.firstPaymentDate
@@ -94,15 +92,15 @@ class PaymentScheduleService {
 
         return PaymentScheduleLine(
             period = period,
-            dueDate = paymentDate.format(DateTimeFormatter.ISO_LOCAL_DATE),
-            repaymentAmount = repayment.roundFinancial(),
-            debtBeginningPeriodAmount = debtBeginning.roundFinancial(),
-            debtEndPeriodAmount = debtEnd.roundFinancial(),
-            periodRate = config.actualizedRate.roundRate(),
-            financialInterestAmount = financialInterest.roundFinancial(),
-            rentAmount = config.rentAmount.roundFinancial(),
-            annualReferenceRate = config.annualReferenceRate.roundRate(),
-            actualizedCashFlowAmount = actualizedCashFlow.roundFinancial()
+            dueDate.format(DateTimeFormatter.ISO_LOCAL_DATE),
+            repaymentAmount,
+            debtBeginningPeriodAmount,
+            debtEndPeriodAmount,
+            config.actualizedRate,
+            financialInterestAmount,
+            config.rentAmount,
+            config.annualReferenceRate,
+            actualizedCashFlowAmount
         )
     }
 
@@ -115,7 +113,7 @@ class PaymentScheduleService {
 
         return PurchaseOptionTotals(
             purchaseOptionAmount = config.purchaseOptionAmount,
-            actualizedPurchaseOptionAmount = actualizedPurchaseOption.roundFinancial()
+            actualizedPurchaseOptionAmount = actualizedPurchaseOption
         )
     }
 
@@ -131,19 +129,16 @@ class PaymentScheduleService {
         val totalAmount = totalRepayment
             .add(totalInterest)
             .add(config.purchaseOptionAmount)
-            .roundFinancial()
 
         val totalRepaymentWithOption = totalRepayment
             .add(config.purchaseOptionAmount)
-            .roundFinancial()
 
         val totalActualizedWithOption = totalActualized
             .add(purchaseOption.actualizedPurchaseOptionAmount)
-            .roundFinancial()
 
         return PaymentScheduleTotals(
             totalAmount = totalAmount,
-            totalInterestAmount = totalInterest.roundFinancial(),
+            totalInterestAmount = totalInterest,
             totalRepaymentAmount = totalRepaymentWithOption,
             totalActualizedCashFlowsAmount = totalActualizedWithOption
         )
