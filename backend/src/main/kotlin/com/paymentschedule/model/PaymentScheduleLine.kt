@@ -2,6 +2,21 @@ package com.paymentschedule.model
 
 import java.math.BigDecimal
 
+/**
+ * Payment schedule line
+ *
+ * @property period
+ * @property dueDate
+ * @property repaymentAmount
+ * @property debtBeginningPeriodAmount
+ * @property debtEndPeriodAmount
+ * @property periodRate
+ * @property financialInterestAmount
+ * @property rentAmount
+ * @property annualReferenceRate
+ * @property actualizedCashFlowAmount
+ * @constructor Create empty Payment schedule line
+ */
 data class PaymentScheduleLine(
     val period: Int,
     val dueDate: String,

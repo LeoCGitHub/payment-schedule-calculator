@@ -29,8 +29,8 @@ object CalculatorUtils {
      *
      * @param rentAmount Periodic rent amount
      * @param purchaseOptionAmount Purchase option value (residual value)
-     * @param assetValue Asset value (financed amount)
-     * @param contractDuration Number of contract periods
+     * @param assetAmount Asset value (financed amount)
+     * @param totalPeriods Number of contract periods
      * @param precision Convergence precision (default 1e-5)
      * @param maxIterations Maximum number of iterations (default 1000)
      * @return The implicit periodic discount rate
@@ -213,6 +213,13 @@ object CalculatorUtils {
         return cashFlow.divide(discountFactor, BigDecimalUtils.MATH_CONTEXT)
     }
 
+    /**
+     * Calculate annual reference rate
+     *
+     * @param periodicity
+     * @param actualizedRate
+     * @return
+     */
     fun calculateAnnualReferenceRate(periodicity: Int, actualizedRate: BigDecimal): BigDecimal {
         var result = BigDecimal.ZERO;
         val periodsPerYear = 12.div(periodicity)
@@ -225,23 +232,60 @@ object CalculatorUtils {
         return result
     }
 
+    /**
+     * Calculate financial interest
+     *
+     * @param debtBeginningPeriod
+     * @param actualizedRate
+     * @return
+     */
     fun calculateFinancialInterest(debtBeginningPeriod: BigDecimal, actualizedRate: BigDecimal): BigDecimal {
         return debtBeginningPeriod.multiply(actualizedRate)
     }
 
+    /**
+     * Calculate repayment
+     *
+     * @param rentAmount
+     * @param financialInterest
+     * @return
+     */
     fun calculateRepayment(rentAmount: BigDecimal, financialInterest: BigDecimal): BigDecimal {
         return rentAmount.subtract(financialInterest)
     }
 
+    /**
+     * Calculate debt end period
+     *
+     * @param debtBeginningPeriod
+     * @param repayment
+     * @return
+     */
     fun calculateDebtEndPeriod(debtBeginningPeriod: BigDecimal, repayment: BigDecimal): BigDecimal {
         return debtBeginningPeriod.subtract(repayment)
     }
 
+    /**
+     * Calculate payment date
+     *
+     * @param periodIndex
+     * @param periodicity
+     * @param firstPaymentDate
+     * @return
+     */
     fun calculatePaymentDate(periodIndex: Int, periodicity: Int, firstPaymentDate: LocalDate): LocalDate {
         val monthsToAdd = (periodIndex - 1) * periodicity
+
         return firstPaymentDate.plusMonths(monthsToAdd.toLong())
     }
 
+    /**
+     * Calculate total periods
+     *
+     * @param contractDuration
+     * @param periodicity
+     * @return
+     */
     fun calculateTotalPeriods(contractDuration: Int, periodicity: Int): Int {
         return contractDuration.div(periodicity)
     }

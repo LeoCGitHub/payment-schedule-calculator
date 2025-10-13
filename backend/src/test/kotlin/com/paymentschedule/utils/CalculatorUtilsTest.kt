@@ -11,7 +11,7 @@ class CalculatorUtilsTest {
         val rate = CalculatorUtils.calculateInternalRateOfReturn(
             rentAmount = BigDecimal("10000.0"),
             purchaseOptionAmount = BigDecimal("1500.0"),
-            assetValue = BigDecimal("150000.0"),
+            assetAmount = BigDecimal("150000.0"),
             totalPeriods = 16
         )
         println("Method 1 - Discount rate found: $rate")
@@ -82,11 +82,11 @@ class CalculatorUtilsTest {
     @Test
     fun testResidualDebtCalculation() {
         val rentAmount = BigDecimal("10000.0")
-        val assetValue = BigDecimal("150000.0")
+        val assetAmount = BigDecimal("150000.0")
         val rate = BigDecimal("0.00875")
         val periods = 16
 
-        var debt = assetValue
+        var debt = assetAmount
         for (t in 1..periods) {
             val interest = debt.multiply(rate)
             val principal = rentAmount.subtract(interest)
