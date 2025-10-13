@@ -43,7 +43,6 @@ export class PaymentScheduleFormService {
         }
         break;
       case 'periodicity':
-        // When periodicity changes, validate against current duration
         if (formData && formData.contractDuration) {
           const duration = parseInt(formData.contractDuration);
           const periodicityMonths =
@@ -54,14 +53,24 @@ export class PaymentScheduleFormService {
           }
         }
         break;
-      case 'assetValue':
+      case 'assetAmount':
         if (!value || parseFloat(value) <= 0) {
-          return 'Asset value must be greater than 0';
+          return 'Asset amount must be greater than 0';
+        }
+        if (formData && formData.rentAmount) {
+          if (parseInt(value) < parseInt(formData.rentAmount)) {
+            return 'Asset amount must be greater than Rent amount';
+          }
         }
         break;
       case 'rentAmount':
         if (!value || parseFloat(value) <= 0) {
           return 'Rent amount must be greater than 0';
+        }
+        if (formData && formData.assetAmount) {
+          if (parseInt(value) > parseInt(formData.assetAmount)) {
+            return 'Rent amount must be lower than Asset amount';
+          }
         }
         break;
       case 'firstPaymentDate':
@@ -106,8 +115,8 @@ export class PaymentScheduleFormService {
       }
     }
 
-    if (!formData.assetValue || parseFloat(formData.assetValue) <= 0) {
-      errors.assetValue = 'Asset value must be greater than 0';
+    if (!formData.assetAmount || parseFloat(formData.assetAmount) <= 0) {
+      errors.assetAmount = 'Asset value must be greater than 0';
     }
 
     if (!formData.rentAmount || parseFloat(formData.rentAmount) <= 0) {
@@ -138,8 +147,8 @@ export class PaymentScheduleFormService {
     return (
       !!formData.contractDuration &&
       parseInt(formData.contractDuration) > 0 &&
-      !!formData.assetValue &&
-      parseFloat(formData.assetValue) > 0 &&
+      !!formData.assetAmount &&
+      parseFloat(formData.assetAmount) > 0 &&
       !!formData.rentAmount &&
       parseFloat(formData.rentAmount) > 0 &&
       !!formData.firstPaymentDate &&
@@ -160,7 +169,7 @@ export class PaymentScheduleFormService {
         this.PERIODICITY_MAP[formData.periodicity] ||
         this.PERIODICITY_MAP.Trimestriel,
       contractDuration: parseInt(formData.contractDuration),
-      assetAmount: parseFloat(formData.assetValue),
+      assetAmount: parseFloat(formData.assetAmount),
       purchaseOptionAmount: parseFloat(formData.purchaseOptionValue),
       firstPaymentDate: formData.firstPaymentDate,
       rentAmount: parseFloat(formData.rentAmount),
@@ -175,7 +184,7 @@ export class PaymentScheduleFormService {
     return {
       periodicity: 'Trimestriel',
       contractDuration: '48',
-      assetValue: '150000',
+      assetAmount: '150000',
       purchaseOptionValue: '1500',
       firstPaymentDate: '17/09/2025',
       rentAmount: '10000',

@@ -79,14 +79,14 @@ export default function PaymentScheduleForm({
         />
 
         <FormInput
-          id="assetValue"
-          name="assetValue"
-          label={t('form.assetValue.label')}
+          id="assetAmount"
+          name="assetAmount"
+          label={t('form.assetAmount.label')}
           type="number"
-          value={formData.assetValue}
+          value={formData.assetAmount}
           onChange={handleChange}
           disabled={loading}
-          error={errors.assetValue}
+          error={errors.assetAmount}
           min="0"
           step="1"
         />

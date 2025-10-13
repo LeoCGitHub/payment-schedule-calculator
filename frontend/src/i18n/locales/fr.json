@@ -16,9 +16,9 @@
       "label": "Durée Contractuelle (mois)",
       "placeholder": "Entrez la durée en mois"
     },
-    "assetValue": {
-      "label": "Valeur du Bien",
-      "placeholder": "Entrez la valeur du bien"
+    "assetAmount": {
+      "label": "Montant du Bien",
+      "placeholder": "Entrez le montant du bien"
     },
     "rentAmount": {
       "label": "Montant du Loyer",
@@ -58,11 +58,13 @@
       "required": "La durée contractuelle est requise",
       "consistency": "La durée contractuelle doit être un multiple de {{months}} mois pour une périodicité {{periodicity}}"
     },
-    "assetValue": {
-      "required": "La valeur du bien doit être supérieure à 0"
+    "assetAmount": {
+      "required": "Le montant du bien doit être supérieure à 0",
+      "consistency": "Le montant du bien ne peut être inférieur au montant du loyer"
     },
     "rentAmount": {
-      "required": "Le montant du loyer doit être supérieur à 0"
+      "required": "Le montant du loyer doit être supérieur à 0",
+      "consistency": "Le montant du loyer ne peut être supérieur au montant du bien"
     },
     "firstPaymentDate": {
       "required": "La date du premier paiement est requise"

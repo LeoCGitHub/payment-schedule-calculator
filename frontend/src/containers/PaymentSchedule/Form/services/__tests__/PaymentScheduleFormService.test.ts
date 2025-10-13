@@ -19,18 +19,18 @@ describe('PaymentScheduleFormService', () => {
       ).toBeUndefined();
     });
 
-    it('should validate assetValue field', () => {
-      expect(PaymentScheduleFormService.validateField('assetValue', '')).toBe(
+    it('should validate assetAmount field', () => {
+      expect(PaymentScheduleFormService.validateField('assetAmount', '')).toBe(
         'Asset value must be greater than 0'
       );
-      expect(PaymentScheduleFormService.validateField('assetValue', '0')).toBe(
+      expect(PaymentScheduleFormService.validateField('assetAmount', '0')).toBe(
         'Asset value must be greater than 0'
       );
       expect(
-        PaymentScheduleFormService.validateField('assetValue', '-100')
+        PaymentScheduleFormService.validateField('assetAmount', '-100')
       ).toBe('Asset value must be greater than 0');
       expect(
-        PaymentScheduleFormService.validateField('assetValue', '1000')
+        PaymentScheduleFormService.validateField('assetAmount', '1000')
       ).toBeUndefined();
     });
 
@@ -80,7 +80,7 @@ describe('PaymentScheduleFormService', () => {
       const mockFormData: PaymentScheduleFormData = {
         periodicity: 'Trimestriel',
         contractDuration: '48',
-        assetValue: '150000',
+        assetAmount: '150000',
         purchaseOptionValue: '1500',
         firstPaymentDate: '17/09/2025',
         rentAmount: '10000',
@@ -183,7 +183,7 @@ describe('PaymentScheduleFormService', () => {
     const validFormData: PaymentScheduleFormData = {
       periodicity: 'Trimestriel',
       contractDuration: '48',
-      assetValue: '150000',
+      assetAmount: '150000',
       purchaseOptionValue: '1500',
       firstPaymentDate: '17/09/2025',
       rentAmount: '10000',
@@ -206,16 +206,16 @@ describe('PaymentScheduleFormService', () => {
       expect(errors.contractDuration).toBe('Contract duration is required');
     });
 
-    it('should return error when assetValue is empty', () => {
-      const formData = { ...validFormData, assetValue: '' };
+    it('should return error when assetAmount is empty', () => {
+      const formData = { ...validFormData, assetAmount: '' };
       const errors = PaymentScheduleFormService.validateForm(formData);
-      expect(errors.assetValue).toBe('Asset value must be greater than 0');
+      expect(errors.assetAmount).toBe('Asset value must be greater than 0');
     });
 
-    it('should return error when assetValue is zero', () => {
-      const formData = { ...validFormData, assetValue: '0' };
+    it('should return error when assetAmount is zero', () => {
+      const formData = { ...validFormData, assetAmount: '0' };
       const errors = PaymentScheduleFormService.validateForm(formData);
-      expect(errors.assetValue).toBe('Asset value must be greater than 0');
+      expect(errors.assetAmount).toBe('Asset value must be greater than 0');
     });
 
     it('should return error when rentAmount is empty', () => {
@@ -248,7 +248,7 @@ describe('PaymentScheduleFormService', () => {
       const formData: PaymentScheduleFormData = {
         periodicity: 'Mensuel',
         contractDuration: '',
-        assetValue: '0',
+        assetAmount: '0',
         purchaseOptionValue: '',
         firstPaymentDate: '',
         rentAmount: '-100',
@@ -256,7 +256,7 @@ describe('PaymentScheduleFormService', () => {
       const errors = PaymentScheduleFormService.validateForm(formData);
 
       expect(errors.contractDuration).toBe('Contract duration is required');
-      expect(errors.assetValue).toBe('Asset value must be greater than 0');
+      expect(errors.assetAmount).toBe('Asset value must be greater than 0');
       expect(errors.rentAmount).toBe('Rent amount must be greater than 0');
       expect(errors.firstPaymentDate).toBe('First payment date is required');
       expect(errors.purchaseOptionValue).toBe(
@@ -361,7 +361,7 @@ describe('PaymentScheduleFormService', () => {
     const validFormData: PaymentScheduleFormData = {
       periodicity: 'Trimestriel',
       contractDuration: '48',
-      assetValue: '150000',
+      assetAmount: '150000',
       purchaseOptionValue: '1500',
       firstPaymentDate: '17/09/2025',
       rentAmount: '10000',
@@ -387,8 +387,8 @@ describe('PaymentScheduleFormService', () => {
       expect(isValid).toBe(false);
     });
 
-    it('should return false when assetValue is empty', () => {
-      const formData = { ...validFormData, assetValue: '' };
+    it('should return false when assetAmount is empty', () => {
+      const formData = { ...validFormData, assetAmount: '' };
       const isValid = PaymentScheduleFormService.isFormValid(formData, {});
       expect(isValid).toBe(false);
     });
@@ -411,7 +411,7 @@ describe('PaymentScheduleFormService', () => {
       const formData: PaymentScheduleFormData = {
         periodicity: 'Trimestriel',
         contractDuration: '48',
-        assetValue: '150000',
+        assetAmount: '150000',
         purchaseOptionValue: '1500',
         firstPaymentDate: '17/09/2025',
         rentAmount: '10000',
@@ -433,7 +433,7 @@ describe('PaymentScheduleFormService', () => {
       const formData: PaymentScheduleFormData = {
         periodicity: 'Mensuel',
         contractDuration: '24',
-        assetValue: '50000',
+        assetAmount: '50000',
         purchaseOptionValue: '500',
         firstPaymentDate: '01/01/2024',
         rentAmount: '2000',
@@ -447,7 +447,7 @@ describe('PaymentScheduleFormService', () => {
       const formData: PaymentScheduleFormData = {
         periodicity: 'Semestriel',
         contractDuration: '24',
-        assetValue: '50000',
+        assetAmount: '50000',
         purchaseOptionValue: '500',
         firstPaymentDate: '01/01/2024',
         rentAmount: '2000',
@@ -461,7 +461,7 @@ describe('PaymentScheduleFormService', () => {
       const formData: PaymentScheduleFormData = {
         periodicity: 'Annuel',
         contractDuration: '24',
-        assetValue: '50000',
+        assetAmount: '50000',
         purchaseOptionValue: '500',
         firstPaymentDate: '01/01/2024',
         rentAmount: '2000',
@@ -475,7 +475,7 @@ describe('PaymentScheduleFormService', () => {
       const formData: PaymentScheduleFormData = {
         periodicity: 'Unknown' as any,
         contractDuration: '24',
-        assetValue: '50000',
+        assetAmount: '50000',
         purchaseOptionValue: '500',
         firstPaymentDate: '01/01/2024',
         rentAmount: '2000',
@@ -489,7 +489,7 @@ describe('PaymentScheduleFormService', () => {
       const formData: PaymentScheduleFormData = {
         periodicity: 'Trimestriel',
         contractDuration: '48',
-        assetValue: '150000.50',
+        assetAmount: '150000.50',
         purchaseOptionValue: '1500.75',
         firstPaymentDate: '17/09/2025',
         rentAmount: '10000.25',
@@ -510,7 +510,7 @@ describe('PaymentScheduleFormService', () => {
       expect(defaultData).toEqual({
         periodicity: 'Trimestriel',
         contractDuration: '48',
-        assetValue: '150000',
+        assetAmount: '150000',
         purchaseOptionValue: '1500',
         firstPaymentDate: '17/09/2025',
         rentAmount: '10000',

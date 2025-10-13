@@ -68,62 +68,43 @@ export function usePaymentScheduleForm({
       onDataChange(newFormData);
     }
 
-    // Validate field on change
-    validateField(name, processedValue, newFormData);
+    validateField(name, newFormData);
   };
 
   const validateField = (
     name: string,
-    value: string,
     currentFormData: PaymentScheduleFormData
   ): void => {
     const newErrors: PaymentScheduleFormErrors = { ...errors };
-    const error = PaymentScheduleFormService.validateField(
-      name,
-      value,
-      currentFormData
+
+    validateFieldWithTranslation(
+      name as keyof PaymentScheduleFormData,
+      currentFormData,
+      newErrors
+    );
+    //  TODO LCG bug here on dynamic langage change, faut recharger page
+
+    revalidateDependentFields(
+      name as keyof PaymentScheduleFormData,
+      'periodicity',
+      'contractDuration',
+      currentFormData,
+      newErrors
     );
 
-    if (error) {
-      newErrors[name as keyof PaymentScheduleFormErrors] = translateError(
-        error,
-        t
-      );
-    } else {
-      delete newErrors[name as keyof PaymentScheduleFormErrors];
-    }
-
-    // When periodicity or contractDuration changes, re-validate the other field
-    if (name === 'periodicity' && currentFormData.contractDuration) {
-      const durationError = PaymentScheduleFormService.validateField(
-        'contractDuration',
-        currentFormData.contractDuration,
-        currentFormData
-      );
-      if (durationError) {
-        newErrors.contractDuration = translateError(durationError, t);
-      } else {
-        delete newErrors.contractDuration;
-      }
-    } else if (name === 'contractDuration' && currentFormData.periodicity) {
-      const periodicityError = PaymentScheduleFormService.validateField(
-        'periodicity',
-        currentFormData.periodicity,
-        currentFormData
-      );
-      if (periodicityError) {
-        newErrors.periodicity = translateError(periodicityError, t);
-      } else {
-        delete newErrors.periodicity;
-      }
-    }
+    revalidateDependentFields(
+      name as keyof PaymentScheduleFormData,
+      'assetAmount',
+      'rentAmount',
+      currentFormData,
+      newErrors
+    );
 
     setErrors(newErrors);
   };
 
   const validate = (): boolean => {
     const rawErrors = PaymentScheduleFormService.validateForm(formData);
-    // Translate all errors
     const translatedErrors: PaymentScheduleFormErrors = {};
     Object.entries(rawErrors).forEach(([key, value]) => {
       if (value) {
@@ -133,6 +114,37 @@ export function usePaymentScheduleForm({
     });
     setErrors(translatedErrors);
     return Object.keys(translatedErrors).length === 0;
+  };
+
+  const validateFieldWithTranslation = (
+    fieldName: keyof PaymentScheduleFormData,
+    currentFormData: PaymentScheduleFormData,
+    newErrors: PaymentScheduleFormErrors
+  ) => {
+    const error = PaymentScheduleFormService.validateField(
+      fieldName,
+      currentFormData[fieldName],
+      currentFormData
+    );
+    if (error) {
+      newErrors[fieldName] = translateError(error, t);
+    } else {
+      delete newErrors[fieldName];
+    }
+  };
+
+  const revalidateDependentFields = (
+    currentField: keyof PaymentScheduleFormData,
+    fieldName: keyof PaymentScheduleFormData,
+    dependantName: keyof PaymentScheduleFormData,
+    currentFormData: PaymentScheduleFormData,
+    newErrors: PaymentScheduleFormErrors
+  ) => {
+    if (currentField === fieldName && currentFormData[dependantName]) {
+      validateFieldWithTranslation(dependantName, currentFormData, newErrors);
+    } else if (currentField === dependantName && currentFormData[fieldName]) {
+      validateFieldWithTranslation(fieldName, currentFormData, newErrors);
+    }
   };
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>): void => {

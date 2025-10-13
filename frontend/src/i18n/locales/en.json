@@ -16,7 +16,7 @@
       "label": "Contract Duration (months)",
       "placeholder": "Enter the duration in months"
     },
-    "assetValue": {
+    "assetAmount": {
       "label": "Asset Value",
       "placeholder": "Enter the asset value"
     },
@@ -58,11 +58,13 @@
       "required": "Contract duration is required",
       "consistency": "Contract duration must be a multiple of {{months}} months for {{periodicity}} periodicity"
     },
-    "assetValue": {
-      "required": "Asset value must be greater than 0"
+    "assetAmount": {
+      "required": "Asset amount must be greater than 0",
+      "consistency": "Asset amount must be greater than Rent amount"
     },
     "rentAmount": {
-      "required": "Rent amount must be greater than 0"
+      "required": "Rent amount must be greater than 0",
+      "consistency": "Rent amount must be lower than Asset amount"
     },
     "firstPaymentDate": {
       "required": "First payment date is required"

@@ -5,7 +5,6 @@ import { TFunction } from 'i18next';
  * Maps English error messages from the service to translation keys
  */
 export function translateError(error: string, t: TFunction): string {
-  // Contract duration errors
   if (error === 'Contract duration is required') {
     return t('errors.contractDuration.required');
   }
@@ -24,12 +23,22 @@ export function translateError(error: string, t: TFunction): string {
 
   // Asset value errors
   if (error === 'Asset value must be greater than 0') {
-    return t('errors.assetValue.required');
+    return t('errors.assetAmount.required');
+  }
+
+  // Rent amount errors
+  if (error === 'Asset amount must be greater than Rent amount') {
+    return t('errors.assetAmount.consistency');
   }
 
   // Rent amount errors
   if (error === 'Rent amount must be greater than 0') {
     return t('errors.rentAmount.required');
+  }
+
+  // Rent amount errors
+  if (error === 'Rent amount must be lower than Asset amount') {
+    return t('errors.rentAmount.consistency');
   }
 
   // First payment date errors

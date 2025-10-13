@@ -118,15 +118,15 @@ describe('PaymentScheduleForm', () => {
     );
     expect(contractDurationInput).toHaveAttribute('min', '1');
 
-    const assetValueInput = screen.getByLabelText("Valeur de l'actif");
-    expect(assetValueInput).toHaveAttribute('min', '0');
+    const assetAmountInput = screen.getByLabelText("Valeur de l'actif");
+    expect(assetAmountInput).toHaveAttribute('min', '0');
   });
 
   it('should render number inputs with correct step values', () => {
     render(<PaymentScheduleForm onSubmit={mockOnSubmit} loading={false} />);
 
-    const assetValueInput = screen.getByLabelText("Valeur de l'actif");
-    expect(assetValueInput).toHaveAttribute('step', '1');
+    const assetAmountInput = screen.getByLabelText("Valeur de l'actif");
+    expect(assetAmountInput).toHaveAttribute('step', '1');
 
     const rentAmountInput = screen.getByLabelText(
       'Montant du loyer (fixe et payé à terme échu)'
@@ -178,7 +178,7 @@ describe('PaymentScheduleForm', () => {
     const initialData = {
       periodicity: 'Mensuel',
       contractDuration: '24',
-      assetValue: '50000',
+      assetAmount: '50000',
       purchaseOptionValue: '500',
       firstPaymentDate: '01/01/2024',
       rentAmount: '2000',

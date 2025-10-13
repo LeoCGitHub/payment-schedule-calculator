@@ -1,7 +1,7 @@
 export interface PaymentScheduleFormData {
   periodicity: string;
   contractDuration: string;
-  assetValue: string;
+  assetAmount: string;
   purchaseOptionValue: string;
   firstPaymentDate: string;
   rentAmount: string;

@@ -5,8 +5,10 @@
 export const ERROR_KEYS = {
   CONTRACT_DURATION_REQUIRED: 'errors.contractDuration.required',
   CONTRACT_DURATION_CONSISTENCY: 'errors.contractDuration.consistency',
-  ASSET_VALUE_REQUIRED: 'errors.assetValue.required',
+  ASSET_AMOUNT_REQUIRED: 'errors.assetAmount.required',
+  ASSET_AMOUNT_CONSISTENCY: 'errors.assetAmount.consistency',
   RENT_AMOUNT_REQUIRED: 'errors.rentAmount.required',
+  RENT_AMOUNT_CONSISTENCY: 'errors.rentAmount.consistency',
   FIRST_PAYMENT_DATE_REQUIRED: 'errors.firstPaymentDate.required',
   PURCHASE_OPTION_VALUE_REQUIRED: 'errors.purchaseOptionValue.required',
 } as const;
