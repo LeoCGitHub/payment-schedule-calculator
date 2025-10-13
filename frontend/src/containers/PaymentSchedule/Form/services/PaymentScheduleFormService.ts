@@ -18,13 +18,40 @@ export class PaymentScheduleFormService {
    * Validate a single field
    * @param name Field name
    * @param value Field value
+   * @param formData Optional form data for cross-field validation
    * @returns Error message if validation fails, undefined otherwise
    */
-  static validateField(name: string, value: string): string | undefined {
+  static validateField(
+    name: string,
+    value: string,
+    formData?: PaymentScheduleFormData
+  ): string | undefined {
     switch (name) {
       case 'contractDuration':
         if (!value || parseInt(value) <= 0) {
           return 'Contract duration is required';
+        }
+        if (formData) {
+          const duration = parseInt(value);
+          const periodicityMonths =
+            this.PERIODICITY_MAP[formData.periodicity] ||
+            this.PERIODICITY_MAP.Trimestriel;
+
+          if (duration % periodicityMonths !== 0) {
+            return `Contract duration must be a multiple of ${periodicityMonths} months for ${formData.periodicity} periodicity`;
+          }
+        }
+        break;
+      case 'periodicity':
+        // When periodicity changes, validate against current duration
+        if (formData && formData.contractDuration) {
+          const duration = parseInt(formData.contractDuration);
+          const periodicityMonths =
+            this.PERIODICITY_MAP[value] || this.PERIODICITY_MAP.Trimestriel;
+
+          if (duration > 0 && duration % periodicityMonths !== 0) {
+            return `Contract duration must be a multiple of ${periodicityMonths} months for ${value} periodicity`;
+          }
         }
         break;
       case 'assetValue':
@@ -68,6 +95,15 @@ export class PaymentScheduleFormService {
       parseInt(formData.contractDuration) <= 0
     ) {
       errors.contractDuration = 'Contract duration is required';
+    } else {
+      const duration = parseInt(formData.contractDuration);
+      const periodicityMonths =
+        this.PERIODICITY_MAP[formData.periodicity] ||
+        this.PERIODICITY_MAP.Trimestriel;
+
+      if (duration % periodicityMonths !== 0) {
+        errors.contractDuration = `Contract duration must be a multiple of ${periodicityMonths} months for ${formData.periodicity} periodicity`;
+      }
     }
 
     if (!formData.assetValue || parseFloat(formData.assetValue) <= 0) {

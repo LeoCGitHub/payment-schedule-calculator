@@ -40,7 +40,8 @@ describe('PaymentScheduleApi', () => {
         json: async () => mockResponse,
       } as Response);
 
-      const result = await paymentScheduleApiService.calculateSchedule(mockRequest);
+      const result =
+        await paymentScheduleApiService.calculateSchedule(mockRequest);
 
       expect(global.fetch).toHaveBeenCalledWith(
         expect.stringContaining('/payment-schedule/calculate'),
@@ -98,9 +99,9 @@ describe('PaymentScheduleApi', () => {
         statusText: 'Bad Request',
       } as Response);
 
-      await expect(paymentScheduleApiService.calculateSchedule(mockRequest)).rejects.toThrow(
-        'Error during calculating: 400 Bad Request'
-      );
+      await expect(
+        paymentScheduleApiService.calculateSchedule(mockRequest)
+      ).rejects.toThrow('Error during calculating: 400 Bad Request');
     });
 
     it('should throw error on 500 Internal Server Error', async () => {
@@ -110,9 +111,9 @@ describe('PaymentScheduleApi', () => {
         statusText: 'Internal Server Error',
       } as Response);
 
-      await expect(paymentScheduleApiService.calculateSchedule(mockRequest)).rejects.toThrow(
-        'Error during calculating: 500 Internal Server Error'
-      );
+      await expect(
+        paymentScheduleApiService.calculateSchedule(mockRequest)
+      ).rejects.toThrow('Error during calculating: 500 Internal Server Error');
     });
 
     it('should throw error on 404 Not Found', async () => {
@@ -122,17 +123,17 @@ describe('PaymentScheduleApi', () => {
         statusText: 'Not Found',
       } as Response);
 
-      await expect(paymentScheduleApiService.calculateSchedule(mockRequest)).rejects.toThrow(
-        'Error during calculating: 404 Not Found'
-      );
+      await expect(
+        paymentScheduleApiService.calculateSchedule(mockRequest)
+      ).rejects.toThrow('Error during calculating: 404 Not Found');
     });
 
     it('should handle network errors', async () => {
       global.fetch = vi.fn().mockRejectedValue(new Error('Network error'));
 
-      await expect(paymentScheduleApiService.calculateSchedule(mockRequest)).rejects.toThrow(
-        'Network error'
-      );
+      await expect(
+        paymentScheduleApiService.calculateSchedule(mockRequest)
+      ).rejects.toThrow('Network error');
     });
 
     it('should set correct content-type header', async () => {
@@ -171,7 +172,8 @@ describe('PaymentScheduleApi', () => {
         json: async () => emptyResponse,
       } as Response);
 
-      const result = await paymentScheduleApiService.calculateSchedule(mockRequest);
+      const result =
+        await paymentScheduleApiService.calculateSchedule(mockRequest);
 
       expect(result.lines).toEqual([]);
       expect(result.totals.totalRent).toBe(0);

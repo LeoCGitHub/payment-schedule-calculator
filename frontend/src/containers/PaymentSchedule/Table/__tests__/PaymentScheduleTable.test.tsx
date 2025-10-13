@@ -78,7 +78,9 @@ describe('PaymentScheduleTable', () => {
   });
 
   it('should render PaymentScheduleRow for each line', () => {
-    const { container } = render(<PaymentScheduleTable schedule={mockSchedule} />);
+    const { container } = render(
+      <PaymentScheduleTable schedule={mockSchedule} />
+    );
 
     const tbody = container.querySelector('tbody');
     const rows = tbody?.querySelectorAll('tr');
@@ -98,16 +100,22 @@ describe('PaymentScheduleTable', () => {
   });
 
   it('should apply correct CSS classes', () => {
-    const { container } = render(<PaymentScheduleTable schedule={mockSchedule} />);
+    const { container } = render(
+      <PaymentScheduleTable schedule={mockSchedule} />
+    );
 
     expect(container.querySelector('.schedule-container')).toBeInTheDocument();
-    expect(container.querySelector('.schedule-table-wrapper')).toBeInTheDocument();
+    expect(
+      container.querySelector('.schedule-table-wrapper')
+    ).toBeInTheDocument();
     expect(container.querySelector('.table-responsive')).toBeInTheDocument();
     expect(container.querySelector('.schedule-table')).toBeInTheDocument();
   });
 
   it('should render table structure with thead, tbody, and tfoot', () => {
-    const { container } = render(<PaymentScheduleTable schedule={mockSchedule} />);
+    const { container } = render(
+      <PaymentScheduleTable schedule={mockSchedule} />
+    );
 
     expect(container.querySelector('thead')).toBeInTheDocument();
     expect(container.querySelector('tbody')).toBeInTheDocument();
@@ -115,7 +123,9 @@ describe('PaymentScheduleTable', () => {
   });
 
   it('should render correct number of header columns', () => {
-    const { container } = render(<PaymentScheduleTable schedule={mockSchedule} />);
+    const { container } = render(
+      <PaymentScheduleTable schedule={mockSchedule} />
+    );
 
     const headers = container.querySelectorAll('thead th');
     expect(headers).toHaveLength(10);
@@ -136,7 +146,9 @@ describe('PaymentScheduleTable', () => {
       },
     };
 
-    const { container } = render(<PaymentScheduleTable schedule={emptySchedule} />);
+    const { container } = render(
+      <PaymentScheduleTable schedule={emptySchedule} />
+    );
 
     const tbody = container.querySelector('tbody');
     const rows = tbody?.querySelectorAll('tr');
@@ -150,7 +162,9 @@ describe('PaymentScheduleTable', () => {
       purchaseOptionTotals: mockSchedule.purchaseOptionTotals,
     };
 
-    const { container } = render(<PaymentScheduleTable schedule={singleLineSchedule} />);
+    const { container } = render(
+      <PaymentScheduleTable schedule={singleLineSchedule} />
+    );
 
     const tbody = container.querySelector('tbody');
     const rows = tbody?.querySelectorAll('tr');
@@ -160,7 +174,9 @@ describe('PaymentScheduleTable', () => {
   it('should render totals with correct values', () => {
     render(<PaymentScheduleTable schedule={mockSchedule} />);
 
-    expect(screen.getByText(/20[\s\u202f]000,00[\s\u202f]€/)).toBeInTheDocument();
+    expect(
+      screen.getByText(/20[\s\u202f]000,00[\s\u202f]€/)
+    ).toBeInTheDocument();
   });
 
   it('should render purchase option totals with correct values', () => {
@@ -171,7 +187,9 @@ describe('PaymentScheduleTable', () => {
   });
 
   it('should use period as key for rows', () => {
-    const { container } = render(<PaymentScheduleTable schedule={mockSchedule} />);
+    const { container } = render(
+      <PaymentScheduleTable schedule={mockSchedule} />
+    );
 
     const tbody = container.querySelector('tbody');
     const rows = tbody?.querySelectorAll('tr');

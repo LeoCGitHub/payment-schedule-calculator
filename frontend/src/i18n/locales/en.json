@@ -1,0 +1,85 @@
+{
+  "app": {
+    "title": "Payment Schedule Calculator",
+    "subtitle": "Calculate your payment schedule easily"
+  },
+  "form": {
+    "title": "Payment Schedule Information",
+    "periodicity": {
+      "label": "Periodicity",
+      "Mensuel": "Monthly",
+      "Trimestriel": "Quarterly",
+      "Semestriel": "Semi-Annual",
+      "Annuel": "Annual"
+    },
+    "contractDuration": {
+      "label": "Contract Duration (months)",
+      "placeholder": "Enter the duration in months"
+    },
+    "assetValue": {
+      "label": "Asset Value",
+      "placeholder": "Enter the asset value"
+    },
+    "rentAmount": {
+      "label": "Rent Amount",
+      "placeholder": "Enter the rent amount"
+    },
+    "purchaseOptionValue": {
+      "label": "Purchase Option Amount",
+      "placeholder": "Enter the purchase option amount"
+    },
+    "firstPaymentDate": {
+      "label": "First Payment Date",
+      "placeholder": "Select the first payment date"
+    },
+    "submit": "Calculate Schedule",
+    "reset": "Reset"
+  },
+  "table": {
+    "title": "Payment Schedule",
+    "headers": {
+      "period": "Period",
+      "dueDate": "Due Date",
+      "rentAmount": "Rent",
+      "periodRate": "Rate",
+      "annualReferenceRate": "Annual Rate",
+      "financialInterestAmount": "Financial Interest",
+      "repaymentAmount": "Repayment",
+      "debtBeginningPeriodAmount": "Debt Beginning Period",
+      "debtEndPeriodAmount": "Debt End Period",
+      "actualizedCashFlowAmount": "Discounted Cash Flow"
+    },
+    "purchaseOption": "Purchase Option",
+    "total": "Total",
+    "emptyCell": "-"
+  },
+  "errors": {
+    "contractDuration": {
+      "required": "Contract duration is required",
+      "consistency": "Contract duration must be a multiple of {{months}} months for {{periodicity}} periodicity"
+    },
+    "assetValue": {
+      "required": "Asset value must be greater than 0"
+    },
+    "rentAmount": {
+      "required": "Rent amount must be greater than 0"
+    },
+    "firstPaymentDate": {
+      "required": "First payment date is required"
+    },
+    "purchaseOptionValue": {
+      "required": "Purchase option amount is required"
+    },
+    "general": "An error occurred while calculating the payment schedule. Please try again."
+  },
+  "toast": {
+    "success": "Success!",
+    "error": "Error",
+    "close": "Close"
+  },
+  "language": {
+    "selector": "Language",
+    "fr": "French",
+    "en": "English"
+  }
+}

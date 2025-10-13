@@ -1,13 +1,16 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import PaymentScheduleForm from '../containers/PaymentSchedule/Form/PaymentScheduleForm';
 import PaymentScheduleTable from '../containers/PaymentSchedule/Table/PaymentScheduleTable';
 import Toast from '../components/Toast/Toast';
+import { LanguageSelector } from '../components/LanguageSelector/LanguageSelector';
 import { paymentScheduleApiService } from '../api/PaymentScheduleApi';
 import './App.scss';
 import { PaymentScheduleResponse } from '@/types/payment-schedule/response/PaymentScheduleResponse';
 import { PaymentScheduleRequest } from '@/types/payment-schedule/request/PaymentScheduleRequest';
 
 function App(): React.JSX.Element {
+  const { t } = useTranslation();
   const [schedule, setSchedule] = useState<PaymentScheduleResponse | null>(
     null
   );
@@ -25,9 +28,7 @@ function App(): React.JSX.Element {
       setSchedule(result as unknown as PaymentScheduleResponse);
     } catch (err) {
       const errorMessage =
-        err instanceof Error
-          ? err.message
-          : 'An error occurred while calculating the payment schedule';
+        err instanceof Error ? err.message : t('errors.general');
       setError(errorMessage);
     } finally {
       setLoading(false);
@@ -37,9 +38,10 @@ function App(): React.JSX.Element {
   return (
     <div className="app">
       <header className="app-header">
-        <h1>
-          Calculateur d&apos;échéancier d'un contrat de location-financement
-        </h1>
+        <div className="app-header__content">
+          <h1>{t('app.title')}</h1>
+          <LanguageSelector />
+        </div>
       </header>
 
       <main className="app-main">
@@ -54,11 +56,8 @@ function App(): React.JSX.Element {
             ) : (
               <div className="placeholder">
                 <div className="placeholder-icon">📊</div>
-                <h3>Echéancier</h3>
-                <p>
-                  Remplissez le formulaire et cliquez sur "Calculer
-                  l'échéancier" pour voir les résultats
-                </p>
+                <h3>{t('table.title')}</h3>
+                <p>{t('app.subtitle')}</p>
               </div>
             )}
           </div>

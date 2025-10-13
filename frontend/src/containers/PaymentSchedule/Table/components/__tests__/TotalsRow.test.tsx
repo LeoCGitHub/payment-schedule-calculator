@@ -32,10 +32,18 @@ describe('TotalsRow', () => {
       </table>
     );
 
-    expect(screen.getByText(/480[\s\u202f]000,00[\s\u202f]€/)).toBeInTheDocument();
-    expect(screen.getByText(/331[\s\u202f]500,00[\s\u202f]€/)).toBeInTheDocument();
-    expect(screen.getByText(/148[\s\u202f]500,00[\s\u202f]€/)).toBeInTheDocument();
-    expect(screen.getByText(/450[\s\u202f]000,00[\s\u202f]€/)).toBeInTheDocument();
+    expect(
+      screen.getByText(/480[\s\u202f]000,00[\s\u202f]€/)
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(/331[\s\u202f]500,00[\s\u202f]€/)
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(/148[\s\u202f]500,00[\s\u202f]€/)
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(/450[\s\u202f]000,00[\s\u202f]€/)
+    ).toBeInTheDocument();
   });
 
   it('should apply totals-row-line class to the row', () => {
@@ -181,6 +189,8 @@ describe('TotalsRow', () => {
       </table>
     );
 
-    expect(screen.getByText(/10[\s\u202f]000[\s\u202f]000,00[\s\u202f]€/)).toBeInTheDocument();
+    expect(
+      screen.getByText(/10[\s\u202f]000[\s\u202f]000,00[\s\u202f]€/)
+    ).toBeInTheDocument();
   });
 });

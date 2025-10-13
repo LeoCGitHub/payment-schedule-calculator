@@ -89,7 +89,9 @@ describe('Toast', () => {
   });
 
   it('should apply correct CSS class based on type', () => {
-    const { container, rerender } = render(<Toast message="Test" type="error" />);
+    const { container, rerender } = render(
+      <Toast message="Test" type="error" />
+    );
     expect(container.querySelector('.toast-error')).toBeInTheDocument();
 
     rerender(<Toast message="Test" type="success" />);
@@ -101,7 +103,9 @@ describe('Toast', () => {
 
   it('should clean up timer on unmount', () => {
     const onClose = vi.fn();
-    const { unmount } = render(<Toast message="Test" onClose={onClose} duration={3000} />);
+    const { unmount } = render(
+      <Toast message="Test" onClose={onClose} duration={3000} />
+    );
 
     unmount();
     vi.advanceTimersByTime(3000);

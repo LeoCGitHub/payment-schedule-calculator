@@ -30,7 +30,8 @@ describe('ErrorMessage', () => {
   });
 
   it('should handle long error messages', () => {
-    const longMessage = 'This is a very long error message that should still render correctly';
+    const longMessage =
+      'This is a very long error message that should still render correctly';
     render(<ErrorMessage message={longMessage} />);
 
     expect(screen.getByText(longMessage)).toBeInTheDocument();

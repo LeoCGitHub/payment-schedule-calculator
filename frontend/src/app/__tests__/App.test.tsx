@@ -19,14 +19,18 @@ describe('App', () => {
     render(<App />);
 
     expect(
-      screen.getByText("Calculateur d'échéancier d'un contrat de location-financement")
+      screen.getByText(
+        "Calculateur d'échéancier d'un contrat de location-financement"
+      )
     ).toBeInTheDocument();
   });
 
   it('should render PaymentScheduleForm', () => {
     render(<App />);
 
-    expect(screen.getByText('Sélectionnez vos conditions initiales')).toBeInTheDocument();
+    expect(
+      screen.getByText('Sélectionnez vos conditions initiales')
+    ).toBeInTheDocument();
   });
 
   it('should render placeholder when no schedule', () => {
@@ -34,7 +38,9 @@ describe('App', () => {
 
     expect(screen.getByText('Echéancier')).toBeInTheDocument();
     expect(
-      screen.getByText(/Remplissez le formulaire et cliquez sur "Calculer l'échéancier"/i)
+      screen.getByText(
+        /Remplissez le formulaire et cliquez sur "Calculer l'échéancier"/i
+      )
     ).toBeInTheDocument();
   });
 
@@ -70,12 +76,16 @@ describe('App', () => {
 
   it('should display Toast on API error', async () => {
     const mockError = new Error('API Error');
-    vi.mocked(paymentScheduleApiService.calculateSchedule).mockRejectedValueOnce(mockError);
+    vi.mocked(
+      paymentScheduleApiService.calculateSchedule
+    ).mockRejectedValueOnce(mockError);
 
     const user = userEvent.setup();
     render(<App />);
 
-    const submitButton = screen.getByRole('button', { name: /Calculer l'échéancier/i });
+    const submitButton = screen.getByRole('button', {
+      name: /Calculer l'échéancier/i,
+    });
     await user.click(submitButton);
 
     await waitFor(() => {
@@ -111,12 +121,16 @@ describe('App', () => {
       },
     };
 
-    vi.mocked(paymentScheduleApiService.calculateSchedule).mockResolvedValueOnce(mockSchedule);
+    vi.mocked(
+      paymentScheduleApiService.calculateSchedule
+    ).mockResolvedValueOnce(mockSchedule);
 
     const user = userEvent.setup();
     render(<App />);
 
-    const submitButton = screen.getByRole('button', { name: /Calculer l'échéancier/i });
+    const submitButton = screen.getByRole('button', {
+      name: /Calculer l'échéancier/i,
+    });
     await user.click(submitButton);
 
     await waitFor(() => {
@@ -139,7 +153,9 @@ describe('App', () => {
       },
     };
 
-    vi.mocked(paymentScheduleApiService.calculateSchedule).mockResolvedValueOnce(mockSchedule);
+    vi.mocked(
+      paymentScheduleApiService.calculateSchedule
+    ).mockResolvedValueOnce(mockSchedule);
 
     const user = userEvent.setup();
     render(<App />);
@@ -147,22 +163,30 @@ describe('App', () => {
     // Initially placeholder is shown
     expect(screen.getByText(/Remplissez le formulaire/i)).toBeInTheDocument();
 
-    const submitButton = screen.getByRole('button', { name: /Calculer l'échéancier/i });
+    const submitButton = screen.getByRole('button', {
+      name: /Calculer l'échéancier/i,
+    });
     await user.click(submitButton);
 
     await waitFor(() => {
-      expect(screen.queryByText(/Remplissez le formulaire/i)).not.toBeInTheDocument();
+      expect(
+        screen.queryByText(/Remplissez le formulaire/i)
+      ).not.toBeInTheDocument();
     });
   });
 
   it('should close Toast when close button is clicked', async () => {
     const mockError = new Error('Test Error');
-    vi.mocked(paymentScheduleApiService.calculateSchedule).mockRejectedValueOnce(mockError);
+    vi.mocked(
+      paymentScheduleApiService.calculateSchedule
+    ).mockRejectedValueOnce(mockError);
 
     const user = userEvent.setup();
     render(<App />);
 
-    const submitButton = screen.getByRole('button', { name: /Calculer l'échéancier/i });
+    const submitButton = screen.getByRole('button', {
+      name: /Calculer l'échéancier/i,
+    });
     await user.click(submitButton);
 
     await waitFor(() => {
@@ -185,26 +209,34 @@ describe('App', () => {
     const user = userEvent.setup();
     render(<App />);
 
-    const submitButton = screen.getByRole('button', { name: /Calculer l'échéancier/i });
+    const submitButton = screen.getByRole('button', {
+      name: /Calculer l'échéancier/i,
+    });
     await user.click(submitButton);
 
-    expect(screen.getByRole('button', { name: /Calcul en cours.../i })).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: /Calcul en cours.../i })
+    ).toBeInTheDocument();
   });
 
   it('should handle non-Error exceptions', async () => {
-    vi.mocked(paymentScheduleApiService.calculateSchedule).mockRejectedValueOnce(
-      'String error'
-    );
+    vi.mocked(
+      paymentScheduleApiService.calculateSchedule
+    ).mockRejectedValueOnce('String error');
 
     const user = userEvent.setup();
     render(<App />);
 
-    const submitButton = screen.getByRole('button', { name: /Calculer l'échéancier/i });
+    const submitButton = screen.getByRole('button', {
+      name: /Calculer l'échéancier/i,
+    });
     await user.click(submitButton);
 
     await waitFor(() => {
       expect(
-        screen.getByText('An error occurred while calculating the payment schedule')
+        screen.getByText(
+          'An error occurred while calculating the payment schedule'
+        )
       ).toBeInTheDocument();
     });
   });
@@ -212,7 +244,9 @@ describe('App', () => {
   it('should pass loading state to form', () => {
     render(<App />);
 
-    const submitButton = screen.getByRole('button', { name: /Calculer l'échéancier/i });
+    const submitButton = screen.getByRole('button', {
+      name: /Calculer l'échéancier/i,
+    });
     expect(submitButton).not.toBeDisabled();
   });
 });

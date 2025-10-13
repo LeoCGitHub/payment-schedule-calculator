@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import './Toast.scss';
 
 export type ToastType = 'error' | 'success' | 'info';
@@ -16,6 +17,8 @@ export default function Toast({
   onClose,
   duration = 5000,
 }: ToastProps): React.JSX.Element | null {
+  const { t } = useTranslation();
+
   useEffect(() => {
     if (duration && onClose) {
       const timer = setTimeout(() => {
@@ -39,7 +42,11 @@ export default function Toast({
         <span className="toast-message">{message}</span>
       </div>
       {onClose && (
-        <button className="toast-close" onClick={onClose} aria-label="Fermer">
+        <button
+          className="toast-close"
+          onClick={onClose}
+          aria-label={t('toast.close')}
+        >
           ×
         </button>
       )}

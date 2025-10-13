@@ -29,9 +29,15 @@ describe('FormSelect', () => {
   it('should render all options', () => {
     render(<FormSelect {...defaultProps} />);
 
-    expect(screen.getByRole('option', { name: 'Option 1' })).toBeInTheDocument();
-    expect(screen.getByRole('option', { name: 'Option 2' })).toBeInTheDocument();
-    expect(screen.getByRole('option', { name: 'Option 3' })).toBeInTheDocument();
+    expect(
+      screen.getByRole('option', { name: 'Option 1' })
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('option', { name: 'Option 2' })
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('option', { name: 'Option 3' })
+    ).toBeInTheDocument();
   });
 
   it('should have correct selected value', () => {
@@ -102,7 +108,9 @@ describe('FormSelect', () => {
   it('should trigger onChange with new value when selection changes', async () => {
     const user = userEvent.setup();
     const onChange = vi.fn();
-    render(<FormSelect {...defaultProps} value="option1" onChange={onChange} />);
+    render(
+      <FormSelect {...defaultProps} value="option1" onChange={onChange} />
+    );
 
     const select = screen.getByRole('combobox');
     await user.selectOptions(select, 'option3');
@@ -116,9 +124,15 @@ describe('FormSelect', () => {
   it('should render option values correctly', () => {
     render(<FormSelect {...defaultProps} />);
 
-    const option1 = screen.getByRole('option', { name: 'Option 1' }) as HTMLOptionElement;
-    const option2 = screen.getByRole('option', { name: 'Option 2' }) as HTMLOptionElement;
-    const option3 = screen.getByRole('option', { name: 'Option 3' }) as HTMLOptionElement;
+    const option1 = screen.getByRole('option', {
+      name: 'Option 1',
+    }) as HTMLOptionElement;
+    const option2 = screen.getByRole('option', {
+      name: 'Option 2',
+    }) as HTMLOptionElement;
+    const option3 = screen.getByRole('option', {
+      name: 'Option 3',
+    }) as HTMLOptionElement;
 
     expect(option1.value).toBe('option1');
     expect(option2.value).toBe('option2');

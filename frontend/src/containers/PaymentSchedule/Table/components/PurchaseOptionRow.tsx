@@ -1,33 +1,44 @@
 import { PurchaseOptionTotals } from '@/types/payment-schedule/response/PurchaseOptionsTotals';
+import { useTranslation } from 'react-i18next';
 import { formatCurrency } from '@/utils/formatter/NumberFormatter';
 import TableCell from '@/components/Table/TableCell/TableCell';
-import { TABLE_LABELS } from '../constants/tableConfig';
 
 interface PurchaseOptionRowProps {
   purchaseOptionTotals: PurchaseOptionTotals;
 }
 
+// Map i18next language code to locale
+const getLocale = (language: string): string => {
+  return language === 'en' ? 'en-US' : 'fr-FR';
+};
+
 export default function PurchaseOptionRow({
   purchaseOptionTotals,
 }: PurchaseOptionRowProps): React.JSX.Element {
+  const { t, i18n } = useTranslation();
+  const locale = getLocale(i18n.language);
+
   return (
     <tr className="purchase-option-line">
       <TableCell colSpan={2} className="purchase-option-label">
-        {TABLE_LABELS.purchaseOption}
+        {t('table.purchaseOption')}
       </TableCell>
       <TableCell className="amount">
-        {formatCurrency(purchaseOptionTotals.purchaseOptionAmount)}
+        {formatCurrency(purchaseOptionTotals.purchaseOptionAmount, locale)}
       </TableCell>
-      <TableCell className="amount">{TABLE_LABELS.emptyCell}</TableCell>
-      <TableCell className="amount">{TABLE_LABELS.emptyCell}</TableCell>
-      <TableCell className="amount">{TABLE_LABELS.emptyCell}</TableCell>
+      <TableCell className="amount">{t('table.emptyCell')}</TableCell>
+      <TableCell className="amount">{t('table.emptyCell')}</TableCell>
+      <TableCell className="amount">{t('table.emptyCell')}</TableCell>
       <TableCell className="amount">
-        {formatCurrency(purchaseOptionTotals.purchaseOptionAmount)}
+        {formatCurrency(purchaseOptionTotals.purchaseOptionAmount, locale)}
       </TableCell>
-      <TableCell className="amount">{TABLE_LABELS.emptyCell}</TableCell>
-      <TableCell className="amount">{TABLE_LABELS.emptyCell}</TableCell>
+      <TableCell className="amount">{t('table.emptyCell')}</TableCell>
+      <TableCell className="amount">{t('table.emptyCell')}</TableCell>
       <TableCell className="amount">
-        {formatCurrency(purchaseOptionTotals.actualizedPurchaseOptionAmount)}
+        {formatCurrency(
+          purchaseOptionTotals.actualizedPurchaseOptionAmount,
+          locale
+        )}
       </TableCell>
     </tr>
   );

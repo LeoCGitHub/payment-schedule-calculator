@@ -43,7 +43,9 @@ describe('PurchaseOptionRow', () => {
       </table>
     );
 
-    expect(screen.getByText(/1[\s\u202f]450,00[\s\u202f]€/)).toBeInTheDocument();
+    expect(
+      screen.getByText(/1[\s\u202f]450,00[\s\u202f]€/)
+    ).toBeInTheDocument();
   });
 
   it('should apply purchase-option-line class to the row', () => {
@@ -159,7 +161,9 @@ describe('PurchaseOptionRow', () => {
 
     const largeAmounts = screen.getAllByText(/100[\s\u202f]000,00[\s\u202f]€/);
     expect(largeAmounts.length).toBe(2); // Appears twice
-    expect(screen.getByText(/95[\s\u202f]000,00[\s\u202f]€/)).toBeInTheDocument();
+    expect(
+      screen.getByText(/95[\s\u202f]000,00[\s\u202f]€/)
+    ).toBeInTheDocument();
   });
 
   it('should render purchase option amount in correct cells', () => {
@@ -198,6 +202,8 @@ describe('PurchaseOptionRow', () => {
 
     const amounts = screen.getAllByText(/1[\s\u202f]500,50[\s\u202f]€/);
     expect(amounts.length).toBe(2); // Appears twice
-    expect(screen.getByText(/1[\s\u202f]450,75[\s\u202f]€/)).toBeInTheDocument();
+    expect(
+      screen.getByText(/1[\s\u202f]450,75[\s\u202f]€/)
+    ).toBeInTheDocument();
   });
 });

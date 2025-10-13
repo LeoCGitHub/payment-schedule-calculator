@@ -1,0 +1,85 @@
+{
+  "app": {
+    "title": "Calculateur d'Échéancier de Paiement",
+    "subtitle": "Calculez facilement votre échéancier de paiement"
+  },
+  "form": {
+    "title": "Informations de l'Échéancier",
+    "periodicity": {
+      "label": "Périodicité",
+      "Mensuel": "Mensuel",
+      "Trimestriel": "Trimestriel",
+      "Semestriel": "Semestriel",
+      "Annuel": "Annuel"
+    },
+    "contractDuration": {
+      "label": "Durée Contractuelle (mois)",
+      "placeholder": "Entrez la durée en mois"
+    },
+    "assetValue": {
+      "label": "Valeur du Bien",
+      "placeholder": "Entrez la valeur du bien"
+    },
+    "rentAmount": {
+      "label": "Montant du Loyer",
+      "placeholder": "Entrez le montant du loyer"
+    },
+    "purchaseOptionValue": {
+      "label": "Montant de l'Option d'Achat",
+      "placeholder": "Entrez le montant de l'option d'achat"
+    },
+    "firstPaymentDate": {
+      "label": "Date du Premier Paiement",
+      "placeholder": "Sélectionnez la date du premier paiement"
+    },
+    "submit": "Calculer l'Échéancier",
+    "reset": "Réinitialiser"
+  },
+  "table": {
+    "title": "Échéancier de Paiement",
+    "headers": {
+      "period": "Période",
+      "dueDate": "Date d'échéance",
+      "rentAmount": "Loyer",
+      "periodRate": "Taux",
+      "annualReferenceRate": "Taux annuel",
+      "financialInterestAmount": "Intérêts financiers",
+      "repaymentAmount": "Remboursement",
+      "debtBeginningPeriodAmount": "Dette début période",
+      "debtEndPeriodAmount": "Dette fin période",
+      "actualizedCashFlowAmount": "Flux actualisés"
+    },
+    "purchaseOption": "Option d'achat",
+    "total": "Total",
+    "emptyCell": "-"
+  },
+  "errors": {
+    "contractDuration": {
+      "required": "La durée contractuelle est requise",
+      "consistency": "La durée contractuelle doit être un multiple de {{months}} mois pour une périodicité {{periodicity}}"
+    },
+    "assetValue": {
+      "required": "La valeur du bien doit être supérieure à 0"
+    },
+    "rentAmount": {
+      "required": "Le montant du loyer doit être supérieur à 0"
+    },
+    "firstPaymentDate": {
+      "required": "La date du premier paiement est requise"
+    },
+    "purchaseOptionValue": {
+      "required": "Le montant de l'option d'achat est requis"
+    },
+    "general": "Une erreur est survenue lors du calcul de l'échéancier. Veuillez réessayer."
+  },
+  "toast": {
+    "success": "Succès !",
+    "error": "Erreur",
+    "close": "Fermer"
+  },
+  "language": {
+    "selector": "Langue",
+    "fr": "Français",
+    "en": "Anglais"
+  }
+}

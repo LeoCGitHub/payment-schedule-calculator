@@ -13,30 +13,44 @@ describe('PaymentScheduleForm', () => {
   it('should render form title', () => {
     render(<PaymentScheduleForm onSubmit={mockOnSubmit} loading={false} />);
 
-    expect(screen.getByText('Sélectionnez vos conditions initiales')).toBeInTheDocument();
+    expect(
+      screen.getByText('Sélectionnez vos conditions initiales')
+    ).toBeInTheDocument();
   });
 
   it('should render all form fields', () => {
     render(<PaymentScheduleForm onSubmit={mockOnSubmit} loading={false} />);
 
-    expect(screen.getByLabelText('Date de la première échéance')).toBeInTheDocument();
+    expect(
+      screen.getByLabelText('Date de la première échéance')
+    ).toBeInTheDocument();
     expect(screen.getByLabelText('Périodicité')).toBeInTheDocument();
-    expect(screen.getByLabelText('Durée contractuelle (en mois)')).toBeInTheDocument();
+    expect(
+      screen.getByLabelText('Durée contractuelle (en mois)')
+    ).toBeInTheDocument();
     expect(screen.getByLabelText("Valeur de l'actif")).toBeInTheDocument();
-    expect(screen.getByLabelText('Montant du loyer (fixe et payé à terme échu)')).toBeInTheDocument();
-    expect(screen.getByLabelText("Valeur de l'option d'achat")).toBeInTheDocument();
+    expect(
+      screen.getByLabelText('Montant du loyer (fixe et payé à terme échu)')
+    ).toBeInTheDocument();
+    expect(
+      screen.getByLabelText("Valeur de l'option d'achat")
+    ).toBeInTheDocument();
   });
 
   it('should render submit button', () => {
     render(<PaymentScheduleForm onSubmit={mockOnSubmit} loading={false} />);
 
-    expect(screen.getByRole('button', { name: /Calculer l'échéancier/i })).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: /Calculer l'échéancier/i })
+    ).toBeInTheDocument();
   });
 
   it('should show loading state on submit button when loading', () => {
     render(<PaymentScheduleForm onSubmit={mockOnSubmit} loading={true} />);
 
-    expect(screen.getByRole('button', { name: /Calcul en cours.../i })).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: /Calcul en cours.../i })
+    ).toBeInTheDocument();
   });
 
   it('should disable all fields when loading', () => {
@@ -71,8 +85,12 @@ describe('PaymentScheduleForm', () => {
     render(<PaymentScheduleForm onSubmit={mockOnSubmit} loading={false} />);
 
     expect(screen.getByRole('option', { name: 'Mensuel' })).toBeInTheDocument();
-    expect(screen.getByRole('option', { name: 'Trimestriel' })).toBeInTheDocument();
-    expect(screen.getByRole('option', { name: 'Semestriel' })).toBeInTheDocument();
+    expect(
+      screen.getByRole('option', { name: 'Trimestriel' })
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('option', { name: 'Semestriel' })
+    ).toBeInTheDocument();
     expect(screen.getByRole('option', { name: 'Annuel' })).toBeInTheDocument();
   });
 
@@ -91,9 +109,13 @@ describe('PaymentScheduleForm', () => {
   });
 
   it('should render number inputs with correct min values', () => {
-    const { container } = render(<PaymentScheduleForm onSubmit={mockOnSubmit} loading={false} />);
+    const { container } = render(
+      <PaymentScheduleForm onSubmit={mockOnSubmit} loading={false} />
+    );
 
-    const contractDurationInput = screen.getByLabelText('Durée contractuelle (en mois)');
+    const contractDurationInput = screen.getByLabelText(
+      'Durée contractuelle (en mois)'
+    );
     expect(contractDurationInput).toHaveAttribute('min', '1');
 
     const assetValueInput = screen.getByLabelText("Valeur de l'actif");
@@ -106,7 +128,9 @@ describe('PaymentScheduleForm', () => {
     const assetValueInput = screen.getByLabelText("Valeur de l'actif");
     expect(assetValueInput).toHaveAttribute('step', '1');
 
-    const rentAmountInput = screen.getByLabelText('Montant du loyer (fixe et payé à terme échu)');
+    const rentAmountInput = screen.getByLabelText(
+      'Montant du loyer (fixe et payé à terme échu)'
+    );
     expect(rentAmountInput).toHaveAttribute('step', '1');
   });
 
@@ -122,7 +146,9 @@ describe('PaymentScheduleForm', () => {
       />
     );
 
-    const contractDurationInput = screen.getByLabelText('Durée contractuelle (en mois)');
+    const contractDurationInput = screen.getByLabelText(
+      'Durée contractuelle (en mois)'
+    );
     await user.clear(contractDurationInput);
     await user.type(contractDurationInput, '36');
 
@@ -130,14 +156,18 @@ describe('PaymentScheduleForm', () => {
   });
 
   it('should apply form CSS classes', () => {
-    const { container } = render(<PaymentScheduleForm onSubmit={mockOnSubmit} loading={false} />);
+    const { container } = render(
+      <PaymentScheduleForm onSubmit={mockOnSubmit} loading={false} />
+    );
 
     expect(container.querySelector('.payment-form')).toBeInTheDocument();
     expect(container.querySelector('.form-row')).toBeInTheDocument();
   });
 
   it('should render submit button with correct class', () => {
-    const { container } = render(<PaymentScheduleForm onSubmit={mockOnSubmit} loading={false} />);
+    const { container } = render(
+      <PaymentScheduleForm onSubmit={mockOnSubmit} loading={false} />
+    );
 
     const submitButton = container.querySelector('.submit-btn');
     expect(submitButton).toBeInTheDocument();
@@ -169,7 +199,9 @@ describe('PaymentScheduleForm', () => {
   });
 
   it('should have form element', () => {
-    const { container } = render(<PaymentScheduleForm onSubmit={mockOnSubmit} loading={false} />);
+    const { container } = render(
+      <PaymentScheduleForm onSubmit={mockOnSubmit} loading={false} />
+    );
 
     const form = container.querySelector('form');
     expect(form).toBeInTheDocument();

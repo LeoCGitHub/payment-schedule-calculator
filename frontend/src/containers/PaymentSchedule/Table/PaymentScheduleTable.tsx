@@ -1,4 +1,5 @@
 import { PaymentScheduleResponse } from '@/types/payment-schedule/response/PaymentScheduleResponse';
+import { useTranslation } from 'react-i18next';
 import './PaymentScheduleTable.scss';
 import PaymentScheduleRow from './components/PaymentScheduleRow';
 import PurchaseOptionRow from './components/PurchaseOptionRow';
@@ -12,6 +13,8 @@ export interface PaymentScheduleTableProps {
 export default function PaymentScheduleTable({
   schedule,
 }: PaymentScheduleTableProps): React.JSX.Element | null {
+  const { t } = useTranslation();
+
   if (!schedule) {
     return null;
   }
@@ -25,7 +28,7 @@ export default function PaymentScheduleTable({
               <tr>
                 {TABLE_COLUMNS.map(column => (
                   <th key={column.key} className={column.className}>
-                    {column.label}
+                    {t(`table.headers.${column.key}`)}
                   </th>
                 ))}
               </tr>

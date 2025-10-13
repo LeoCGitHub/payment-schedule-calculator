@@ -182,6 +182,8 @@ describe('PaymentScheduleRow', () => {
       </table>
     );
 
-    expect(screen.getByText(/1[\s\u202f]000[\s\u202f]000,00[\s\u202f]€/)).toBeInTheDocument();
+    expect(
+      screen.getByText(/1[\s\u202f]000[\s\u202f]000,00[\s\u202f]€/)
+    ).toBeInTheDocument();
   });
 });

@@ -1,15 +1,17 @@
 import './PaymentScheduleForm.scss';
+import { useTranslation } from 'react-i18next';
 import { convertToISO } from '../../../utils/formatter/DateFormatter';
 import { PaymentScheduleFormService } from '@/containers/PaymentSchedule/Form/services/PaymentScheduleFormService';
 import { PaymentScheduleFormProps } from './types/PaymentScheduleFormProps';
 import { usePaymentScheduleForm } from './hooks/usePaymentScheduleForm';
 import FormInput from '@/components/Form/FormInput/FormInput';
 import FormSelect from '@/components/Form/FormSelect/FormSelect';
-import {
-  PERIODICITY_OPTIONS,
-  FORM_LABELS,
-  SUBMIT_BUTTON_LABELS,
-} from './constants/formConfig';
+import { FormSelectOption } from '@/components/Form/FormSelect/FormSelect';
+
+// Map i18next language code to locale
+const getLocale = (language: string): string => {
+  return language === 'en' ? 'en-US' : 'fr-FR';
+};
 
 export default function PaymentScheduleForm({
   onSubmit,
@@ -17,6 +19,9 @@ export default function PaymentScheduleForm({
   initialData,
   onDataChange,
 }: PaymentScheduleFormProps): React.JSX.Element {
+  const { t, i18n } = useTranslation();
+  const locale = getLocale(i18n.language);
+
   const { formData, errors, isFormValid, handleChange, handleSubmit } =
     usePaymentScheduleForm({
       initialData,
@@ -27,17 +32,24 @@ export default function PaymentScheduleForm({
       },
     });
 
+  const periodicityOptions: FormSelectOption[] = [
+    { value: 'Mensuel', label: t('form.periodicity.Mensuel') },
+    { value: 'Trimestriel', label: t('form.periodicity.Trimestriel') },
+    { value: 'Semestriel', label: t('form.periodicity.Semestriel') },
+    { value: 'Annuel', label: t('form.periodicity.Annuel') },
+  ];
+
   return (
     <form onSubmit={handleSubmit} className="payment-form">
-      <h2>Sélectionnez vos conditions initiales</h2>
+      <h2>{t('form.title')}</h2>
 
       <div className="form-row">
         <FormInput
           id="firstPaymentDate"
           name="firstPaymentDate"
-          label={FORM_LABELS.firstPaymentDate}
+          label={t('form.firstPaymentDate.label')}
           type="date"
-          value={convertToISO(formData.firstPaymentDate)}
+          value={convertToISO(formData.firstPaymentDate, locale)}
           onChange={handleChange}
           disabled={loading}
           error={errors.firstPaymentDate}
@@ -46,9 +58,9 @@ export default function PaymentScheduleForm({
         <FormSelect
           id="periodicity"
           name="periodicity"
-          label={FORM_LABELS.periodicity}
+          label={t('form.periodicity.label')}
           value={formData.periodicity}
-          options={PERIODICITY_OPTIONS}
+          options={periodicityOptions}
           onChange={handleChange}
           disabled={loading}
           error={errors.periodicity}
@@ -57,7 +69,7 @@ export default function PaymentScheduleForm({
         <FormInput
           id="contractDuration"
           name="contractDuration"
-          label={FORM_LABELS.contractDuration}
+          label={t('form.contractDuration.label')}
           type="number"
           value={formData.contractDuration}
           onChange={handleChange}
@@ -69,7 +81,7 @@ export default function PaymentScheduleForm({
         <FormInput
           id="assetValue"
           name="assetValue"
-          label={FORM_LABELS.assetValue}
+          label={t('form.assetValue.label')}
           type="number"
           value={formData.assetValue}
           onChange={handleChange}
@@ -82,7 +94,7 @@ export default function PaymentScheduleForm({
         <FormInput
           id="rentAmount"
           name="rentAmount"
-          label={FORM_LABELS.rentAmount}
+          label={t('form.rentAmount.label')}
           type="number"
           value={formData.rentAmount}
           onChange={handleChange}
@@ -95,7 +107,7 @@ export default function PaymentScheduleForm({
         <FormInput
           id="purchaseOptionValue"
           name="purchaseOptionValue"
-          label={FORM_LABELS.purchaseOptionValue}
+          label={t('form.purchaseOptionValue.label')}
           type="number"
           value={formData.purchaseOptionValue}
           onChange={handleChange}
@@ -111,9 +123,7 @@ export default function PaymentScheduleForm({
             className="submit-btn"
             disabled={loading || !isFormValid}
           >
-            {loading
-              ? SUBMIT_BUTTON_LABELS.loading
-              : SUBMIT_BUTTON_LABELS.default}
+            {loading ? t('form.submit') + '...' : t('form.submit')}
           </button>
         </div>
       </div>
