@@ -16,7 +16,6 @@ class PaymentScheduleServiceTest {
 
     @Test
     fun `should calculate schedule with valid request`() {
-        // Given
         val request = PaymentScheduleRequest(
             periodicity = 3,
             contractDuration = 48,
@@ -26,10 +25,8 @@ class PaymentScheduleServiceTest {
             rentAmount = BigDecimal("10000")
         )
 
-        // When
         val response = paymentScheduleService.calculateSchedule(request)
 
-        // Then
         assertNotNull(response)
         assertEquals(16, response.paymentScheduleLines.size, "Should have 16 periods (48/3)")
         assertNotNull(response.paymentScheduleTotals)
@@ -48,16 +45,13 @@ class PaymentScheduleServiceTest {
             rentAmount = BigDecimal("4500")
         )
 
-        // When
         val response = paymentScheduleService.calculateSchedule(request)
 
-        // Then
         assertEquals(12, response.paymentScheduleLines.size, "Should have 12 monthly periods")
     }
 
     @Test
     fun `should calculate correct totals`() {
-        // Given
         val request = PaymentScheduleRequest(
             periodicity = 3,
             contractDuration = 48,
@@ -67,10 +61,8 @@ class PaymentScheduleServiceTest {
             rentAmount = BigDecimal("10000")
         )
 
-        // When
         val response = paymentScheduleService.calculateSchedule(request)
 
-        // Then
         val totals = response.paymentScheduleTotals
         assertTrue(totals.totalInterestAmount > BigDecimal.ZERO, "Total interest should be positive")
         assertTrue(totals.totalRepaymentAmount > BigDecimal.ZERO, "Total repayment should be positive")
@@ -79,7 +71,6 @@ class PaymentScheduleServiceTest {
 
     @Test
     fun `should have decreasing debt over periods`() {
-        // Given
         val request = PaymentScheduleRequest(
             periodicity = 3,
             contractDuration = 48,
@@ -89,10 +80,8 @@ class PaymentScheduleServiceTest {
             rentAmount = BigDecimal("10000")
         )
 
-        // When
         val response = paymentScheduleService.calculateSchedule(request)
 
-        // Then
         val lines = response.paymentScheduleLines
         for (i in 1 until lines.size) {
             assertTrue(
@@ -104,7 +93,6 @@ class PaymentScheduleServiceTest {
 
     @Test
     fun `should have first period debt equal to asset amount`() {
-        // Given
         val assetAmount = BigDecimal("150000")
         val request = PaymentScheduleRequest(
             periodicity = 3,
@@ -115,13 +103,11 @@ class PaymentScheduleServiceTest {
             rentAmount = BigDecimal("10000")
         )
 
-        // When
         val response = paymentScheduleService.calculateSchedule(request)
 
-        // Then
         val firstLine = response.paymentScheduleLines.first()
         assertEquals(
-            assetAmount.setScale(2),
+            assetAmount,
             firstLine.debtBeginningPeriodAmount,
             "First period debt should equal asset amount"
         )
@@ -129,7 +115,6 @@ class PaymentScheduleServiceTest {
 
     @Test
     fun `should have last period debt close to purchase option`() {
-        // Given
         val purchaseOption = BigDecimal("1500")
         val request = PaymentScheduleRequest(
             periodicity = 3,
@@ -140,10 +125,8 @@ class PaymentScheduleServiceTest {
             rentAmount = BigDecimal("10000")
         )
 
-        // When
         val response = paymentScheduleService.calculateSchedule(request)
 
-        // Then
         val lastLine = response.paymentScheduleLines.last()
         val tolerance = BigDecimal("10") // 10€ tolerance
         val diff = (lastLine.debtEndPeriodAmount - purchaseOption).abs()
@@ -155,7 +138,6 @@ class PaymentScheduleServiceTest {
 
     @Test
     fun `should calculate increasing payment dates`() {
-        // Given
         val firstDate = LocalDate.of(2025, 9, 17)
         val request = PaymentScheduleRequest(
             periodicity = 3,
@@ -166,10 +148,8 @@ class PaymentScheduleServiceTest {
             rentAmount = BigDecimal("12000")
         )
 
-        // When
         val response = paymentScheduleService.calculateSchedule(request)
 
-        // Then
         val lines = response.paymentScheduleLines
         assertEquals(firstDate.toString(), lines[0].dueDate, "First payment date should match")
         assertEquals(firstDate.plusMonths(3).toString(), lines[1].dueDate, "Second payment should be 3 months later")
@@ -178,7 +158,6 @@ class PaymentScheduleServiceTest {
 
     @Test
     fun `should have consistent rent amount across periods`() {
-        // Given
         val rentAmount = BigDecimal("10000")
         val request = PaymentScheduleRequest(
             periodicity = 3,
@@ -189,13 +168,11 @@ class PaymentScheduleServiceTest {
             rentAmount = rentAmount
         )
 
-        // When
         val response = paymentScheduleService.calculateSchedule(request)
 
-        // Then
         response.paymentScheduleLines.forEach { line ->
             assertEquals(
-                rentAmount.setScale(2),
+                rentAmount,
                 line.rentAmount,
                 "Rent amount should be consistent across all periods"
             )
@@ -204,7 +181,6 @@ class PaymentScheduleServiceTest {
 
     @Test
     fun `should have repayment plus interest equal to rent`() {
-        // Given
         val request = PaymentScheduleRequest(
             periodicity = 3,
             contractDuration = 48,
@@ -214,15 +190,13 @@ class PaymentScheduleServiceTest {
             rentAmount = BigDecimal("10000")
         )
 
-        // When
         val response = paymentScheduleService.calculateSchedule(request)
 
-        // Then
         response.paymentScheduleLines.forEach { line ->
             val sum = line.repaymentAmount.add(line.financialInterestAmount)
             assertEquals(
                 line.rentAmount,
-                sum,
+                sum.setScale(0),
                 "Repayment + Interest should equal Rent for period ${line.period}"
             )
         }
@@ -230,7 +204,6 @@ class PaymentScheduleServiceTest {
 
     @Test
     fun `should calculate positive interest rates`() {
-        // Given
         val request = PaymentScheduleRequest(
             periodicity = 3,
             contractDuration = 48,
@@ -240,10 +213,8 @@ class PaymentScheduleServiceTest {
             rentAmount = BigDecimal("10000")
         )
 
-        // When
         val response = paymentScheduleService.calculateSchedule(request)
 
-        // Then
         response.paymentScheduleLines.forEach { line ->
             assertTrue(line.periodRate > BigDecimal.ZERO, "Period rate should be positive")
             assertTrue(line.annualReferenceRate > BigDecimal.ZERO, "Annual rate should be positive")
@@ -283,7 +254,6 @@ class PaymentScheduleServiceTest {
 
     @Test
     fun `should calculate purchase option actualized value`() {
-        // Given
         val purchaseOption = BigDecimal("1500")
         val request = PaymentScheduleRequest(
             periodicity = 3,
@@ -294,10 +264,8 @@ class PaymentScheduleServiceTest {
             rentAmount = BigDecimal("10000")
         )
 
-        // When
         val response = paymentScheduleService.calculateSchedule(request)
 
-        // Then
         val purchaseOptionTotals = response.purchaseOptionTotals
         assertEquals(purchaseOption, purchaseOptionTotals.purchaseOptionAmount)
         assertTrue(

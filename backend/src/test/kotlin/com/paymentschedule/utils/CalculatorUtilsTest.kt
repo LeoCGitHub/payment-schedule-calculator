@@ -29,7 +29,7 @@ class CalculatorUtilsTest {
         val rate = CalculatorUtils.calculateImplicitRateBasedOnResidualDebt(
             rentAmount = BigDecimal("10000.0"),
             purchaseOptionAmount = BigDecimal("1500.0"),
-            assetValue = BigDecimal("150000.0"),
+            assetAmount = BigDecimal("150000.0"),
             period = 16
         )
         println("Method 2 - Discount rate found: $rate")
@@ -46,15 +46,15 @@ class CalculatorUtilsTest {
     fun testBothMethodsGiveSameResult() {
         val rentAmount = BigDecimal("10000.0")
         val purchaseOptionAmount = BigDecimal("1500.0")
-        val assetValue = BigDecimal("150000.0")
+        val assetAmount = BigDecimal("150000.0")
         val periods = 16
 
         val rate1 = CalculatorUtils.calculateInternalRateOfReturn(
-            rentAmount, purchaseOptionAmount, assetValue, periods
+            rentAmount, purchaseOptionAmount, assetAmount, periods
         )
 
         val rate2 = CalculatorUtils.calculateImplicitRateBasedOnResidualDebt(
-            rentAmount, purchaseOptionAmount, assetValue, periods
+            rentAmount, purchaseOptionAmount, assetAmount, periods
         )
 
         println("Method 1 (discounted cash flows): $rate1")

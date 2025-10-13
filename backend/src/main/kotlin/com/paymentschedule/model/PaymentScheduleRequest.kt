@@ -22,12 +22,10 @@ import java.time.LocalDate
  * @property rentAmount Periodic rent amount
  */
 data class PaymentScheduleRequest(
-    @field:Positive(message = "Periodicity must be positive")
     @field:Min(value = 1, message = "Periodicity must be at least 1")
     @field:Max(value = 12, message = "Periodicity must be at most 12")
     val periodicity: Int,
 
-    @field:Positive(message = "Contract duration must be positive")
     @field:Min(value = 1, message = "Contract duration must be at least 1 month")
     val contractDuration: Int,
 
@@ -44,7 +42,7 @@ data class PaymentScheduleRequest(
     val firstPaymentDate: LocalDate,
 
     @field:NotNull(message = "Rent amount is required")
-    @field:DecimalMin(value = "0.01", message = "Rent amount must be greater than 0")
+    @field:DecimalMin(value = "0.0001", message = "Rent amount must be greater than 0")
     val rentAmount: BigDecimal
 ) {
     /**

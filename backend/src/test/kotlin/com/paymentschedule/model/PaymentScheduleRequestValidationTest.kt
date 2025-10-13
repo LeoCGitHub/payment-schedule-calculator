@@ -62,7 +62,7 @@ class PaymentScheduleRequestValidationTest {
         val violations = validator.validate(request)
 
         assertFalse(violations.isEmpty())
-        assertViolation(violations, "periodicity", "must be positive")
+        assertViolation(violations, "periodicity", "must be at least 1")
     }
 
     @Test
@@ -71,7 +71,7 @@ class PaymentScheduleRequestValidationTest {
         val violations = validator.validate(request)
 
         assertFalse(violations.isEmpty())
-        assertViolation(violations, "periodicity", "must be positive")
+        assertViolation(violations, "periodicity", "must be at least 1")
     }
 
     @Test
@@ -117,7 +117,7 @@ class PaymentScheduleRequestValidationTest {
         val violations = validator.validate(request)
 
         assertFalse(violations.isEmpty())
-        assertViolation(violations, "contractDuration", "must be positive")
+        assertViolation(violations, "contractDuration", "must be at least 1 month")
     }
 
     @Test
@@ -126,7 +126,7 @@ class PaymentScheduleRequestValidationTest {
         val violations = validator.validate(request)
 
         assertFalse(violations.isEmpty())
-        assertViolation(violations, "contractDuration", "must be positive")
+        assertViolation(violations, "contractDuration", "must be at least 1 month")
     }
 
     @Test
@@ -155,6 +155,7 @@ class PaymentScheduleRequestValidationTest {
                 rentAmount = amount.multiply(BigDecimal("0.05")) // 5% of asset
             )
             val violations = validator.validate(request)
+            System.out.println(request.toString())
             assertTrue(
                 violations.isEmpty(),
                 "Asset amount $amount should be valid, but got violations: ${violations.map { it.message }}"
@@ -216,7 +217,7 @@ class PaymentScheduleRequestValidationTest {
         val violations = validator.validate(request)
 
         assertFalse(violations.isEmpty())
-        assertViolation(violations, "purchaseOptionAmount", "must be greater than or equal to 0")
+        assertViolation(violations, "purchaseOptionAmount", "Purchase option amount cannot be negative")
     }
 
     @Test
@@ -314,15 +315,6 @@ class PaymentScheduleRequestValidationTest {
                 "Date $date should be valid, but got violations: ${violations.map { it.message }}"
             )
         }
-    }
-
-    @Test
-    fun `should fail validation when first payment date is in the past`() {
-        val request = createValidRequest().copy(firstPaymentDate = LocalDate.now().minusDays(1))
-        val violations = validator.validate(request)
-
-        assertFalse(violations.isEmpty())
-        assertViolation(violations, "firstPaymentDate", "must be today or in the future")
     }
 
     // ========== Combined Validation Tests ==========

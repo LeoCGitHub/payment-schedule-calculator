@@ -5,8 +5,6 @@ import io.restassured.RestAssured.given
 import io.restassured.http.ContentType
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.Test
-import java.math.BigDecimal
-import java.time.LocalDate
 
 @QuarkusTest
 class PaymentScheduleResourceTest {

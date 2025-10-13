@@ -109,13 +109,13 @@ object CalculatorUtils {
     @Deprecated(
         message = "Use calculateInternalRateOfReturn for better performance. " +
                 "This method is kept only for testing and validation purposes.",
-        replaceWith = ReplaceWith("calculateInternalRateOfReturn(rentAmount, purchaseOptionAmount, assetValue, period)"),
+        replaceWith = ReplaceWith("calculateInternalRateOfReturn(rentAmount, purchaseOptionAmount, assetAmount, period)"),
         level = DeprecationLevel.WARNING
     )
     fun calculateImplicitRateBasedOnResidualDebt(
         rentAmount: BigDecimal,
         purchaseOptionAmount: BigDecimal,
-        assetValue: BigDecimal,
+        assetAmount: BigDecimal,
         period: Int,
         precision: BigDecimal = BigDecimal.valueOf(1e-5)
     ): BigDecimal {
@@ -126,7 +126,7 @@ object CalculatorUtils {
         while ((high - low) > precision) {
             mid = (low + high).divide(BigDecimal.valueOf(2), BigDecimalUtils.MATH_CONTEXT)
 
-            var currentDebt = assetValue
+            var currentDebt = assetAmount
 
             for (t in 1..period) {
                 val interestForPeriod = currentDebt.multiply(mid, BigDecimalUtils.MATH_CONTEXT)
@@ -158,7 +158,7 @@ object CalculatorUtils {
     /**
      * Calculate Net Present Value (NPV) equation for IRR calculation
      *
-     * Evaluates: NPV = Rent × [(1 - (1+r)^-n) / r] + PurchaseOption / (1+r)^n - AssetValue
+     * Evaluates: NPV = Rent × [(1 - (1+r)^-n) / r] + PurchaseOption / (1+r)^n - assetAmount
      *
      * This function returns the difference between the present value of all cash flows
      * and the asset value. When this equals zero, we've found the Internal Rate of Return.
