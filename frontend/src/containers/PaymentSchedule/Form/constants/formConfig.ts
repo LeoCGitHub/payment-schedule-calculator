@@ -1,22 +1,18 @@
 import { FormSelectOption } from '@/components/Form/FormSelect/FormSelect';
-
+import { t } from 'i18next';
+import { PaymentScheduleFormData } from '../types/PaymentScheduleFormData';
 export const PERIODICITY_OPTIONS: FormSelectOption[] = [
-  { value: 'Mensuel', label: 'Mensuel' },
-  { value: 'Trimestriel', label: 'Trimestriel' },
-  { value: 'Semestriel', label: 'Semestriel' },
-  { value: 'Annuel', label: 'Annuel' },
+  { value: '1', label: t('form.periodicity.monthly') },
+  { value: '3', label: t('form.periodicity.quarterly') },
+  { value: '6', label: t('form.periodicity.semiAnnual') },
+  { value: '12', label: t('form.periodicity.annual') },
 ];
-
-export const FORM_LABELS = {
-  firstPaymentDate: 'Date de la première échéance',
-  periodicity: 'Périodicité',
-  contractDuration: 'Durée contractuelle (en mois)',
-  assetAmount: "Valeur de l'actif",
-  rentAmount: 'Montant du loyer (fixe et payé à terme échu)',
-  purchaseOptionValue: "Valeur de l'option d'achat",
-} as const;
-
-export const SUBMIT_BUTTON_LABELS = {
-  default: "Calculer l'échéancier",
-  loading: 'Calcul en cours...',
-} as const;
+export const DEFAULT_FORM_DATA: PaymentScheduleFormData = {
+  periodicity: '3',
+  contractDuration: '48',
+  assetAmount: '150000',
+  purchaseOptionAmount: '1500',
+  firstPaymentDate: '17/09/2025',
+  rentAmount: '10000',
+  marginalDebtRate: undefined,
+};

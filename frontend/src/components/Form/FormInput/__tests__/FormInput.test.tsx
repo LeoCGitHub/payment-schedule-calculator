@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import FormInput from '../FormInput';
 
@@ -33,7 +33,9 @@ describe('FormInput', () => {
     const input = screen.getByRole('textbox');
     await user.type(input, 'hello');
 
-    expect(onChange).toHaveBeenCalledTimes(5); // Once for each character
+    await waitFor(() => {
+      expect(onChange).toHaveBeenCalledTimes(5);
+    });
   });
 
   it('should render as number input when type is number', () => {

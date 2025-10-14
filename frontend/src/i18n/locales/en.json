@@ -1,16 +1,19 @@
 {
   "app": {
-    "title": "Payment Schedule Calculator",
-    "subtitle": "Calculate your payment schedule easily"
+    "title": "Payment Schedule Calculator"
+  },
+  "placeholder": {
+    "title": "Payment Schedule",
+    "subtitle": "Select your condictions and click the button"
   },
   "form": {
-    "title": "Payment Schedule Information",
+    "title": "Select your informations",
     "periodicity": {
       "label": "Periodicity",
-      "Mensuel": "Monthly",
-      "Trimestriel": "Quarterly",
-      "Semestriel": "Semi-Annual",
-      "Annuel": "Annual"
+      "monthly": "Monthly",
+      "quarterly": "Quarterly",
+      "semiAnnual": "Semi-Annual",
+      "annual": "Annual"
     },
     "contractDuration": {
       "label": "Contract Duration (months)",
@@ -24,13 +27,18 @@
       "label": "Rent Amount",
       "placeholder": "Enter the rent amount"
     },
-    "purchaseOptionValue": {
+    "purchaseOptionAmount": {
       "label": "Purchase Option Amount",
       "placeholder": "Enter the purchase option amount"
     },
     "firstPaymentDate": {
       "label": "First Payment Date",
       "placeholder": "Select the first payment date"
+    },
+    "marginalDebtRate": {
+      "label": "Marginal Debt Rate",
+      "placeholder": "Select your Marginal Debt Rate",
+      "flag": "BÊTA"
     },
     "submit": "Calculate Schedule",
     "reset": "Reset"
@@ -78,7 +86,7 @@
     "firstPaymentDate": {
       "required": "First payment date is required"
     },
-    "purchaseOptionValue": {
+    "purchaseOptionAmount": {
       "required": "Purchase option amount is required"
     },
     "general": "An error occurred while calculating the payment schedule. Please try again."

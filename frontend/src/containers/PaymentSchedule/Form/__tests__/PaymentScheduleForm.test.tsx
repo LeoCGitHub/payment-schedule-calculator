@@ -11,50 +11,84 @@ describe('PaymentScheduleForm', () => {
   });
 
   it('should render form title', () => {
-    render(<PaymentScheduleForm onSubmit={mockOnSubmit} loading={false} />);
+    render(
+      <PaymentScheduleForm
+        onSubmit={mockOnSubmit}
+        loading={false}
+        onReset={function (): void {
+          throw new Error('Function not implemented.');
+        }}
+      />
+    );
 
-    expect(
-      screen.getByText('Sélectionnez vos conditions initiales')
-    ).toBeInTheDocument();
+    expect(screen.getByText('form.title')).toBeInTheDocument();
   });
 
   it('should render all form fields', () => {
-    render(<PaymentScheduleForm onSubmit={mockOnSubmit} loading={false} />);
+    render(
+      <PaymentScheduleForm
+        onSubmit={mockOnSubmit}
+        loading={false}
+        onReset={function (): void {
+          throw new Error('Function not implemented.');
+        }}
+      />
+    );
 
     expect(
-      screen.getByLabelText('Date de la première échéance')
+      screen.getByLabelText('form.firstPaymentDate.label')
     ).toBeInTheDocument();
-    expect(screen.getByLabelText('Périodicité')).toBeInTheDocument();
+    expect(screen.getByLabelText('form.periodicity.label')).toBeInTheDocument();
+    expect(screen.getByLabelText('form.periodicity.label')).toBeInTheDocument();
+    expect(screen.getByLabelText('form.assetAmount.label')).toBeInTheDocument();
+    expect(screen.getByLabelText('form.rentAmount.label')).toBeInTheDocument();
     expect(
-      screen.getByLabelText('Durée contractuelle (en mois)')
-    ).toBeInTheDocument();
-    expect(screen.getByLabelText("Valeur de l'actif")).toBeInTheDocument();
-    expect(
-      screen.getByLabelText('Montant du loyer (fixe et payé à terme échu)')
-    ).toBeInTheDocument();
-    expect(
-      screen.getByLabelText("Valeur de l'option d'achat")
+      screen.getByLabelText('form.purchaseOptionAmount.label')
     ).toBeInTheDocument();
   });
 
   it('should render submit button', () => {
-    render(<PaymentScheduleForm onSubmit={mockOnSubmit} loading={false} />);
+    render(
+      <PaymentScheduleForm
+        onSubmit={mockOnSubmit}
+        loading={false}
+        onReset={function (): void {
+          throw new Error('Function not implemented.');
+        }}
+      />
+    );
 
     expect(
-      screen.getByRole('button', { name: /Calculer l'échéancier/i })
+      screen.getByRole('button', { name: 'form.submit' })
     ).toBeInTheDocument();
   });
 
   it('should show loading state on submit button when loading', () => {
-    render(<PaymentScheduleForm onSubmit={mockOnSubmit} loading={true} />);
+    render(
+      <PaymentScheduleForm
+        onSubmit={mockOnSubmit}
+        loading={true}
+        onReset={function (): void {
+          throw new Error('Function not implemented.');
+        }}
+      />
+    );
 
     expect(
-      screen.getByRole('button', { name: /Calcul en cours.../i })
+      screen.getByRole('button', { name: 'form.submit...' })
     ).toBeInTheDocument();
   });
 
   it('should disable all fields when loading', () => {
-    render(<PaymentScheduleForm onSubmit={mockOnSubmit} loading={true} />);
+    render(
+      <PaymentScheduleForm
+        onSubmit={mockOnSubmit}
+        loading={true}
+        onReset={function (): void {
+          throw new Error('Function not implemented.');
+        }}
+      />
+    );
 
     const inputs = screen.getAllByRole('spinbutton');
     inputs.forEach(input => {
@@ -66,14 +100,32 @@ describe('PaymentScheduleForm', () => {
   });
 
   it('should disable submit button when loading', () => {
-    render(<PaymentScheduleForm onSubmit={mockOnSubmit} loading={true} />);
+    render(
+      <PaymentScheduleForm
+        onSubmit={mockOnSubmit}
+        loading={true}
+        onReset={function (): void {
+          throw new Error('Function not implemented.');
+        }}
+      />
+    );
 
-    const submitButton = screen.getByRole('button');
+    const submitButton = screen.getByRole('button', {
+      name: 'form.submit...',
+    });
     expect(submitButton).toBeDisabled();
   });
 
   it('should render form with default values', () => {
-    render(<PaymentScheduleForm onSubmit={mockOnSubmit} loading={false} />);
+    render(
+      <PaymentScheduleForm
+        onSubmit={mockOnSubmit}
+        loading={false}
+        onReset={function (): void {
+          throw new Error('Function not implemented.');
+        }}
+      />
+    );
 
     expect(screen.getByDisplayValue('48')).toBeInTheDocument();
     expect(screen.getByDisplayValue('150000')).toBeInTheDocument();
@@ -81,56 +133,71 @@ describe('PaymentScheduleForm', () => {
     expect(screen.getByDisplayValue('1500')).toBeInTheDocument();
   });
 
-  it('should render periodicity select with all options', () => {
-    render(<PaymentScheduleForm onSubmit={mockOnSubmit} loading={false} />);
-
-    expect(screen.getByRole('option', { name: 'Mensuel' })).toBeInTheDocument();
-    expect(
-      screen.getByRole('option', { name: 'Trimestriel' })
-    ).toBeInTheDocument();
-    expect(
-      screen.getByRole('option', { name: 'Semestriel' })
-    ).toBeInTheDocument();
-    expect(screen.getByRole('option', { name: 'Annuel' })).toBeInTheDocument();
-  });
-
   it('should have Trimestriel selected by default', () => {
-    render(<PaymentScheduleForm onSubmit={mockOnSubmit} loading={false} />);
+    render(
+      <PaymentScheduleForm
+        onSubmit={mockOnSubmit}
+        loading={false}
+        onReset={function (): void {
+          throw new Error('Function not implemented.');
+        }}
+      />
+    );
 
     const select = screen.getByRole('combobox');
-    expect(select.value).toBe('Trimestriel');
+    expect((select as HTMLSelectElement).value).toBe('3');
   });
 
   it('should render date input with correct type', () => {
-    render(<PaymentScheduleForm onSubmit={mockOnSubmit} loading={false} />);
+    render(
+      <PaymentScheduleForm
+        onSubmit={mockOnSubmit}
+        loading={false}
+        onReset={function (): void {
+          throw new Error('Function not implemented.');
+        }}
+      />
+    );
 
-    const dateInput = screen.getByLabelText('Date de la première échéance');
+    const dateInput = screen.getByLabelText('form.firstPaymentDate.label');
     expect(dateInput).toHaveAttribute('type', 'date');
   });
 
   it('should render number inputs with correct min values', () => {
-    const { container } = render(
-      <PaymentScheduleForm onSubmit={mockOnSubmit} loading={false} />
+    render(
+      <PaymentScheduleForm
+        onSubmit={mockOnSubmit}
+        loading={false}
+        onReset={function (): void {
+          throw new Error('Function not implemented.');
+        }}
+      />
     );
 
     const contractDurationInput = screen.getByLabelText(
-      'Durée contractuelle (en mois)'
+      'form.contractDuration.label'
     );
     expect(contractDurationInput).toHaveAttribute('min', '1');
 
-    const assetAmountInput = screen.getByLabelText("Valeur de l'actif");
+    const assetAmountInput = screen.getByLabelText('form.assetAmount.label');
     expect(assetAmountInput).toHaveAttribute('min', '0');
   });
 
   it('should render number inputs with correct step values', () => {
-    render(<PaymentScheduleForm onSubmit={mockOnSubmit} loading={false} />);
+    render(
+      <PaymentScheduleForm
+        onSubmit={mockOnSubmit}
+        loading={false}
+        onReset={function (): void {
+          throw new Error('Function not implemented.');
+        }}
+      />
+    );
 
-    const assetAmountInput = screen.getByLabelText("Valeur de l'actif");
+    const assetAmountInput = screen.getByLabelText('form.assetAmount.label');
     expect(assetAmountInput).toHaveAttribute('step', '1');
 
-    const rentAmountInput = screen.getByLabelText(
-      'Montant du loyer (fixe et payé à terme échu)'
-    );
+    const rentAmountInput = screen.getByLabelText('form.rentAmount.label');
     expect(rentAmountInput).toHaveAttribute('step', '1');
   });
 
@@ -143,11 +210,14 @@ describe('PaymentScheduleForm', () => {
         onSubmit={mockOnSubmit}
         loading={false}
         onDataChange={onDataChange}
+        onReset={function (): void {
+          throw new Error('Function not implemented.');
+        }}
       />
     );
 
     const contractDurationInput = screen.getByLabelText(
-      'Durée contractuelle (en mois)'
+      'form.contractDuration.label'
     );
     await user.clear(contractDurationInput);
     await user.type(contractDurationInput, '36');
@@ -157,7 +227,13 @@ describe('PaymentScheduleForm', () => {
 
   it('should apply form CSS classes', () => {
     const { container } = render(
-      <PaymentScheduleForm onSubmit={mockOnSubmit} loading={false} />
+      <PaymentScheduleForm
+        onSubmit={mockOnSubmit}
+        loading={false}
+        onReset={function (): void {
+          throw new Error('Function not implemented.');
+        }}
+      />
     );
 
     expect(container.querySelector('.payment-form')).toBeInTheDocument();
@@ -166,7 +242,13 @@ describe('PaymentScheduleForm', () => {
 
   it('should render submit button with correct class', () => {
     const { container } = render(
-      <PaymentScheduleForm onSubmit={mockOnSubmit} loading={false} />
+      <PaymentScheduleForm
+        onSubmit={mockOnSubmit}
+        loading={false}
+        onReset={function (): void {
+          throw new Error('Function not implemented.');
+        }}
+      />
     );
 
     const submitButton = container.querySelector('.submit-btn');
@@ -179,7 +261,7 @@ describe('PaymentScheduleForm', () => {
       periodicity: 'Mensuel',
       contractDuration: '24',
       assetAmount: '50000',
-      purchaseOptionValue: '500',
+      purchaseOptionAmount: '500',
       firstPaymentDate: '01/01/2024',
       rentAmount: '2000',
     };
@@ -189,6 +271,9 @@ describe('PaymentScheduleForm', () => {
         onSubmit={mockOnSubmit}
         loading={false}
         initialData={initialData}
+        onReset={function (): void {
+          throw new Error('Function not implemented.');
+        }}
       />
     );
 
@@ -200,7 +285,13 @@ describe('PaymentScheduleForm', () => {
 
   it('should have form element', () => {
     const { container } = render(
-      <PaymentScheduleForm onSubmit={mockOnSubmit} loading={false} />
+      <PaymentScheduleForm
+        onSubmit={mockOnSubmit}
+        loading={false}
+        onReset={function (): void {
+          throw new Error('Function not implemented.');
+        }}
+      />
     );
 
     const form = container.querySelector('form');

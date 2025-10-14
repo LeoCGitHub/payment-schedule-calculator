@@ -21,14 +21,14 @@ describe('PaymentScheduleFormService', () => {
 
     it('should validate assetAmount field', () => {
       expect(PaymentScheduleFormService.validateField('assetAmount', '')).toBe(
-        'Asset value must be greater than 0'
+        'Asset amount must be greater than 0'
       );
       expect(PaymentScheduleFormService.validateField('assetAmount', '0')).toBe(
-        'Asset value must be greater than 0'
+        'Asset amount must be greater than 0'
       );
       expect(
         PaymentScheduleFormService.validateField('assetAmount', '-100')
-      ).toBe('Asset value must be greater than 0');
+      ).toBe('Asset amount must be greater than 0');
       expect(
         PaymentScheduleFormService.validateField('assetAmount', '1000')
       ).toBeUndefined();
@@ -61,12 +61,12 @@ describe('PaymentScheduleFormService', () => {
       ).toBeUndefined();
     });
 
-    it('should validate purchaseOptionValue field', () => {
+    it('should validate purchaseOptionAmount field', () => {
       expect(
-        PaymentScheduleFormService.validateField('purchaseOptionValue', '')
+        PaymentScheduleFormService.validateField('purchaseOptionAmount', '')
       ).toBe('Purchase option amount is required');
       expect(
-        PaymentScheduleFormService.validateField('purchaseOptionValue', '1000')
+        PaymentScheduleFormService.validateField('purchaseOptionAmount', '1000')
       ).toBeUndefined();
     });
 
@@ -78,10 +78,10 @@ describe('PaymentScheduleFormService', () => {
 
     describe('cross-field validation with formData', () => {
       const mockFormData: PaymentScheduleFormData = {
-        periodicity: 'Trimestriel',
+        periodicity: '3',
         contractDuration: '48',
         assetAmount: '150000',
-        purchaseOptionValue: '1500',
+        purchaseOptionAmount: '1500',
         firstPaymentDate: '17/09/2025',
         rentAmount: '10000',
       };
@@ -104,11 +104,11 @@ describe('PaymentScheduleFormService', () => {
             mockFormData
           )
         ).toBe(
-          'Contract duration must be a multiple of 3 months for Trimestriel periodicity'
+          'Contract duration must be a multiple of 3 months for 3 periodicity'
         );
 
         // Valid with Mensuel periodicity
-        const mensuelFormData = { ...mockFormData, periodicity: 'Mensuel' };
+        const mensuelFormData = { ...mockFormData, periodicity: '1' };
         expect(
           PaymentScheduleFormService.validateField(
             'contractDuration',
@@ -123,7 +123,7 @@ describe('PaymentScheduleFormService', () => {
         expect(
           PaymentScheduleFormService.validateField(
             'periodicity',
-            'Semestriel',
+            '6',
             mockFormData
           )
         ).toBeUndefined();
@@ -136,11 +136,11 @@ describe('PaymentScheduleFormService', () => {
         expect(
           PaymentScheduleFormService.validateField(
             'periodicity',
-            'Semestriel',
+            '6',
             formDataWithDuration13
           )
         ).toBe(
-          'Contract duration must be a multiple of 6 months for Semestriel periodicity'
+          'Contract duration must be a multiple of 6 months for 6 periodicity'
         );
       });
 
@@ -159,7 +159,7 @@ describe('PaymentScheduleFormService', () => {
         expect(
           PaymentScheduleFormService.validateField(
             'periodicity',
-            'Annuel',
+            '12',
             mockFormData
           )
         ).toBeUndefined();
@@ -169,11 +169,11 @@ describe('PaymentScheduleFormService', () => {
         expect(
           PaymentScheduleFormService.validateField(
             'periodicity',
-            'Annuel',
+            '12',
             formDataWith13
           )
         ).toBe(
-          'Contract duration must be a multiple of 12 months for Annuel periodicity'
+          'Contract duration must be a multiple of 12 months for 12 periodicity'
         );
       });
     });
@@ -181,10 +181,10 @@ describe('PaymentScheduleFormService', () => {
 
   describe('validateForm', () => {
     const validFormData: PaymentScheduleFormData = {
-      periodicity: 'Trimestriel',
+      periodicity: '3',
       contractDuration: '48',
       assetAmount: '150000',
-      purchaseOptionValue: '1500',
+      purchaseOptionAmount: '1500',
       firstPaymentDate: '17/09/2025',
       rentAmount: '10000',
     };
@@ -236,10 +236,10 @@ describe('PaymentScheduleFormService', () => {
       expect(errors.firstPaymentDate).toBe('First payment date is required');
     });
 
-    it('should return error when purchaseOptionValue is empty', () => {
-      const formData = { ...validFormData, purchaseOptionValue: '' };
+    it('should return error when purchaseOptionAmount is empty', () => {
+      const formData = { ...validFormData, purchaseOptionAmount: '' };
       const errors = PaymentScheduleFormService.validateForm(formData);
-      expect(errors.purchaseOptionValue).toBe(
+      expect(errors.purchaseOptionAmount).toBe(
         'Purchase option amount is required'
       );
     });
@@ -249,7 +249,7 @@ describe('PaymentScheduleFormService', () => {
         periodicity: 'Mensuel',
         contractDuration: '',
         assetAmount: '0',
-        purchaseOptionValue: '',
+        purchaseOptionAmount: '',
         firstPaymentDate: '',
         rentAmount: '-100',
       };
@@ -259,7 +259,7 @@ describe('PaymentScheduleFormService', () => {
       expect(errors.assetAmount).toBe('Asset value must be greater than 0');
       expect(errors.rentAmount).toBe('Rent amount must be greater than 0');
       expect(errors.firstPaymentDate).toBe('First payment date is required');
-      expect(errors.purchaseOptionValue).toBe(
+      expect(errors.purchaseOptionAmount).toBe(
         'Purchase option amount is required'
       );
     });
@@ -269,73 +269,73 @@ describe('PaymentScheduleFormService', () => {
         // Mensuel = 1 month, so any positive duration should be valid
         const formData = {
           ...validFormData,
-          periodicity: 'Mensuel',
+          periodicity: '1',
           contractDuration: '13',
         };
         const errors = PaymentScheduleFormService.validateForm(formData);
         expect(errors.contractDuration).toBeUndefined();
       });
 
-      it('should return error when duration is not a multiple of Trimestriel periodicity (3 months)', () => {
+      it('should return error when duration is not a multiple of 3 periodicity (3 months)', () => {
         const formData = {
           ...validFormData,
-          periodicity: 'Trimestriel',
+          periodicity: '3',
           contractDuration: '13',
         };
         const errors = PaymentScheduleFormService.validateForm(formData);
         expect(errors.contractDuration).toBe(
-          'Contract duration must be a multiple of 3 months for Trimestriel periodicity'
+          'Contract duration must be a multiple of 3 months for 3 periodicity'
         );
       });
 
       it('should accept valid duration for Trimestriel periodicity', () => {
         const formData = {
           ...validFormData,
-          periodicity: 'Trimestriel',
+          periodicity: '3',
           contractDuration: '36',
         };
         const errors = PaymentScheduleFormService.validateForm(formData);
         expect(errors.contractDuration).toBeUndefined();
       });
 
-      it('should return error when duration is not a multiple of Semestriel periodicity (6 months)', () => {
+      it('should return error when duration is not a multiple of 6 periodicity (6 months)', () => {
         const formData = {
           ...validFormData,
-          periodicity: 'Semestriel',
+          periodicity: '6',
           contractDuration: '13',
         };
         const errors = PaymentScheduleFormService.validateForm(formData);
         expect(errors.contractDuration).toBe(
-          'Contract duration must be a multiple of 6 months for Semestriel periodicity'
+          'Contract duration must be a multiple of 6 months for 6 periodicity'
         );
       });
 
       it('should accept valid duration for Semestriel periodicity', () => {
         const formData = {
           ...validFormData,
-          periodicity: 'Semestriel',
+          periodicity: '6',
           contractDuration: '24',
         };
         const errors = PaymentScheduleFormService.validateForm(formData);
         expect(errors.contractDuration).toBeUndefined();
       });
 
-      it('should return error when duration is not a multiple of Annuel periodicity (12 months)', () => {
+      it('should return error when duration is not a multiple of 12 periodicity (12 months)', () => {
         const formData = {
           ...validFormData,
-          periodicity: 'Annuel',
+          periodicity: '12',
           contractDuration: '13',
         };
         const errors = PaymentScheduleFormService.validateForm(formData);
         expect(errors.contractDuration).toBe(
-          'Contract duration must be a multiple of 12 months for Annuel periodicity'
+          'Contract duration must be a multiple of 12 months for 12 periodicity'
         );
       });
 
       it('should accept valid duration for Annuel periodicity', () => {
         const formData = {
           ...validFormData,
-          periodicity: 'Annuel',
+          periodicity: '12',
           contractDuration: '36',
         };
         const errors = PaymentScheduleFormService.validateForm(formData);
@@ -346,12 +346,12 @@ describe('PaymentScheduleFormService', () => {
         // 7 is not a multiple of 3 (Trimestriel)
         const formData = {
           ...validFormData,
-          periodicity: 'Trimestriel',
+          periodicity: '3',
           contractDuration: '7',
         };
         const errors = PaymentScheduleFormService.validateForm(formData);
         expect(errors.contractDuration).toBe(
-          'Contract duration must be a multiple of 3 months for Trimestriel periodicity'
+          'Contract duration must be a multiple of 3 months for 3 periodicity'
         );
       });
     });
@@ -359,10 +359,10 @@ describe('PaymentScheduleFormService', () => {
 
   describe('isFormValid', () => {
     const validFormData: PaymentScheduleFormData = {
-      periodicity: 'Trimestriel',
+      periodicity: '3',
       contractDuration: '48',
       assetAmount: '150000',
-      purchaseOptionValue: '1500',
+      purchaseOptionAmount: '1500',
       firstPaymentDate: '17/09/2025',
       rentAmount: '10000',
     };
@@ -409,10 +409,10 @@ describe('PaymentScheduleFormService', () => {
   describe('transformToRequest', () => {
     it('should transform form data to API request format', () => {
       const formData: PaymentScheduleFormData = {
-        periodicity: 'Trimestriel',
+        periodicity: '3',
         contractDuration: '48',
         assetAmount: '150000',
-        purchaseOptionValue: '1500',
+        purchaseOptionAmount: '1500',
         firstPaymentDate: '17/09/2025',
         rentAmount: '10000',
       };
@@ -420,6 +420,7 @@ describe('PaymentScheduleFormService', () => {
       const request = PaymentScheduleFormService.transformToRequest(formData);
 
       expect(request).toEqual({
+        marginalDebtRate: undefined,
         periodicity: 3,
         contractDuration: 48,
         assetAmount: 150000,
@@ -431,10 +432,10 @@ describe('PaymentScheduleFormService', () => {
 
     it('should transform Mensuel periodicity correctly', () => {
       const formData: PaymentScheduleFormData = {
-        periodicity: 'Mensuel',
+        periodicity: '1',
         contractDuration: '24',
         assetAmount: '50000',
-        purchaseOptionValue: '500',
+        purchaseOptionAmount: '500',
         firstPaymentDate: '01/01/2024',
         rentAmount: '2000',
       };
@@ -445,10 +446,10 @@ describe('PaymentScheduleFormService', () => {
 
     it('should transform Semestriel periodicity correctly', () => {
       const formData: PaymentScheduleFormData = {
-        periodicity: 'Semestriel',
+        periodicity: '6',
         contractDuration: '24',
         assetAmount: '50000',
-        purchaseOptionValue: '500',
+        purchaseOptionAmount: '500',
         firstPaymentDate: '01/01/2024',
         rentAmount: '2000',
       };
@@ -459,10 +460,10 @@ describe('PaymentScheduleFormService', () => {
 
     it('should transform Annuel periodicity correctly', () => {
       const formData: PaymentScheduleFormData = {
-        periodicity: 'Annuel',
+        periodicity: '12',
         contractDuration: '24',
         assetAmount: '50000',
-        purchaseOptionValue: '500',
+        purchaseOptionAmount: '500',
         firstPaymentDate: '01/01/2024',
         rentAmount: '2000',
       };
@@ -471,26 +472,12 @@ describe('PaymentScheduleFormService', () => {
       expect(request.periodicity).toBe(12);
     });
 
-    it('should default to Trimestriel for unknown periodicity', () => {
-      const formData: PaymentScheduleFormData = {
-        periodicity: 'Unknown' as any,
-        contractDuration: '24',
-        assetAmount: '50000',
-        purchaseOptionValue: '500',
-        firstPaymentDate: '01/01/2024',
-        rentAmount: '2000',
-      };
-
-      const request = PaymentScheduleFormService.transformToRequest(formData);
-      expect(request.periodicity).toBe(3);
-    });
-
     it('should handle decimal values correctly', () => {
       const formData: PaymentScheduleFormData = {
-        periodicity: 'Trimestriel',
+        periodicity: '3',
         contractDuration: '48',
         assetAmount: '150000.50',
-        purchaseOptionValue: '1500.75',
+        purchaseOptionAmount: '1500.75',
         firstPaymentDate: '17/09/2025',
         rentAmount: '10000.25',
       };
@@ -500,29 +487,6 @@ describe('PaymentScheduleFormService', () => {
       expect(request.assetAmount).toBe(150000.5);
       expect(request.purchaseOptionAmount).toBe(1500.75);
       expect(request.rentAmount).toBe(10000.25);
-    });
-  });
-
-  describe('getDefaultFormData', () => {
-    it('should return default form data', () => {
-      const defaultData = PaymentScheduleFormService.getDefaultFormData();
-
-      expect(defaultData).toEqual({
-        periodicity: 'Trimestriel',
-        contractDuration: '48',
-        assetAmount: '150000',
-        purchaseOptionValue: '1500',
-        firstPaymentDate: '17/09/2025',
-        rentAmount: '10000',
-      });
-    });
-
-    it('should return a new object each time', () => {
-      const defaultData1 = PaymentScheduleFormService.getDefaultFormData();
-      const defaultData2 = PaymentScheduleFormService.getDefaultFormData();
-
-      expect(defaultData1).toEqual(defaultData2);
-      expect(defaultData1).not.toBe(defaultData2);
     });
   });
 });

@@ -183,6 +183,7 @@ $letter-spacing: 0.5px;
   h2 {
     font-size: 1.2rem;
     margin: 0;
+    justify-self: center;
   }
 
   h3 {
@@ -193,13 +194,14 @@ $letter-spacing: 0.5px;
   }
 
   p {
-    font-size: 0.8rem;
+    font-size: 0.9rem;
     margin-bottom: 18px;
   }
 
   ul {
-    font-size: 0.8rem;
-    margin: 0.4rem;
+    font-size: 0.9em;
+    margin: 0;
+    padding: 0.7rem;
   }
 }
 

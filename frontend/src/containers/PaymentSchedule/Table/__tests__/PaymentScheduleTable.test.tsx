@@ -58,16 +58,28 @@ describe('PaymentScheduleTable', () => {
   it('should render table headers', () => {
     render(<PaymentScheduleTable schedule={mockSchedule} />);
 
-    expect(screen.getByText('Période')).toBeInTheDocument();
-    expect(screen.getByText("Date d'échéance")).toBeInTheDocument();
-    expect(screen.getByText('Loyer')).toBeInTheDocument();
-    expect(screen.getByText('Taux')).toBeInTheDocument();
-    expect(screen.getByText('Taux annuel')).toBeInTheDocument();
-    expect(screen.getByText('Intérêts financiers')).toBeInTheDocument();
-    expect(screen.getByText('Remboursement')).toBeInTheDocument();
-    expect(screen.getByText('Dette début période')).toBeInTheDocument();
-    expect(screen.getByText('Dette fin période')).toBeInTheDocument();
-    expect(screen.getByText('Flux actualisés')).toBeInTheDocument();
+    expect(screen.getByText('table.headers.period')).toBeInTheDocument();
+    expect(screen.getByText('table.headers.dueDate')).toBeInTheDocument();
+    expect(screen.getByText('table.headers.rentAmount')).toBeInTheDocument();
+    expect(screen.getByText('table.headers.periodRate')).toBeInTheDocument();
+    expect(
+      screen.getByText('table.headers.annualReferenceRate')
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText('table.headers.financialInterestAmount')
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText('table.headers.repaymentAmount')
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText('table.headers.debtBeginningPeriodAmount')
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText('table.headers.debtEndPeriodAmount')
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText('table.headers.actualizedCashFlowAmount')
+    ).toBeInTheDocument();
   });
 
   it('should render all payment schedule lines', () => {
@@ -90,13 +102,13 @@ describe('PaymentScheduleTable', () => {
   it('should render TotalsRow in tfoot', () => {
     render(<PaymentScheduleTable schedule={mockSchedule} />);
 
-    expect(screen.getByText('Total')).toBeInTheDocument();
+    expect(screen.getByText('table.total')).toBeInTheDocument();
   });
 
   it('should render PurchaseOptionRow in tfoot', () => {
     render(<PaymentScheduleTable schedule={mockSchedule} />);
 
-    expect(screen.getByText("Option d'achat")).toBeInTheDocument();
+    expect(screen.getByText('table.purchaseOption')).toBeInTheDocument();
   });
 
   it('should apply correct CSS classes', () => {

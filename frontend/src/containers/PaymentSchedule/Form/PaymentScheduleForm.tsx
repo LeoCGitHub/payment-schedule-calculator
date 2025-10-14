@@ -6,12 +6,7 @@ import { PaymentScheduleFormProps } from './types/PaymentScheduleFormProps';
 import { usePaymentScheduleForm } from './hooks/usePaymentScheduleForm';
 import FormInput from '@/components/Form/FormInput/FormInput';
 import FormSelect from '@/components/Form/FormSelect/FormSelect';
-import { FormSelectOption } from '@/components/Form/FormSelect/FormSelect';
-
-// Map i18next language code to locale
-const getLocale = (language: string): string => {
-  return language === 'en' ? 'en-US' : 'fr-FR';
-};
+import { PERIODICITY_OPTIONS } from './constants/formConfig';
 
 export default function PaymentScheduleForm({
   onSubmit,
@@ -19,26 +14,30 @@ export default function PaymentScheduleForm({
   initialData,
   onDataChange,
   rateNegativ,
+  onReset,
 }: PaymentScheduleFormProps): React.JSX.Element {
-  const { t, i18n } = useTranslation();
-  const locale = getLocale(i18n.language);
+  const { t } = useTranslation();
 
-  const { formData, errors, isFormValid, handleChange, handleSubmit } =
-    usePaymentScheduleForm({
-      initialData,
-      onDataChange,
-      onSubmit: data => {
-        const request = PaymentScheduleFormService.transformToRequest(data);
-        void onSubmit(request);
-      },
-    });
+  const {
+    formData,
+    errors,
+    isFormValid,
+    handleReset,
+    handleChange,
+    handleSubmit,
+  } = usePaymentScheduleForm({
+    initialData,
+    onDataChange,
+    onSubmit: data => {
+      const request = PaymentScheduleFormService.transformToRequest(data);
+      void onSubmit(request);
+    },
+  });
 
-  const periodicityOptions: FormSelectOption[] = [
-    { value: 'Mensuel', label: t('form.periodicity.Mensuel') },
-    { value: 'Trimestriel', label: t('form.periodicity.Trimestriel') },
-    { value: 'Semestriel', label: t('form.periodicity.Semestriel') },
-    { value: 'Annuel', label: t('form.periodicity.Annuel') },
-  ];
+  const combinedReset = () => {
+    handleReset();
+    onReset();
+  };
 
   return (
     <form onSubmit={handleSubmit} className="payment-form">
@@ -49,8 +48,9 @@ export default function PaymentScheduleForm({
           id="firstPaymentDate"
           name="firstPaymentDate"
           label={t('form.firstPaymentDate.label')}
+          placeholder={t('form.firstPaymentDate.placeholder')}
           type="date"
-          value={convertToISO(formData.firstPaymentDate, locale)}
+          value={convertToISO(formData.firstPaymentDate)}
           onChange={handleChange}
           disabled={loading}
           error={errors.firstPaymentDate}
@@ -61,7 +61,7 @@ export default function PaymentScheduleForm({
           name="periodicity"
           label={t('form.periodicity.label')}
           value={formData.periodicity}
-          options={periodicityOptions}
+          options={PERIODICITY_OPTIONS}
           onChange={handleChange}
           disabled={loading}
           error={errors.periodicity}
@@ -71,6 +71,7 @@ export default function PaymentScheduleForm({
           id="contractDuration"
           name="contractDuration"
           label={t('form.contractDuration.label')}
+          placeholder={t('form.contractDuration.placeholder')}
           type="number"
           value={formData.contractDuration}
           onChange={handleChange}
@@ -83,6 +84,7 @@ export default function PaymentScheduleForm({
           id="assetAmount"
           name="assetAmount"
           label={t('form.assetAmount.label')}
+          placeholder={t('form.assetAmount.placeholder')}
           type="number"
           value={formData.assetAmount}
           onChange={handleChange}
@@ -96,6 +98,7 @@ export default function PaymentScheduleForm({
           id="rentAmount"
           name="rentAmount"
           label={t('form.rentAmount.label')}
+          placeholder={t('form.rentAmount.placeholder')}
           type="number"
           value={formData.rentAmount}
           onChange={handleChange}
@@ -106,35 +109,48 @@ export default function PaymentScheduleForm({
         />
 
         <FormInput
-          id="purchaseOptionValue"
-          name="purchaseOptionValue"
-          label={t('form.purchaseOptionValue.label')}
+          id="purchaseOptionAmount"
+          name="purchaseOptionAmount"
+          label={t('form.purchaseOptionAmount.label')}
+          placeholder={t('form.purchaseOptionAmount.placeholder')}
           type="number"
-          value={formData.purchaseOptionValue}
+          value={formData.purchaseOptionAmount}
           onChange={handleChange}
           disabled={loading}
-          error={errors.purchaseOptionValue}
+          error={errors.purchaseOptionAmount}
           min="0"
           step="1"
         />
 
         {rateNegativ ? (
-          <FormInput
-            id="marginalDebtRate"
-            name="marginalDebtRate"
-            label={t('form.marginalDebtRate.label')}
-            type="number"
-            value={formData.marginalDebtRate || ''}
-            onChange={handleChange}
-            disabled={loading}
-            error={errors.marginalDebtRate}
-            min="0"
-            max="100"
-            step="1"
-          />
+          <div className="form-input-with-beta-flag">
+            <div className="flag-beta">{t('form.marginalDebtRate.flag')}</div>
+            <FormInput
+              id="marginalDebtRate"
+              name="marginalDebtRate"
+              label={t('form.marginalDebtRate.label')}
+              placeholder={t('form.marginalDebtRate.placeholder')}
+              type="number"
+              value={formData.marginalDebtRate || ''}
+              onChange={handleChange}
+              disabled={loading}
+              error={errors.marginalDebtRate}
+              min="0"
+              max="100"
+              step="0.1"
+            />
+          </div>
         ) : null}
 
-        <div className="form-group">
+        <div className="form-group footer-button">
+          <button
+            type="button"
+            className="reset-btn"
+            disabled={loading}
+            onClick={combinedReset}
+          >
+            {t('form.reset')}
+          </button>
           <button
             type="submit"
             className="submit-btn"

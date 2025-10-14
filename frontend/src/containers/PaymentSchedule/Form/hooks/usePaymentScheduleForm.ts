@@ -1,10 +1,17 @@
-import { useState, useEffect, ChangeEvent, FormEvent } from 'react';
+import {
+  useState,
+  useEffect,
+  ChangeEvent,
+  FormEvent,
+  useCallback,
+} from 'react';
 import { useTranslation } from 'react-i18next';
 import { PaymentScheduleFormData } from '../types/PaymentScheduleFormData';
 import { PaymentScheduleFormErrors } from '../types/PaymentScheduleFormErrors';
 import { PaymentScheduleFormService } from '@/containers/PaymentSchedule/Form/services/PaymentScheduleFormService';
 import { convertFromISO } from '@/utils/formatter/DateFormatter';
 import { translateError } from '@/i18n/translateError';
+import { DEFAULT_FORM_DATA } from '../constants/formConfig';
 
 // Map i18next language code to locale
 const getLocale = (language: string): string => {
@@ -21,6 +28,7 @@ interface UsePaymentScheduleFormReturn {
   formData: PaymentScheduleFormData;
   errors: PaymentScheduleFormErrors;
   isFormValid: boolean;
+  handleReset: () => void;
   handleChange: (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
   handleSubmit: (e: FormEvent<HTMLFormElement>) => void;
 }
@@ -34,79 +42,80 @@ export function usePaymentScheduleForm({
   const locale = getLocale(i18n.language);
 
   const [formData, setFormData] = useState<PaymentScheduleFormData>(
-    initialData || PaymentScheduleFormService.getDefaultFormData()
+    initialData || DEFAULT_FORM_DATA
   );
-
   const [errors, setErrors] = useState<PaymentScheduleFormErrors>({});
 
-  useEffect(() => {
-    if (initialData) {
-      setFormData(initialData);
-    }
-  }, [initialData]);
+  const validateFieldWithTranslation = useCallback(
+    (
+      fieldName: keyof PaymentScheduleFormData,
+      currentFormData: PaymentScheduleFormData,
+      newErrors: PaymentScheduleFormErrors
+    ) => {
+      const error = PaymentScheduleFormService.validateField(
+        fieldName,
+        currentFormData[fieldName],
+        currentFormData
+      );
+      if (error) {
+        newErrors[fieldName] = translateError(error, t);
+      } else {
+        delete newErrors[fieldName];
+      }
+    },
+    [t]
+  );
 
-  const handleChange = (
-    e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ): void => {
-    const { name, value } = e.target;
+  const revalidateDependentFields = useCallback(
+    (
+      currentField: keyof PaymentScheduleFormData,
+      fieldName: keyof PaymentScheduleFormData,
+      dependantName: keyof PaymentScheduleFormData,
+      currentFormData: PaymentScheduleFormData,
+      newErrors: PaymentScheduleFormErrors
+    ) => {
+      if (currentField === fieldName && currentFormData[dependantName]) {
+        validateFieldWithTranslation(dependantName, currentFormData, newErrors);
+      } else if (currentField === dependantName && currentFormData[fieldName]) {
+        validateFieldWithTranslation(fieldName, currentFormData, newErrors);
+      }
+    },
+    [validateFieldWithTranslation]
+  );
 
-    let processedValue = value;
+  const validateField = useCallback(
+    (name: string, currentFormData: PaymentScheduleFormData): void => {
+      const newErrors: PaymentScheduleFormErrors = { ...errors };
 
-    if (name === 'firstPaymentDate' && value) {
-      processedValue = convertFromISO(value, locale);
-    }
+      validateFieldWithTranslation(
+        name as keyof PaymentScheduleFormData,
+        currentFormData,
+        newErrors
+      );
+      //  TODO LCG bug here on dynamic langage change, faut recharger page
 
-    if (name === 'marginalDebtRate' && parseInt(value) > 100) {
-      processedValue = '100';
-    }
+      revalidateDependentFields(
+        name as keyof PaymentScheduleFormData,
+        'periodicity',
+        'contractDuration',
+        currentFormData,
+        newErrors
+      );
 
-    const newFormData: PaymentScheduleFormData = {
-      ...formData,
-      [name]: processedValue,
-    };
+      revalidateDependentFields(
+        name as keyof PaymentScheduleFormData,
+        'assetAmount',
+        'rentAmount',
+        currentFormData,
+        newErrors
+      );
 
-    setFormData(newFormData);
+      setErrors(newErrors);
+    },
+    [errors, setErrors, validateFieldWithTranslation, revalidateDependentFields]
+  );
 
-    if (onDataChange) {
-      onDataChange(newFormData);
-    }
-
-    validateField(name, newFormData);
-  };
-
-  const validateField = (
-    name: string,
-    currentFormData: PaymentScheduleFormData
-  ): void => {
-    const newErrors: PaymentScheduleFormErrors = { ...errors };
-
-    validateFieldWithTranslation(
-      name as keyof PaymentScheduleFormData,
-      currentFormData,
-      newErrors
-    );
-    //  TODO LCG bug here on dynamic langage change, faut recharger page
-
-    revalidateDependentFields(
-      name as keyof PaymentScheduleFormData,
-      'periodicity',
-      'contractDuration',
-      currentFormData,
-      newErrors
-    );
-
-    revalidateDependentFields(
-      name as keyof PaymentScheduleFormData,
-      'assetAmount',
-      'rentAmount',
-      currentFormData,
-      newErrors
-    );
-
-    setErrors(newErrors);
-  };
-
-  const validate = (): boolean => {
+  const validate = useCallback((): boolean => {
     const rawErrors = PaymentScheduleFormService.validateForm(formData);
     const translatedErrors: PaymentScheduleFormErrors = {};
     Object.entries(rawErrors).forEach(([key, value]) => {
@@ -117,48 +126,66 @@ export function usePaymentScheduleForm({
     });
     setErrors(translatedErrors);
     return Object.keys(translatedErrors).length === 0;
-  };
+  }, [formData, setErrors, t]);
 
-  const validateFieldWithTranslation = (
-    fieldName: keyof PaymentScheduleFormData,
-    currentFormData: PaymentScheduleFormData,
-    newErrors: PaymentScheduleFormErrors
-  ) => {
-    const error = PaymentScheduleFormService.validateField(
-      fieldName,
-      currentFormData[fieldName],
-      currentFormData
-    );
-    if (error) {
-      newErrors[fieldName] = translateError(error, t);
-    } else {
-      delete newErrors[fieldName];
+  useEffect(() => {
+    if (initialData) {
+      setFormData(initialData);
+      setErrors({});
     }
+  }, [initialData]);
+
+  const handleReset = () => {
+    setFormData(DEFAULT_FORM_DATA);
+    setErrors({});
   };
 
-  const revalidateDependentFields = (
-    currentField: keyof PaymentScheduleFormData,
-    fieldName: keyof PaymentScheduleFormData,
-    dependantName: keyof PaymentScheduleFormData,
-    currentFormData: PaymentScheduleFormData,
-    newErrors: PaymentScheduleFormErrors
-  ) => {
-    if (currentField === fieldName && currentFormData[dependantName]) {
-      validateFieldWithTranslation(dependantName, currentFormData, newErrors);
-    } else if (currentField === dependantName && currentFormData[fieldName]) {
-      validateFieldWithTranslation(fieldName, currentFormData, newErrors);
-    }
-  };
+  const handleChange = useCallback(
+    (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>): void => {
+      const { name, value } = e.target;
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>): void => {
-    e.preventDefault();
+      let processedValue = value;
 
-    if (!validate()) {
-      return;
-    }
+      if (name === 'firstPaymentDate' && value) {
+        processedValue = convertFromISO(value, locale);
+      }
 
-    onSubmit(formData);
-  };
+      if (name === 'marginalDebtRate' && parseInt(value) > 100) {
+        processedValue = '100';
+      }
+
+      setFormData(prevFormData => {
+        const newFormData: PaymentScheduleFormData = {
+          ...prevFormData,
+          [name]: processedValue,
+        };
+
+        if (onDataChange) {
+          onDataChange(newFormData);
+        }
+
+        validateField(name, newFormData);
+
+        return newFormData;
+      });
+    },
+    [locale, onDataChange, validateField]
+  );
+
+  const handleSubmit = useCallback(
+    (e: FormEvent<HTMLFormElement>): void => {
+      e.preventDefault();
+
+      if (!validate()) {
+        return;
+      }
+
+      const dataToSubmit = { ...formData };
+
+      onSubmit(dataToSubmit);
+    },
+    [formData, onSubmit, validate]
+  );
 
   const isFormValid = PaymentScheduleFormService.isFormValid(formData, errors);
 
@@ -166,6 +193,7 @@ export function usePaymentScheduleForm({
     formData,
     errors,
     isFormValid,
+    handleReset,
     handleChange,
     handleSubmit,
   };

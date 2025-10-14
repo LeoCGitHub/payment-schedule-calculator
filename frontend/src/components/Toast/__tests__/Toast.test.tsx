@@ -43,7 +43,7 @@ describe('Toast', () => {
     const onClose = vi.fn();
     render(<Toast message="Test message" onClose={onClose} />);
 
-    expect(screen.getByLabelText('Fermer')).toBeInTheDocument();
+    expect(screen.getByLabelText('toast.close')).toBeInTheDocument();
   });
 
   it('should not render close button when onClose is not provided', () => {
@@ -58,7 +58,7 @@ describe('Toast', () => {
     const onClose = vi.fn();
     render(<Toast message="Test message" onClose={onClose} />);
 
-    const closeButton = screen.getByLabelText('Fermer');
+    const closeButton = screen.getByLabelText('toast.close');
     await user.click(closeButton);
 
     expect(onClose).toHaveBeenCalledTimes(1);

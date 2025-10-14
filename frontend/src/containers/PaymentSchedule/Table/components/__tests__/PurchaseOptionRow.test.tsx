@@ -18,7 +18,7 @@ describe('PurchaseOptionRow', () => {
       </table>
     );
 
-    expect(screen.getByText("Option d'achat")).toBeInTheDocument();
+    expect(screen.getByText('table.purchaseOption')).toBeInTheDocument();
   });
 
   it('should render purchase option amount with currency formatting', () => {
@@ -72,7 +72,7 @@ describe('PurchaseOptionRow', () => {
 
     const labelCell = container.querySelector('.purchase-option-label');
     expect(labelCell).toBeInTheDocument();
-    expect(labelCell).toHaveTextContent("Option d'achat");
+    expect(labelCell).toHaveTextContent('table.purchaseOption');
   });
 
   it('should render empty cells with dash', () => {
@@ -84,7 +84,7 @@ describe('PurchaseOptionRow', () => {
       </table>
     );
 
-    const emptyCells = screen.getAllByText('-');
+    const emptyCells = screen.getAllByText('table.emptyCell');
     expect(emptyCells.length).toBe(5);
   });
 
@@ -177,7 +177,7 @@ describe('PurchaseOptionRow', () => {
 
     const cells = container.querySelectorAll('td');
     // Cell 0: Label (colSpan 2)
-    expect(cells[0]).toHaveTextContent("Option d'achat");
+    expect(cells[0]).toHaveTextContent('table.purchaseOption');
     // Cell 1: purchaseOptionAmount
     expect(cells[1]).toHaveTextContent(/1[\s\u202f]500,00[\s\u202f]€/);
     // Cell 5: purchaseOptionAmount (repayment)

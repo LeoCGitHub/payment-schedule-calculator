@@ -1,7 +1,11 @@
 // Variables
 $primary-color: #646cff;
 $primary-hover: #535bf2;
+$secondary-color: #6c757d;
+$secondary-hover: #5a6268;
 $error-color: #e74c3c;
+$beta-color: #ffc107;
+$beta-text-color: #343a40;
 $white: white;
 $gray-light: #f5f5f5;
 $gray-medium: #ddd;
@@ -99,6 +103,11 @@ $shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   }
 }
 
+.footer-button {
+  display: flex;
+  gap: 20px;
+}
+
 .error {
   display: block;
   color: $error-color;
@@ -106,7 +115,8 @@ $shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   margin-top: 0.25rem;
 }
 
-.submit-btn {
+.submit-btn,
+.reset-btn {
   padding: 1rem;
   background-color: $primary-color;
   color: $white;
@@ -125,6 +135,34 @@ $shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     background-color: $disabled-bg;
     cursor: not-allowed;
   }
+}
+
+.reset-btn {
+  background-color: $secondary-color;
+
+  &:hover:not(:disabled) {
+    background-color: $secondary-hover; // Effet au survol
+  }
+}
+
+.flag-beta {
+  position: absolute;
+  right: 7px;
+
+  background-color: $beta-color;
+  color: $beta-text-color;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 0.75rem; // Petit texte
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+
+  transform: rotate(3deg);
+
+  z-index: 10;
 }
 
 // Tablettes et en dessous - champs en ligne (grille)

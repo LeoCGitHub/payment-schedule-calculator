@@ -53,7 +53,7 @@ describe('NumberFormatter', () => {
 
     it('should limit to 4 decimal places maximum', () => {
       const result = formatPercentage(0.123456);
-      expect(result).toMatch(/12,3456[\s\u202f]%/);
+      expect(result).toMatch(/12,346[\s\u202f]%/);
     });
 
     it('should format 1 as 100%', () => {

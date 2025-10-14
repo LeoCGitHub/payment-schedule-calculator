@@ -7,4 +7,5 @@ export interface PaymentScheduleFormProps {
   initialData?: PaymentScheduleFormData;
   onDataChange?: (data: PaymentScheduleFormData) => void;
   rateNegativ?: boolean;
+  onReset: () => void;
 }

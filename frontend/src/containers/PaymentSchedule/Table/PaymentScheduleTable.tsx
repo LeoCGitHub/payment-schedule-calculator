@@ -9,7 +9,7 @@ import PaymentScheduleWarning from './components/PaymentScheduleWarning';
 
 export interface PaymentScheduleTableProps {
   schedule: PaymentScheduleResponse | null;
-  rateNegativ: boolean | false;
+  rateNegativ: boolean;
 }
 
 export default function PaymentScheduleTable({

@@ -84,23 +84,16 @@ export const formatDateShort = (
  * @param locale - Locale to determine input format
  * @returns Date in ISO format
  */
-export const convertToISO = (dateStr: string, locale: string = 'fr-FR') => {
+export const convertToISO = (dateStr: string) => {
   if (!dateStr) return '';
   if (dateStr.includes('-') && dateStr.split('-')[0].length === 4)
-    return dateStr; // Already in ISO format
+    return dateStr;
 
   const parts = dateStr.split('/');
   if (parts.length !== 3) return dateStr;
 
-  if (locale === 'en-US') {
-    // MM/dd/yyyy to yyyy-MM-dd
-    const [month, day, year] = parts;
-    return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
-  } else {
-    // dd/MM/yyyy to yyyy-MM-dd
-    const [day, month, year] = parts;
-    return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
-  }
+  const [day, month, year] = parts;
+  return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
 };
 
 /**
@@ -120,7 +113,3 @@ export const convertFromISO = (dateStr: string, locale: string = 'fr-FR') => {
   }
   return `${day}/${month}/${year}`;
 };
-
-// Backward compatibility
-export const convertToFrench = (dateStr: string) =>
-  convertFromISO(dateStr, 'fr-FR');

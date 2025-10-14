@@ -1,16 +1,19 @@
 {
   "app": {
-    "title": "Calculateur d'Échéancier de Paiement",
-    "subtitle": "Calculez facilement votre échéancier de paiement"
+    "title": "Calculateur d'Échéancier de Paiement d'un contrat de location-financement"
+  },
+  "placeholder": {
+    "title": "Échéancier de Paiement",
+    "subtitle": "Sélectionnez vos conditions initiales et cliquez sur le bouton"
   },
   "form": {
-    "title": "Informations de l'Échéancier",
+    "title": "Sélectionnez vos conditions initiales",
     "periodicity": {
       "label": "Périodicité",
-      "Mensuel": "Mensuel",
-      "Trimestriel": "Trimestriel",
-      "Semestriel": "Semestriel",
-      "Annuel": "Annuel"
+      "monthly": "Mensuel",
+      "quarterly": "Trimestriel",
+      "semiAnnual": "Semestriel",
+      "annual": "Annuel"
     },
     "contractDuration": {
       "label": "Durée Contractuelle (mois)",
@@ -21,16 +24,21 @@
       "placeholder": "Entrez le montant du bien"
     },
     "rentAmount": {
-      "label": "Montant du Loyer",
+      "label": "Montant du Loyer (fixe et payé à terme échu)",
       "placeholder": "Entrez le montant du loyer"
     },
-    "purchaseOptionValue": {
+    "purchaseOptionAmount": {
       "label": "Montant de l'Option d'Achat",
       "placeholder": "Entrez le montant de l'option d'achat"
     },
     "firstPaymentDate": {
       "label": "Date du Premier Paiement",
       "placeholder": "Sélectionnez la date du premier paiement"
+    },
+    "marginalDebtRate": {
+      "label": "Taux d'endettement marginal",
+      "placeholder": "Sélectionnez votre taux d'endettement marginal",
+      "flag": "BÊTA"
     },
     "submit": "Calculer l'Échéancier",
     "reset": "Réinitialiser"
@@ -58,8 +66,8 @@
       "reasonsLabel": "Raisons courantes :",
       "reasons": "Montants des loyers trop faibles par rapport au capital financé\n Option d'achat très basse réduisant la valeur actualisée\n Erreur dans la périodicité ou la durée du contrat\n Environnement économique avec taux d'intérêt négatifs",
       "solutionsLabel": "Solutions possibles :",
-      "solutionsToCheck": "Veuillez vérifier et ajuster si nécessaire les montants des loyers et de l'option d'achat\nConfirmer la cohérence de la durée et périodicité du contrat.",
-      "solutions": "\n\nSi tout est conforme, merci de nous transmettre votre Taux d'endettement marginal afin que nous recalculions l'échéancier"
+      "solutionsToCheck": "Veuillez vérifier et ajuster si nécessaire les montants des loyers et de l'option d'achat\nVeuillez vérifier la cohérence de la durée et périodicité du contrat.",
+      "solutions": "\n\nSi tout est conforme, merci de nous transmettre votre Taux d'endettement marginal afin que nous recalculions l'échéancier (BÊTA)"
     }
   },
   "errors": {
@@ -78,7 +86,7 @@
     "firstPaymentDate": {
       "required": "La date du premier paiement est requise"
     },
-    "purchaseOptionValue": {
+    "purchaseOptionAmount": {
       "required": "Le montant de l'option d'achat est requis"
     },
     "general": "Une erreur est survenue lors du calcul de l'échéancier. Veuillez réessayer."

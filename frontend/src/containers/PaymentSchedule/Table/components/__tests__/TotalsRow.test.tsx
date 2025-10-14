@@ -20,7 +20,7 @@ describe('TotalsRow', () => {
       </table>
     );
 
-    expect(screen.getByText('Total')).toBeInTheDocument();
+    expect(screen.getByText('table.total')).toBeInTheDocument();
   });
 
   it('should render all totals with currency formatting', () => {
@@ -94,7 +94,7 @@ describe('TotalsRow', () => {
       </table>
     );
 
-    const emptyCells = screen.getAllByText('-');
+    const emptyCells = screen.getAllByText('table.emptyCell');
     expect(emptyCells.length).toBe(4);
   });
 
@@ -168,7 +168,7 @@ describe('TotalsRow', () => {
 
     const cells = container.querySelectorAll('td');
     // Cell 0: Total label (colSpan 2)
-    expect(cells[0]).toHaveTextContent('Total');
+    expect(cells[0]).toHaveTextContent('table.total');
     // Cell 1: totalAmount
     expect(cells[1]).toHaveTextContent(/480[\s\u202f]000,00[\s\u202f]€/);
   });

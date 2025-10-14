@@ -10,7 +10,7 @@ export const ERROR_KEYS = {
   RENT_AMOUNT_REQUIRED: 'errors.rentAmount.required',
   RENT_AMOUNT_CONSISTENCY: 'errors.rentAmount.consistency',
   FIRST_PAYMENT_DATE_REQUIRED: 'errors.firstPaymentDate.required',
-  PURCHASE_OPTION_VALUE_REQUIRED: 'errors.purchaseOptionValue.required',
+  PURCHASE_OPTION_VALUE_REQUIRED: 'errors.purchaseOptionAmount.required',
 } as const;
 
 export type ErrorKey = (typeof ERROR_KEYS)[keyof typeof ERROR_KEYS];

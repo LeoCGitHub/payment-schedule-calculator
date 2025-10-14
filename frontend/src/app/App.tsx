@@ -23,6 +23,7 @@ function App(): React.JSX.Element {
   ): Promise<void> => {
     setLoading(true);
     setError(null);
+    setRateNegativ(false);
 
     try {
       const result = await paymentScheduleApiService.calculateSchedule(request);
@@ -35,6 +36,12 @@ function App(): React.JSX.Element {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleReset = () => {
+    setSchedule(null);
+    setRateNegativ(false); // <<< C'EST ICI QUE LE RATE NEGATIV EST RESETÉ
+    setError(null);
   };
 
   return (
@@ -51,6 +58,7 @@ function App(): React.JSX.Element {
           <div className="form-section">
             <PaymentScheduleForm
               onSubmit={handleSubmit}
+              onReset={handleReset}
               loading={loading}
               rateNegativ={rateNegativ}
             />
@@ -65,8 +73,8 @@ function App(): React.JSX.Element {
             ) : (
               <div className="placeholder">
                 <div className="placeholder-icon">📊</div>
-                <h3>{t('table.title')}</h3>
-                <p>{t('app.subtitle')}</p>
+                <h3>{t('placeholder.title')}</h3>
+                <p>{t('placeholder.subtitle')}</p>
               </div>
             )}
           </div>

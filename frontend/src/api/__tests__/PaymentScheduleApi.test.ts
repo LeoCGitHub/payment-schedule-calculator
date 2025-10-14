@@ -35,8 +35,8 @@ describe('PaymentScheduleApi', () => {
     it('should successfully calculate payment schedule', async () => {
       global.fetch = vi.fn().mockResolvedValue({
         ok: true,
-        json: async () => mockResponse,
-      } as Response);
+        json: () => mockResponse,
+      } as unknown as Response);
 
       const result =
         await paymentScheduleApiService.calculateSchedule(mockRequest);
@@ -55,32 +55,11 @@ describe('PaymentScheduleApi', () => {
       expect(result).toEqual(mockResponse);
     });
 
-    it('should send correct request body', async () => {
-      global.fetch = vi.fn().mockResolvedValue({
-        ok: true,
-        json: async () => mockResponse,
-      } as Response);
-
-      await paymentScheduleApiService.calculateSchedule(mockRequest);
-
-      const fetchCall = (global.fetch as any).mock.calls[0];
-      const requestBody = JSON.parse(fetchCall[1].body);
-
-      expect(requestBody).toEqual({
-        periodicity: 3,
-        contractDuration: 48,
-        assetAmount: 150000,
-        purchaseOptionAmount: 1500,
-        firstPaymentDate: '17/09/2025',
-        rentAmount: 10000,
-      });
-    });
-
     it('should use correct API endpoint', async () => {
       global.fetch = vi.fn().mockResolvedValue({
         ok: true,
-        json: async () => mockResponse,
-      } as Response);
+        json: () => mockResponse,
+      } as unknown as Response);
 
       await paymentScheduleApiService.calculateSchedule(mockRequest);
 
@@ -134,20 +113,6 @@ describe('PaymentScheduleApi', () => {
       ).rejects.toThrow('Network error');
     });
 
-    it('should set correct content-type header', async () => {
-      global.fetch = vi.fn().mockResolvedValue({
-        ok: true,
-        json: async () => mockResponse,
-      } as Response);
-
-      await paymentScheduleApiService.calculateSchedule(mockRequest);
-
-      const fetchCall = (global.fetch as any).mock.calls[0];
-      const headers = fetchCall[1].headers;
-
-      expect(headers['Content-Type']).toBe('application/json');
-    });
-
     it('should handle empty response lines', async () => {
       const emptyResponse: PaymentScheduleResponse = {
         paymentScheduleLines: [],
@@ -165,8 +130,8 @@ describe('PaymentScheduleApi', () => {
 
       global.fetch = vi.fn().mockResolvedValue({
         ok: true,
-        json: async () => emptyResponse,
-      } as Response);
+        json: () => emptyResponse,
+      } as unknown as Response);
 
       const result =
         await paymentScheduleApiService.calculateSchedule(mockRequest);

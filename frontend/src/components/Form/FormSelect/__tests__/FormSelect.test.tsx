@@ -1,7 +1,8 @@
 import { describe, it, expect, vi } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import FormSelect from '../FormSelect';
+import { ChangeEvent } from 'react';
 
 describe('FormSelect', () => {
   const defaultOptions = [
@@ -44,7 +45,7 @@ describe('FormSelect', () => {
     render(<FormSelect {...defaultProps} value="option2" />);
 
     const select = screen.getByRole('combobox');
-    expect(select.value).toBe('option2');
+    expect((select as HTMLSelectElement).value).toBe('option2');
   });
 
   it('should call onChange when option is selected', async () => {
@@ -55,7 +56,9 @@ describe('FormSelect', () => {
     const select = screen.getByRole('combobox');
     await user.selectOptions(select, 'option2');
 
-    expect(onChange).toHaveBeenCalledTimes(1);
+    await waitFor(() => {
+      expect(onChange).toHaveBeenCalledTimes(1);
+    });
   });
 
   it('should be disabled when disabled prop is true', () => {
@@ -116,9 +119,12 @@ describe('FormSelect', () => {
     await user.selectOptions(select, 'option3');
 
     expect(onChange).toHaveBeenCalled();
-    // Verify onChange was called (the actual value depends on component implementation)
-    const callArg = onChange.mock.calls[0][0];
-    expect(callArg.target.name).toBe('testSelect');
+    type ExpectedEventType = ChangeEvent<HTMLInputElement | HTMLSelectElement>;
+    const callArg = onChange.mock.calls[0][0] as ExpectedEventType;
+
+    await waitFor(() => {
+      expect(callArg.target.name).toBe('testSelect');
+    });
   });
 
   it('should render option values correctly', () => {
@@ -134,8 +140,8 @@ describe('FormSelect', () => {
       name: 'Option 3',
     });
 
-    expect(option1.value).toBe('option1');
-    expect(option2.value).toBe('option2');
-    expect(option3.value).toBe('option3');
+    expect((option1 as HTMLSelectElement).value).toBe('option1');
+    expect((option2 as HTMLSelectElement).value).toBe('option2');
+    expect((option3 as HTMLSelectElement).value).toBe('option3');
   });
 });

@@ -7,13 +7,6 @@ import { PaymentScheduleRequest } from '@/types/payment-schedule/request/Payment
  * Handles validation and transformation logic for the payment schedule form
  */
 export class PaymentScheduleFormService {
-  private static readonly PERIODICITY_MAP: Record<string, number> = {
-    Mensuel: 1,
-    Trimestriel: 3,
-    Semestriel: 6,
-    Annuel: 12,
-  };
-
   /**
    * Validate a single field
    * @param name Field name
@@ -33,9 +26,7 @@ export class PaymentScheduleFormService {
         }
         if (formData) {
           const duration = parseInt(value);
-          const periodicityMonths =
-            this.PERIODICITY_MAP[formData.periodicity] ||
-            this.PERIODICITY_MAP.Trimestriel;
+          const periodicityMonths = parseInt(formData.periodicity);
 
           if (duration % periodicityMonths !== 0) {
             return `Contract duration must be a multiple of ${periodicityMonths} months for ${formData.periodicity} periodicity`;
@@ -45,8 +36,7 @@ export class PaymentScheduleFormService {
       case 'periodicity':
         if (formData && formData.contractDuration) {
           const duration = parseInt(formData.contractDuration);
-          const periodicityMonths =
-            this.PERIODICITY_MAP[value] || this.PERIODICITY_MAP.Trimestriel;
+          const periodicityMonths = parseInt(value);
 
           if (duration > 0 && duration % periodicityMonths !== 0) {
             return `Contract duration must be a multiple of ${periodicityMonths} months for ${value} periodicity`;
@@ -78,7 +68,7 @@ export class PaymentScheduleFormService {
           return 'First payment date is required';
         }
         break;
-      case 'purchaseOptionValue':
+      case 'purchaseOptionAmount':
         if (!value) {
           return 'Purchase option amount is required';
         }
@@ -111,9 +101,7 @@ export class PaymentScheduleFormService {
       errors.contractDuration = 'Contract duration is required';
     } else {
       const duration = parseInt(formData.contractDuration);
-      const periodicityMonths =
-        this.PERIODICITY_MAP[formData.periodicity] ||
-        this.PERIODICITY_MAP.Trimestriel;
+      const periodicityMonths = parseInt(formData.periodicity);
 
       if (duration % periodicityMonths !== 0) {
         errors.contractDuration = `Contract duration must be a multiple of ${periodicityMonths} months for ${formData.periodicity} periodicity`;
@@ -132,8 +120,8 @@ export class PaymentScheduleFormService {
       errors.firstPaymentDate = 'First payment date is required';
     }
 
-    if (!formData.purchaseOptionValue) {
-      errors.purchaseOptionValue = 'Purchase option amount is required';
+    if (!formData.purchaseOptionAmount) {
+      errors.purchaseOptionAmount = 'Purchase option amount is required';
     }
 
     return errors;
@@ -170,30 +158,15 @@ export class PaymentScheduleFormService {
     formData: PaymentScheduleFormData
   ): PaymentScheduleRequest {
     return {
-      periodicity:
-        this.PERIODICITY_MAP[formData.periodicity] ||
-        this.PERIODICITY_MAP.Trimestriel,
+      periodicity: parseInt(formData.periodicity),
       contractDuration: parseInt(formData.contractDuration),
       assetAmount: parseFloat(formData.assetAmount),
-      purchaseOptionAmount: parseFloat(formData.purchaseOptionValue),
+      purchaseOptionAmount: parseFloat(formData.purchaseOptionAmount),
       firstPaymentDate: formData.firstPaymentDate,
       rentAmount: parseFloat(formData.rentAmount),
-      marginalDebtRate: parseInt(formData.marginalDebtRate || ''),
-    };
-  }
-
-  /**
-   * Get default form data
-   * @returns Default form data values
-   */
-  static getDefaultFormData(): PaymentScheduleFormData {
-    return {
-      periodicity: 'Trimestriel',
-      contractDuration: '48',
-      assetAmount: '150000',
-      purchaseOptionValue: '1500',
-      firstPaymentDate: '17/09/2025',
-      rentAmount: '10000',
+      marginalDebtRate: formData.marginalDebtRate
+        ? parseFloat(formData.marginalDebtRate) / 100
+        : undefined,
     };
   }
 }

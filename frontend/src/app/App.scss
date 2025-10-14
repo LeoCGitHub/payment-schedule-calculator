@@ -76,7 +76,7 @@ $shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 
 .form-section {
   height: 100%;
-  flex: 0 0 400px;
+  // flex: 0 0 400px;
   max-width: 400px;
   position: sticky;
   top: 70px;
@@ -86,6 +86,7 @@ $shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 
 .table-section {
   height: 100%;
+  width: 100%;
   flex: 1;
   min-width: 0;
   background: $white;
@@ -144,11 +145,15 @@ $shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   }
 
   .form-section {
-    flex: none;
+    height: auto;
     max-width: 100%;
     position: static;
     max-height: none;
     overflow-y: visible;
+  }
+
+  .payment-form {
+    height: 100%;
   }
 
   .table-section {
@@ -164,7 +169,7 @@ $shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 @media (max-width: 768px) {
   .app-header {
     h1 {
-      font-size: 1.5rem;
+      font-size: 1.2rem;
     }
 
     p {
@@ -188,5 +193,9 @@ $shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     h3 {
       font-size: 1.25rem;
     }
+  }
+
+  .form-section {
+    width: 100%;
   }
 }

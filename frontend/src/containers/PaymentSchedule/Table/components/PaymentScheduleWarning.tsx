@@ -10,15 +10,12 @@ export default function PaymentScheduleWarning(): React.JSX.Element {
     <div role="alert" className="payment-schedule-warning">
       <h2>{t('table.warning.title')}</h2>
       <p>{t('table.warning.subtitle')}</p>
-
+      {/* TODO LCG */}
       <section>
         <h3>{t('table.warning.reasonsLabel')}</h3>
         <ul>
           {reasonsLines.map((ligne, i) => (
-            <>
-              {ligne}
-              {i < reasonsLines.length - 1 && <br />}
-            </>
+            <li key={i}>{ligne}</li>
           ))}
         </ul>
       </section>
@@ -27,13 +24,10 @@ export default function PaymentScheduleWarning(): React.JSX.Element {
         <ul>
           {' '}
           {solutionsLines.map((ligne, i) => (
-            <>
-              {ligne}
-              {i < solutionsLines.length - 1 && <br />}
-            </>
+            <li key={i}>{ligne}</li>
           ))}
         </ul>
-        <p>{t('table.warning.solutions')}</p>
+        <h4>{t('table.warning.solutions')}</h4>
       </section>
     </div>
   );
