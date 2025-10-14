@@ -52,9 +52,12 @@ export function usePaymentScheduleForm({
 
     let processedValue = value;
 
-    // Convert date from ISO format to locale format
     if (name === 'firstPaymentDate' && value) {
       processedValue = convertFromISO(value, locale);
+    }
+
+    if (name === 'marginalDebtRate' && parseInt(value) > 100) {
+      processedValue = '100';
     }
 
     const newFormData: PaymentScheduleFormData = {

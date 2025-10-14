@@ -45,8 +45,6 @@ export const formatDateShort = (
 ): string => {
   if (!dateString) return '';
 
-  let date: Date;
-
   // Parse date
   if (dateString.includes('/')) {
     const parts = dateString.split('/');

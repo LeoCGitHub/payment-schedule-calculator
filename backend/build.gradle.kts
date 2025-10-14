@@ -24,8 +24,8 @@ dependencies {
     implementation("io.quarkus:quarkus-rest")
     testImplementation("io.quarkus:quarkus-junit5")
     testImplementation("io.rest-assured:rest-assured")
-    testImplementation("org.assertj:assertj-core:3.24.2")
-    testImplementation("io.mockk:mockk:1.13.8")
+    testImplementation("org.assertj:assertj-core")
+    testImplementation("io.mockk:mockk")
 }
 
 group = "com.paymentschedule"

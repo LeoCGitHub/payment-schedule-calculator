@@ -83,6 +83,11 @@ export class PaymentScheduleFormService {
           return 'Purchase option amount is required';
         }
         break;
+      case 'marginalDebtRate':
+        if (!value) {
+          return 'Marginal Debt Ratio is required';
+        }
+        break;
       default:
         break;
     }
@@ -173,6 +178,7 @@ export class PaymentScheduleFormService {
       purchaseOptionAmount: parseFloat(formData.purchaseOptionValue),
       firstPaymentDate: formData.firstPaymentDate,
       rentAmount: parseFloat(formData.rentAmount),
+      marginalDebtRate: parseInt(formData.marginalDebtRate || ''),
     };
   }
 

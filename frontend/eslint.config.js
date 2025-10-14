@@ -30,13 +30,13 @@ export default defineConfig([
       '@typescript-eslint/no-unused-vars': [
         'error',
         {
-          argsIgnorePattern: '^_', // Ignore arguments commençant par _
-          varsIgnorePattern: '^_', // Ignore variables commençant par _
-          caughtErrorsIgnorePattern: '^_', // Ignore paramètres catch commençant par _
-          ignoreRestSiblings: true, // Ignore les destructurations non utilisées
+          argsIgnorePattern: '^_',
+          varsIgnorePattern: '^_',
+          caughtErrorsIgnorePattern: '^_',
+          ignoreRestSiblings: true,
         },
       ],
-      'prettier/prettier': ['error', {}],
+      'prettier/prettier': 'error',
     },
     extends: [
       eslint.configs.recommended,

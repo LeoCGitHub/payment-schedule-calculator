@@ -5,4 +5,5 @@ export interface PaymentScheduleFormErrors {
   assetAmount?: string;
   rentAmount?: string;
   firstPaymentDate?: string;
+  marginalDebtRate?: string;
 }

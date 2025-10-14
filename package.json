@@ -13,8 +13,6 @@
     "test": "nx run-many --target=test --all --parallel=2",
     "test:frontend": "nx test frontend",
     "test:backend": "nx test backend",
-    "lint": "nx run-many --target=lint --all",
-    "format": "nx run-many --target=format --all",
     "graph": "nx graph",
     "affected": "nx affected",
     "affected:build": "nx affected --target=build",

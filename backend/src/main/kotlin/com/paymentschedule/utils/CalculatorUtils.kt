@@ -8,6 +8,7 @@ object CalculatorUtils {
     /**
      * Method 1 (RECOMMENDED): Calculate implicit discount rate using annuity formula
      * Solves: Sum of discounted cash flows - Asset value = 0
+     * Negative rate authorized (low at -50% max)
      *
      * Formula: Rent × [(1 - (1+r)^-n) / r] + Purchase option / (1+r)^n = Asset value
      *
@@ -45,7 +46,7 @@ object CalculatorUtils {
         precision: BigDecimal = BigDecimal.valueOf(1e-5),
         maxIterations: Int = 1000
     ): BigDecimal {
-        var low = BigDecimal.ZERO
+        var low = BigDecimal.valueOf(-0.5)
         var high = BigDecimal.ONE
         var mid: BigDecimal
 
@@ -79,6 +80,7 @@ object CalculatorUtils {
     /**
      * Method 2: Residual debt approach
      * Solves: Final_debt = Purchase option value
+     * Negative rate authorized (low at -50% max)
      *
      * Principle: Simulates amortization and finds the rate for which
      * the residual debt after all payments equals the purchase option value
@@ -99,11 +101,6 @@ object CalculatorUtils {
      * - Identical result: Both methods converge to the same rate
      * - Industry standard: NPV method (Internal Rate of Return) is the reference
      *
-     * Valid use cases:
-     * - Unit tests for cross-validation
-     * - Educational documentation
-     * - Debugging and anomaly investigation
-     *
      * @see calculateInternalRateOfReturn Recommended method for production
      */
     @Deprecated(
@@ -116,10 +113,10 @@ object CalculatorUtils {
         rentAmount: BigDecimal,
         purchaseOptionAmount: BigDecimal,
         assetAmount: BigDecimal,
-        period: Int,
-        precision: BigDecimal = BigDecimal.valueOf(1e-5)
+        totalPeriods: Int,
+        precision: BigDecimal = BigDecimal.valueOf(1e-10)
     ): BigDecimal {
-        var low = BigDecimal.ZERO
+        var low = BigDecimal.valueOf(-0.5)
         var high = BigDecimal.ONE
         var mid: BigDecimal
 
@@ -128,7 +125,7 @@ object CalculatorUtils {
 
             var currentDebt = assetAmount
 
-            for (t in 1..period) {
+            for (t in 1..totalPeriods) {
                 val interestForPeriod = currentDebt.multiply(mid, BigDecimalUtils.MATH_CONTEXT)
 
                 val principalRepayment = rentAmount.subtract(interestForPeriod)
@@ -215,21 +212,17 @@ object CalculatorUtils {
 
     /**
      * Calculate annual reference rate
+     * Negative rate authorized
      *
      * @param periodicity
      * @param actualizedRate
      * @return
      */
     fun calculateAnnualReferenceRate(periodicity: Int, actualizedRate: BigDecimal): BigDecimal {
-        var result = BigDecimal.ZERO;
         val periodsPerYear = 12.div(periodicity)
 
-        if (actualizedRate > BigDecimal.ZERO) {
-            result = BigDecimalUtils.bigDecimalPow(BigDecimal.ONE.add(actualizedRate), periodsPerYear)
-                .subtract(BigDecimal.ONE)
-        }
-
-        return result
+        return BigDecimalUtils.bigDecimalPow(BigDecimal.ONE.add(actualizedRate), periodsPerYear)
+            .subtract(BigDecimal.ONE)
     }
 
     /**

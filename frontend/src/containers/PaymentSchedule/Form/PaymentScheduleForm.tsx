@@ -18,6 +18,7 @@ export default function PaymentScheduleForm({
   loading,
   initialData,
   onDataChange,
+  rateNegativ,
 }: PaymentScheduleFormProps): React.JSX.Element {
   const { t, i18n } = useTranslation();
   const locale = getLocale(i18n.language);
@@ -116,6 +117,22 @@ export default function PaymentScheduleForm({
           min="0"
           step="1"
         />
+
+        {rateNegativ ? (
+          <FormInput
+            id="marginalDebtRate"
+            name="marginalDebtRate"
+            label={t('form.marginalDebtRate.label')}
+            type="number"
+            value={formData.marginalDebtRate || ''}
+            onChange={handleChange}
+            disabled={loading}
+            error={errors.marginalDebtRate}
+            min="0"
+            max="100"
+            step="1"
+          />
+        ) : null}
 
         <div className="form-group">
           <button

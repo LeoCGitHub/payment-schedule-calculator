@@ -10,7 +10,7 @@ export const LanguageSelector = () => {
   const { t, i18n } = useTranslation();
 
   const handleLanguageChange = (languageCode: string) => {
-    i18n.changeLanguage(languageCode);
+    void i18n.changeLanguage(languageCode);
   };
 
   return (

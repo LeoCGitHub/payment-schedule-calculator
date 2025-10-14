@@ -11,6 +11,7 @@ export interface FormInputProps {
   disabled?: boolean;
   error?: string;
   min?: string;
+  max?: string;
   step?: string;
   placeholder?: string;
 }
@@ -25,6 +26,7 @@ export default function FormInput({
   disabled = false,
   error,
   min,
+  max,
   step,
   placeholder,
 }: FormInputProps): React.JSX.Element {
@@ -40,6 +42,7 @@ export default function FormInput({
         disabled={disabled}
         className={error ? 'input-error' : ''}
         min={min}
+        max={max}
         step={step}
         placeholder={placeholder}
       />

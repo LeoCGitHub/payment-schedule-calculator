@@ -19,18 +19,16 @@ describe('PaymentScheduleApi', () => {
     };
 
     const mockResponse: PaymentScheduleResponse = {
-      lines: [],
-      totals: {
-        totalRent: 480000,
-        totalDepreciation: 148500,
-        totalFinancialExpenses: 331500,
-        totalInvoicedExclTax: 480000,
-        totalInvoicedInclTax: 576000,
+      paymentScheduleLines: [],
+      paymentScheduleTotals: {
+        totalAmount: 480000,
+        totalActualizedCashFlowsAmount: 148500,
+        totalInterestAmount: 331500,
+        totalRepaymentAmount: 480000,
       },
       purchaseOptionTotals: {
-        totalPurchaseOption: 1500,
-        totalPurchaseOptionDepreciation: 1500,
-        totalPurchaseOptionInclTax: 1800,
+        purchaseOptionAmount: 1500,
+        actualizedPurchaseOptionAmount: 1500,
       },
     };
 
@@ -152,18 +150,16 @@ describe('PaymentScheduleApi', () => {
 
     it('should handle empty response lines', async () => {
       const emptyResponse: PaymentScheduleResponse = {
-        lines: [],
-        totals: {
-          totalRent: 0,
-          totalDepreciation: 0,
-          totalFinancialExpenses: 0,
-          totalInvoicedExclTax: 0,
-          totalInvoicedInclTax: 0,
+        paymentScheduleLines: [],
+        paymentScheduleTotals: {
+          totalAmount: 0,
+          totalActualizedCashFlowsAmount: 0,
+          totalInterestAmount: 0,
+          totalRepaymentAmount: 0,
         },
         purchaseOptionTotals: {
-          totalPurchaseOption: 0,
-          totalPurchaseOptionDepreciation: 0,
-          totalPurchaseOptionInclTax: 0,
+          purchaseOptionAmount: 0,
+          actualizedPurchaseOptionAmount: 0,
         },
       };
 
@@ -175,8 +171,8 @@ describe('PaymentScheduleApi', () => {
       const result =
         await paymentScheduleApiService.calculateSchedule(mockRequest);
 
-      expect(result.lines).toEqual([]);
-      expect(result.totals.totalRent).toBe(0);
+      expect(result.paymentScheduleLines).toEqual([]);
+      expect(result.paymentScheduleTotals.totalAmount).toBe(0);
     });
   });
 });

@@ -5,13 +5,16 @@ import PaymentScheduleRow from './components/PaymentScheduleRow';
 import PurchaseOptionRow from './components/PurchaseOptionRow';
 import TotalsRow from './components/TotalsRow';
 import { TABLE_COLUMNS } from './constants/tableConfig';
+import PaymentScheduleWarning from './components/PaymentScheduleWarning';
 
 export interface PaymentScheduleTableProps {
   schedule: PaymentScheduleResponse | null;
+  rateNegativ: boolean | false;
 }
 
 export default function PaymentScheduleTable({
   schedule,
+  rateNegativ,
 }: PaymentScheduleTableProps): React.JSX.Element | null {
   const { t } = useTranslation();
 
@@ -21,6 +24,7 @@ export default function PaymentScheduleTable({
 
   return (
     <div className="schedule-container">
+      {rateNegativ ? <PaymentScheduleWarning /> : null}
       <div className="schedule-table-wrapper">
         <div className="table-responsive">
           <table className="schedule-table">

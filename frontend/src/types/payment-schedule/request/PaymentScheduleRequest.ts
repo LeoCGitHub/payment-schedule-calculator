@@ -5,4 +5,5 @@ export interface PaymentScheduleRequest {
   purchaseOptionAmount: number;
   firstPaymentDate: string;
   rentAmount: number;
+  marginalDebtRate?: number;
 }

@@ -14,6 +14,7 @@ function App(): React.JSX.Element {
   const [schedule, setSchedule] = useState<PaymentScheduleResponse | null>(
     null
   );
+  const [rateNegativ, setRateNegativ] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -26,6 +27,7 @@ function App(): React.JSX.Element {
     try {
       const result = await paymentScheduleApiService.calculateSchedule(request);
       setSchedule(result as unknown as PaymentScheduleResponse);
+      setRateNegativ(result.paymentScheduleTotals.totalInterestAmount < 0);
     } catch (err) {
       const errorMessage =
         err instanceof Error ? err.message : t('errors.general');
@@ -47,12 +49,19 @@ function App(): React.JSX.Element {
       <main className="app-main">
         <div className="main-layout">
           <div className="form-section">
-            <PaymentScheduleForm onSubmit={handleSubmit} loading={loading} />
+            <PaymentScheduleForm
+              onSubmit={handleSubmit}
+              loading={loading}
+              rateNegativ={rateNegativ}
+            />
           </div>
 
           <div className="table-section">
             {schedule ? (
-              <PaymentScheduleTable schedule={schedule} />
+              <PaymentScheduleTable
+                schedule={schedule}
+                rateNegativ={rateNegativ}
+              />
             ) : (
               <div className="placeholder">
                 <div className="placeholder-icon">📊</div>

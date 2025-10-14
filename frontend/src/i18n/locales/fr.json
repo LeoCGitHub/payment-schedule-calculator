@@ -51,7 +51,16 @@
     },
     "purchaseOption": "Option d'achat",
     "total": "Total",
-    "emptyCell": "-"
+    "emptyCell": "-",
+    "warning": {
+      "title": "⚠️ Attention : un taux implicite négatif a été calculé",
+      "subtitle": "Un taux implicite négatif peut survenir dans certains cas :",
+      "reasonsLabel": "Raisons courantes :",
+      "reasons": "Montants des loyers trop faibles par rapport au capital financé\n Option d'achat très basse réduisant la valeur actualisée\n Erreur dans la périodicité ou la durée du contrat\n Environnement économique avec taux d'intérêt négatifs",
+      "solutionsLabel": "Solutions possibles :",
+      "solutionsToCheck": "Veuillez vérifier et ajuster si nécessaire les montants des loyers et de l'option d'achat\nConfirmer la cohérence de la durée et périodicité du contrat.",
+      "solutions": "\n\nSi tout est conforme, merci de nous transmettre votre Taux d'endettement marginal afin que nous recalculions l'échéancier"
+    }
   },
   "errors": {
     "contractDuration": {

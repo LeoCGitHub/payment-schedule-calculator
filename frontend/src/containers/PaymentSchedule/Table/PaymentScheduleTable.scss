@@ -13,8 +13,13 @@ $success-color: #27ae60;
 // Background colors
 $bg-light: #f8f9fa;
 $bg-lighter: #f1f3f5;
+$bg-error: #ffe0e0;
 $border-color: #dee2e6;
 $border-color-light: #e9ecef;
+$border-error-color: #d14343;
+
+//Font colors
+$font-error: #7a1f1f;
 
 // Spacing
 $spacing-xs: 0.5rem;
@@ -163,6 +168,38 @@ $letter-spacing: 0.5px;
   .table-responsive {
     width: 100%;
     overflow-x: auto;
+  }
+}
+
+.payment-schedule-warning {
+  border: 3px solid $border-error-color;
+  background-color: $bg-error;
+  color: $font-error;
+  padding: 1rem;
+  border-radius: 12px;
+  max-width: 600px;
+  margin: 24px auto;
+
+  h2 {
+    font-size: 1.2rem;
+    margin: 0;
+  }
+
+  h3 {
+    font-size: 1rem;
+    color: #d14343;
+    margin-bottom: 8px;
+    margin: 0;
+  }
+
+  p {
+    font-size: 0.8rem;
+    margin-bottom: 18px;
+  }
+
+  ul {
+    font-size: 0.8rem;
+    margin: 0.4rem;
   }
 }
 

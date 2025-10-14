@@ -43,7 +43,7 @@ describe('FormSelect', () => {
   it('should have correct selected value', () => {
     render(<FormSelect {...defaultProps} value="option2" />);
 
-    const select = screen.getByRole('combobox') as HTMLSelectElement;
+    const select = screen.getByRole('combobox');
     expect(select.value).toBe('option2');
   });
 
@@ -126,13 +126,13 @@ describe('FormSelect', () => {
 
     const option1 = screen.getByRole('option', {
       name: 'Option 1',
-    }) as HTMLOptionElement;
+    });
     const option2 = screen.getByRole('option', {
       name: 'Option 2',
-    }) as HTMLOptionElement;
+    });
     const option3 = screen.getByRole('option', {
       name: 'Option 3',
-    }) as HTMLOptionElement;
+    });
 
     expect(option1.value).toBe('option1');
     expect(option2.value).toBe('option2');

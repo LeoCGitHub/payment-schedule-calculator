@@ -51,7 +51,16 @@
     },
     "purchaseOption": "Purchase Option",
     "total": "Total",
-    "emptyCell": "-"
+    "emptyCell": "-",
+    "warning": {
+      "title": "⚠️ Warning: a negative implicit rate has been calculated",
+      "subtitle": "A negative implicit rate may occur in certain cases:",
+      "reasonsLabel": "Common reasons:",
+      "reasons": "Rental payments are too low compared to the financed asset amount\nPurchase option is very low, reducing the present value\nError in the payment frequency or contract duration\nEconomic environment with negative interest rates",
+      "solutionsLabel": "Possible solutions:",
+      "solutionsToCheck": "Please verify and adjust the rental and purchase option amounts if necessary\nConfirm the consistency of the contract duration and payment frequency.",
+      "solutions": "\n\nIf everything is correct, please send us your marginal debt ratio so we can recalculate the payment schedule"
+    }
   },
   "errors": {
     "contractDuration": {

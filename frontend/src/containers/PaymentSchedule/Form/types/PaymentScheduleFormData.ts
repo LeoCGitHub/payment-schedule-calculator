@@ -5,4 +5,5 @@ export interface PaymentScheduleFormData {
   purchaseOptionValue: string;
   firstPaymentDate: string;
   rentAmount: string;
+  marginalDebtRate?: string;
 }
