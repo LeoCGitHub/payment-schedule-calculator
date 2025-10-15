@@ -15,13 +15,15 @@ describe('PaymentScheduleRow', () => {
     debtBeginningPeriodAmount: 150000,
     debtEndPeriodAmount: 141500,
     actualizedCashFlowAmount: 9850,
+    linearAmortizationAmount: 0,
+    ifrs16Expense: 0,
   };
 
   it('should render all line data', () => {
     render(
       <table>
         <tbody>
-          <PaymentScheduleRow line={mockLine} />
+          <PaymentScheduleRow line={mockLine} IBRNeeded={false} />
         </tbody>
       </table>
     );
@@ -34,7 +36,7 @@ describe('PaymentScheduleRow', () => {
     render(
       <table>
         <tbody>
-          <PaymentScheduleRow line={mockLine} />
+          <PaymentScheduleRow line={mockLine} IBRNeeded={false} />
         </tbody>
       </table>
     );
@@ -48,7 +50,7 @@ describe('PaymentScheduleRow', () => {
     render(
       <table>
         <tbody>
-          <PaymentScheduleRow line={mockLine} />
+          <PaymentScheduleRow line={mockLine} IBRNeeded={false} />
         </tbody>
       </table>
     );
@@ -62,7 +64,7 @@ describe('PaymentScheduleRow', () => {
     const { container } = render(
       <table>
         <tbody>
-          <PaymentScheduleRow line={mockLine} />
+          <PaymentScheduleRow line={mockLine} IBRNeeded={false} />
         </tbody>
       </table>
     );
@@ -75,7 +77,7 @@ describe('PaymentScheduleRow', () => {
     const { container } = render(
       <table>
         <tbody>
-          <PaymentScheduleRow line={mockLine} />
+          <PaymentScheduleRow line={mockLine} IBRNeeded={false} />
         </tbody>
       </table>
     );
@@ -88,7 +90,7 @@ describe('PaymentScheduleRow', () => {
     const { container } = render(
       <table>
         <tbody>
-          <PaymentScheduleRow line={mockLine} />
+          <PaymentScheduleRow line={mockLine} IBRNeeded={false} />
         </tbody>
       </table>
     );
@@ -101,7 +103,7 @@ describe('PaymentScheduleRow', () => {
     const { container } = render(
       <table>
         <tbody>
-          <PaymentScheduleRow line={mockLine} />
+          <PaymentScheduleRow line={mockLine} IBRNeeded={false} />
         </tbody>
       </table>
     );
@@ -114,7 +116,7 @@ describe('PaymentScheduleRow', () => {
     const { container } = render(
       <table>
         <tbody>
-          <PaymentScheduleRow line={mockLine} />
+          <PaymentScheduleRow line={mockLine} IBRNeeded={false} />
         </tbody>
       </table>
     );
@@ -127,7 +129,7 @@ describe('PaymentScheduleRow', () => {
     const { container } = render(
       <table>
         <tbody>
-          <PaymentScheduleRow line={mockLine} />
+          <PaymentScheduleRow line={mockLine} IBRNeeded={false} />
         </tbody>
       </table>
     );
@@ -141,7 +143,7 @@ describe('PaymentScheduleRow', () => {
     render(
       <table>
         <tbody>
-          <PaymentScheduleRow line={line} />
+          <PaymentScheduleRow line={line} IBRNeeded={false} />
         </tbody>
       </table>
     );
@@ -159,7 +161,7 @@ describe('PaymentScheduleRow', () => {
     render(
       <table>
         <tbody>
-          <PaymentScheduleRow line={line} />
+          <PaymentScheduleRow line={line} IBRNeeded={false} />
         </tbody>
       </table>
     );
@@ -177,7 +179,7 @@ describe('PaymentScheduleRow', () => {
     render(
       <table>
         <tbody>
-          <PaymentScheduleRow line={line} />
+          <PaymentScheduleRow line={line} IBRNeeded={false} />
         </tbody>
       </table>
     );

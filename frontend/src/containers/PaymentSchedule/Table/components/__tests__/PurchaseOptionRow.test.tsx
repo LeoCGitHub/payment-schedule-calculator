@@ -13,7 +13,10 @@ describe('PurchaseOptionRow', () => {
     render(
       <table>
         <tbody>
-          <PurchaseOptionRow purchaseOptionTotals={mockPurchaseOptionTotals} />
+          <PurchaseOptionRow
+            purchaseOptionTotals={mockPurchaseOptionTotals}
+            IBRNeeded={false}
+          />
         </tbody>
       </table>
     );
@@ -25,7 +28,10 @@ describe('PurchaseOptionRow', () => {
     render(
       <table>
         <tbody>
-          <PurchaseOptionRow purchaseOptionTotals={mockPurchaseOptionTotals} />
+          <PurchaseOptionRow
+            purchaseOptionTotals={mockPurchaseOptionTotals}
+            IBRNeeded={false}
+          />
         </tbody>
       </table>
     );
@@ -38,7 +44,10 @@ describe('PurchaseOptionRow', () => {
     render(
       <table>
         <tbody>
-          <PurchaseOptionRow purchaseOptionTotals={mockPurchaseOptionTotals} />
+          <PurchaseOptionRow
+            purchaseOptionTotals={mockPurchaseOptionTotals}
+            IBRNeeded={false}
+          />
         </tbody>
       </table>
     );
@@ -52,7 +61,10 @@ describe('PurchaseOptionRow', () => {
     const { container } = render(
       <table>
         <tbody>
-          <PurchaseOptionRow purchaseOptionTotals={mockPurchaseOptionTotals} />
+          <PurchaseOptionRow
+            purchaseOptionTotals={mockPurchaseOptionTotals}
+            IBRNeeded={false}
+          />
         </tbody>
       </table>
     );
@@ -65,7 +77,10 @@ describe('PurchaseOptionRow', () => {
     const { container } = render(
       <table>
         <tbody>
-          <PurchaseOptionRow purchaseOptionTotals={mockPurchaseOptionTotals} />
+          <PurchaseOptionRow
+            purchaseOptionTotals={mockPurchaseOptionTotals}
+            IBRNeeded={false}
+          />
         </tbody>
       </table>
     );
@@ -79,7 +94,10 @@ describe('PurchaseOptionRow', () => {
     render(
       <table>
         <tbody>
-          <PurchaseOptionRow purchaseOptionTotals={mockPurchaseOptionTotals} />
+          <PurchaseOptionRow
+            purchaseOptionTotals={mockPurchaseOptionTotals}
+            IBRNeeded={false}
+          />
         </tbody>
       </table>
     );
@@ -92,7 +110,10 @@ describe('PurchaseOptionRow', () => {
     const { container } = render(
       <table>
         <tbody>
-          <PurchaseOptionRow purchaseOptionTotals={mockPurchaseOptionTotals} />
+          <PurchaseOptionRow
+            purchaseOptionTotals={mockPurchaseOptionTotals}
+            IBRNeeded={false}
+          />
         </tbody>
       </table>
     );
@@ -105,7 +126,10 @@ describe('PurchaseOptionRow', () => {
     const { container } = render(
       <table>
         <tbody>
-          <PurchaseOptionRow purchaseOptionTotals={mockPurchaseOptionTotals} />
+          <PurchaseOptionRow
+            purchaseOptionTotals={mockPurchaseOptionTotals}
+            IBRNeeded={false}
+          />
         </tbody>
       </table>
     );
@@ -118,7 +142,10 @@ describe('PurchaseOptionRow', () => {
     const { container } = render(
       <table>
         <tbody>
-          <PurchaseOptionRow purchaseOptionTotals={mockPurchaseOptionTotals} />
+          <PurchaseOptionRow
+            purchaseOptionTotals={mockPurchaseOptionTotals}
+            IBRNeeded={false}
+          />
         </tbody>
       </table>
     );
@@ -136,7 +163,10 @@ describe('PurchaseOptionRow', () => {
     render(
       <table>
         <tbody>
-          <PurchaseOptionRow purchaseOptionTotals={zeroTotals} />
+          <PurchaseOptionRow
+            purchaseOptionTotals={zeroTotals}
+            IBRNeeded={false}
+          />
         </tbody>
       </table>
     );
@@ -154,7 +184,10 @@ describe('PurchaseOptionRow', () => {
     render(
       <table>
         <tbody>
-          <PurchaseOptionRow purchaseOptionTotals={largeTotals} />
+          <PurchaseOptionRow
+            purchaseOptionTotals={largeTotals}
+            IBRNeeded={false}
+          />
         </tbody>
       </table>
     );
@@ -170,7 +203,10 @@ describe('PurchaseOptionRow', () => {
     const { container } = render(
       <table>
         <tbody>
-          <PurchaseOptionRow purchaseOptionTotals={mockPurchaseOptionTotals} />
+          <PurchaseOptionRow
+            purchaseOptionTotals={mockPurchaseOptionTotals}
+            IBRNeeded={false}
+          />
         </tbody>
       </table>
     );
@@ -195,7 +231,10 @@ describe('PurchaseOptionRow', () => {
     render(
       <table>
         <tbody>
-          <PurchaseOptionRow purchaseOptionTotals={decimalTotals} />
+          <PurchaseOptionRow
+            purchaseOptionTotals={decimalTotals}
+            IBRNeeded={false}
+          />
         </tbody>
       </table>
     );

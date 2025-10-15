@@ -17,6 +17,8 @@ describe('PaymentScheduleTable', () => {
         debtBeginningPeriodAmount: 150000,
         debtEndPeriodAmount: 141500,
         actualizedCashFlowAmount: 9850,
+        linearAmortizationAmount: 0,
+        ifrs16Expense: 0,
       },
       {
         period: 2,
@@ -29,6 +31,8 @@ describe('PaymentScheduleTable', () => {
         debtBeginningPeriodAmount: 141500,
         debtEndPeriodAmount: 132915,
         actualizedCashFlowAmount: 9750,
+        linearAmortizationAmount: 0,
+        ifrs16Expense: 0,
       },
     ],
     paymentScheduleTotals: {
@@ -36,27 +40,32 @@ describe('PaymentScheduleTable', () => {
       totalInterestAmount: 2915,
       totalAmortizedAmount: 17085,
       totalActualizedCashFlowsAmount: 19600,
+      totalLinearAmortizedAmount: 0,
+      totalIsfsr16Charge: 0,
     },
     purchaseOptionTotals: {
       purchaseOptionAmount: 1500,
       actualizedPurchaseOptionAmount: 1450,
     },
+    ibrNeeded: false,
   };
 
   it('should render null when schedule is null', () => {
-    const { container } = render(<PaymentScheduleTable schedule={null} />);
+    const { container } = render(
+      <PaymentScheduleTable schedule={null} IBRNeeded={false} />
+    );
     expect(container.firstChild).toBeNull();
   });
 
   it('should render table when schedule is provided', () => {
-    render(<PaymentScheduleTable schedule={mockSchedule} />);
+    render(<PaymentScheduleTable schedule={mockSchedule} IBRNeeded={false} />);
 
     const table = screen.getByRole('table');
     expect(table).toBeInTheDocument();
   });
 
   it('should render table headers', () => {
-    render(<PaymentScheduleTable schedule={mockSchedule} />);
+    render(<PaymentScheduleTable schedule={mockSchedule} IBRNeeded={false} />);
 
     expect(screen.getByText('table.headers.period')).toBeInTheDocument();
     expect(screen.getByText('table.headers.dueDate')).toBeInTheDocument();
@@ -83,7 +92,7 @@ describe('PaymentScheduleTable', () => {
   });
 
   it('should render all payment schedule lines', () => {
-    render(<PaymentScheduleTable schedule={mockSchedule} />);
+    render(<PaymentScheduleTable schedule={mockSchedule} IBRNeeded={false} />);
 
     expect(screen.getByText('1')).toBeInTheDocument();
     expect(screen.getByText('2')).toBeInTheDocument();
@@ -91,7 +100,7 @@ describe('PaymentScheduleTable', () => {
 
   it('should render PaymentScheduleRow for each line', () => {
     const { container } = render(
-      <PaymentScheduleTable schedule={mockSchedule} />
+      <PaymentScheduleTable schedule={mockSchedule} IBRNeeded={false} />
     );
 
     const tbody = container.querySelector('tbody');
@@ -100,20 +109,20 @@ describe('PaymentScheduleTable', () => {
   });
 
   it('should render TotalsRow in tfoot', () => {
-    render(<PaymentScheduleTable schedule={mockSchedule} />);
+    render(<PaymentScheduleTable schedule={mockSchedule} IBRNeeded={false} />);
 
     expect(screen.getByText('table.total')).toBeInTheDocument();
   });
 
   it('should render PurchaseOptionRow in tfoot', () => {
-    render(<PaymentScheduleTable schedule={mockSchedule} />);
+    render(<PaymentScheduleTable schedule={mockSchedule} IBRNeeded={false} />);
 
     expect(screen.getByText('table.purchaseOption')).toBeInTheDocument();
   });
 
   it('should apply correct CSS classes', () => {
     const { container } = render(
-      <PaymentScheduleTable schedule={mockSchedule} />
+      <PaymentScheduleTable schedule={mockSchedule} IBRNeeded={false} />
     );
 
     expect(container.querySelector('.schedule-container')).toBeInTheDocument();
@@ -126,7 +135,7 @@ describe('PaymentScheduleTable', () => {
 
   it('should render table structure with thead, tbody, and tfoot', () => {
     const { container } = render(
-      <PaymentScheduleTable schedule={mockSchedule} />
+      <PaymentScheduleTable schedule={mockSchedule} IBRNeeded={false} />
     );
 
     expect(container.querySelector('thead')).toBeInTheDocument();
@@ -136,7 +145,7 @@ describe('PaymentScheduleTable', () => {
 
   it('should render correct number of header columns', () => {
     const { container } = render(
-      <PaymentScheduleTable schedule={mockSchedule} />
+      <PaymentScheduleTable schedule={mockSchedule} IBRNeeded={false} />
     );
 
     const headers = container.querySelectorAll('thead th');
@@ -151,15 +160,18 @@ describe('PaymentScheduleTable', () => {
         totalInterestAmount: 0,
         totalAmortizedAmount: 0,
         totalActualizedCashFlowsAmount: 0,
+        totalLinearAmortizedAmount: 0,
+        totalIsfsr16Charge: 0,
       },
       purchaseOptionTotals: {
         purchaseOptionAmount: 0,
         actualizedPurchaseOptionAmount: 0,
       },
+      ibrNeeded: false,
     };
 
     const { container } = render(
-      <PaymentScheduleTable schedule={emptySchedule} />
+      <PaymentScheduleTable schedule={emptySchedule} IBRNeeded={false} />
     );
 
     const tbody = container.querySelector('tbody');
@@ -172,10 +184,11 @@ describe('PaymentScheduleTable', () => {
       paymentScheduleLines: [mockSchedule.paymentScheduleLines[0]],
       paymentScheduleTotals: mockSchedule.paymentScheduleTotals,
       purchaseOptionTotals: mockSchedule.purchaseOptionTotals,
+      ibrNeeded: false,
     };
 
     const { container } = render(
-      <PaymentScheduleTable schedule={singleLineSchedule} />
+      <PaymentScheduleTable schedule={singleLineSchedule} IBRNeeded={false} />
     );
 
     const tbody = container.querySelector('tbody');
@@ -184,7 +197,7 @@ describe('PaymentScheduleTable', () => {
   });
 
   it('should render totals with correct values', () => {
-    render(<PaymentScheduleTable schedule={mockSchedule} />);
+    render(<PaymentScheduleTable schedule={mockSchedule} IBRNeeded={false} />);
 
     expect(
       screen.getByText(/20[\s\u202f]000,00[\s\u202f]€/)
@@ -192,7 +205,7 @@ describe('PaymentScheduleTable', () => {
   });
 
   it('should render purchase option totals with correct values', () => {
-    render(<PaymentScheduleTable schedule={mockSchedule} />);
+    render(<PaymentScheduleTable schedule={mockSchedule} IBRNeeded={false} />);
 
     const amounts = screen.getAllByText(/1[\s\u202f]500,00[\s\u202f]€/);
     expect(amounts.length).toBeGreaterThan(0);
@@ -200,7 +213,7 @@ describe('PaymentScheduleTable', () => {
 
   it('should use period as key for rows', () => {
     const { container } = render(
-      <PaymentScheduleTable schedule={mockSchedule} />
+      <PaymentScheduleTable schedule={mockSchedule} IBRNeeded={false} />
     );
 
     const tbody = container.querySelector('tbody');

@@ -97,6 +97,8 @@ describe('App', () => {
           debtBeginningPeriodAmount: 150000,
           debtEndPeriodAmount: 141500,
           actualizedCashFlowAmount: 9850,
+          linearAmortizationAmount: 0,
+          ifrs16Expense: 0,
         },
       ],
       paymentScheduleTotals: {
@@ -104,11 +106,14 @@ describe('App', () => {
         totalInterestAmount: 1500,
         totalAmortizedAmount: 8500,
         totalActualizedCashFlowsAmount: 9850,
+        totalLinearAmortizedAmount: 0,
+        totalIsfsr16Charge: 0,
       },
       purchaseOptionTotals: {
         purchaseOptionAmount: 1500,
         actualizedPurchaseOptionAmount: 1450,
       },
+      ibrNeeded: false,
     };
 
     vi.mocked(
@@ -136,11 +141,14 @@ describe('App', () => {
         totalInterestAmount: 0,
         totalAmortizedAmount: 0,
         totalActualizedCashFlowsAmount: 0,
+        totalLinearAmortizedAmount: 0,
+        totalIsfsr16Charge: 0,
       },
       purchaseOptionTotals: {
         purchaseOptionAmount: 0,
         actualizedPurchaseOptionAmount: 0,
       },
+      ibrNeeded: false,
     };
 
     vi.mocked(

@@ -9,13 +9,15 @@ describe('TotalsRow', () => {
     totalInterestAmount: 331500,
     totalAmortizedAmount: 148500,
     totalActualizedCashFlowsAmount: 450000,
+    totalLinearAmortizedAmount: 0,
+    totalIsfsr16Charge: 0,
   };
 
   it('should render Total label', () => {
     render(
       <table>
         <tbody>
-          <TotalsRow totals={mockTotals} />
+          <TotalsRow totals={mockTotals} IBRNeeded={false} />
         </tbody>
       </table>
     );
@@ -27,7 +29,7 @@ describe('TotalsRow', () => {
     render(
       <table>
         <tbody>
-          <TotalsRow totals={mockTotals} />
+          <TotalsRow totals={mockTotals} IBRNeeded={false} />
         </tbody>
       </table>
     );
@@ -50,7 +52,7 @@ describe('TotalsRow', () => {
     const { container } = render(
       <table>
         <tbody>
-          <TotalsRow totals={mockTotals} />
+          <TotalsRow totals={mockTotals} IBRNeeded={false} />
         </tbody>
       </table>
     );
@@ -63,7 +65,7 @@ describe('TotalsRow', () => {
     const { container } = render(
       <table>
         <tbody>
-          <TotalsRow totals={mockTotals} />
+          <TotalsRow totals={mockTotals} IBRNeeded={false} />
         </tbody>
       </table>
     );
@@ -76,7 +78,7 @@ describe('TotalsRow', () => {
     const { container } = render(
       <table>
         <tbody>
-          <TotalsRow totals={mockTotals} />
+          <TotalsRow totals={mockTotals} IBRNeeded={false} />
         </tbody>
       </table>
     );
@@ -89,7 +91,7 @@ describe('TotalsRow', () => {
     render(
       <table>
         <tbody>
-          <TotalsRow totals={mockTotals} />
+          <TotalsRow totals={mockTotals} IBRNeeded={false} />
         </tbody>
       </table>
     );
@@ -102,7 +104,7 @@ describe('TotalsRow', () => {
     const { container } = render(
       <table>
         <tbody>
-          <TotalsRow totals={mockTotals} />
+          <TotalsRow totals={mockTotals} IBRNeeded={false} />
         </tbody>
       </table>
     );
@@ -115,7 +117,7 @@ describe('TotalsRow', () => {
     const { container } = render(
       <table>
         <tbody>
-          <TotalsRow totals={mockTotals} />
+          <TotalsRow totals={mockTotals} IBRNeeded={false} />
         </tbody>
       </table>
     );
@@ -130,12 +132,14 @@ describe('TotalsRow', () => {
       totalInterestAmount: 0,
       totalAmortizedAmount: 0,
       totalActualizedCashFlowsAmount: 0,
+      totalLinearAmortizedAmount: 0,
+      totalIsfsr16Charge: 0,
     };
 
     render(
       <table>
         <tbody>
-          <TotalsRow totals={zeroTotals} />
+          <TotalsRow totals={zeroTotals} IBRNeeded={false} />
         </tbody>
       </table>
     );
@@ -148,7 +152,7 @@ describe('TotalsRow', () => {
     const { container } = render(
       <table>
         <tbody>
-          <TotalsRow totals={mockTotals} />
+          <TotalsRow totals={mockTotals} IBRNeeded={false} />
         </tbody>
       </table>
     );
@@ -161,7 +165,7 @@ describe('TotalsRow', () => {
     const { container } = render(
       <table>
         <tbody>
-          <TotalsRow totals={mockTotals} />
+          <TotalsRow totals={mockTotals} IBRNeeded={false} />
         </tbody>
       </table>
     );
@@ -179,12 +183,14 @@ describe('TotalsRow', () => {
       totalInterestAmount: 5000000,
       totalAmortizedAmount: 5000000,
       totalActualizedCashFlowsAmount: 9500000,
+      totalLinearAmortizedAmount: 0,
+      totalIsfsr16Charge: 0,
     };
 
     render(
       <table>
         <tbody>
-          <TotalsRow totals={largeTotals} />
+          <TotalsRow totals={largeTotals} IBRNeeded={false} />
         </tbody>
       </table>
     );

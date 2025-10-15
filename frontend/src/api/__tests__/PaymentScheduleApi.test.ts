@@ -25,11 +25,14 @@ describe('PaymentScheduleApi', () => {
         totalActualizedCashFlowsAmount: 148500,
         totalInterestAmount: 331500,
         totalAmortizedAmount: 480000,
+        totalLinearAmortizedAmount: 0,
+        totalIsfsr16Charge: 0,
       },
       purchaseOptionTotals: {
         purchaseOptionAmount: 1500,
         actualizedPurchaseOptionAmount: 1500,
       },
+      ibrNeeded: false,
     };
 
     it('should successfully calculate payment schedule', async () => {
@@ -121,11 +124,14 @@ describe('PaymentScheduleApi', () => {
           totalActualizedCashFlowsAmount: 0,
           totalInterestAmount: 0,
           totalAmortizedAmount: 0,
+          totalLinearAmortizedAmount: 0,
+          totalIsfsr16Charge: 0,
         },
         purchaseOptionTotals: {
           purchaseOptionAmount: 0,
           actualizedPurchaseOptionAmount: 0,
         },
+        ibrNeeded: false,
       };
 
       global.fetch = vi.fn().mockResolvedValue({

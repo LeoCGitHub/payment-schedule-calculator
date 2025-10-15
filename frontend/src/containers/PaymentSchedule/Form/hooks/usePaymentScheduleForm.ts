@@ -53,7 +53,7 @@ export function usePaymentScheduleForm({
     ) => {
       const error = PaymentScheduleFormService.validateField(
         fieldName,
-        currentFormData[fieldName],
+        currentFormData[fieldName]!,
         currentFormData
       );
       if (error) {
@@ -91,7 +91,7 @@ export function usePaymentScheduleForm({
         currentFormData,
         newErrors
       );
-      //  TODO LCG bug here on dynamic langage change, faut recharger page
+      //TODO LCG bug here ocdn dynamic langage change, faut recharger page
 
       revalidateDependentFields(
         name as keyof PaymentScheduleFormData,
