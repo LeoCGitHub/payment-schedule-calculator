@@ -79,7 +79,6 @@ class PaymentScheduleResource {
             request.rentAmount
         )
 
-        // Validate business rules after Bean Validation
         request.validateBusinessRules()
 
         val startTime = System.currentTimeMillis()

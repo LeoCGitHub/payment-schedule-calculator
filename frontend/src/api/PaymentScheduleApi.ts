@@ -4,9 +4,9 @@ import { PaymentScheduleResponse } from '@/types/payment-schedule/response/Payme
 const API_BASE_URL: string = import.meta.env.VITE_API_URL as string;
 
 export const paymentScheduleApiService = {
-  async calculateSchedule(
+  calculateSchedule: async (
     request: PaymentScheduleRequest
-  ): Promise<PaymentScheduleResponse> {
+  ): Promise<PaymentScheduleResponse> => {
     const response = await fetch(`${API_BASE_URL}/payment-schedule/calculate`, {
       method: 'POST',
       headers: {

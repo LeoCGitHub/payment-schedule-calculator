@@ -47,12 +47,16 @@ data class ScheduleConfig(
                 request.periodicity
             )
 
-            val actualizedRate = CalculatorUtils.calculateInternalRateOfReturn(
-                rentAmount = request.rentAmount,
-                purchaseOptionAmount = request.purchaseOptionAmount,
-                assetAmount = request.assetAmount,
-                totalPeriods = totalPeriods
-            )
+            var actualizedRate = request.marginalDebtRate;
+
+            if (actualizedRate == null) {
+                actualizedRate = CalculatorUtils.calculateInternalRateOfReturn(
+                    rentAmount = request.rentAmount,
+                    purchaseOptionAmount = request.purchaseOptionAmount,
+                    assetAmount = request.assetAmount,
+                    totalPeriods = totalPeriods
+                )
+            }
 
             val annualReferenceRate = CalculatorUtils.calculateAnnualReferenceRate(
                 request.periodicity,

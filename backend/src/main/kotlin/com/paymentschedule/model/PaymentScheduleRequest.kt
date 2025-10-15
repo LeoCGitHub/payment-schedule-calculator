@@ -46,8 +46,8 @@ data class PaymentScheduleRequest(
     val rentAmount: BigDecimal,
 
     @field:DecimalMin(value = "0.0001", message = "Marginal Debt Rate amount must be greater than 0")
-    @field:DecimalMin(value = "100", message = "Marginal Debt Rate must be maximum 100")
-    val marginalDebtRate: BigDecimal
+    @field:DecimalMax(value = "1", message = "Marginal Debt Rate must be maximum 100")
+    val marginalDebtRate: BigDecimal?
 ) {
     /**
      * Validate business rules

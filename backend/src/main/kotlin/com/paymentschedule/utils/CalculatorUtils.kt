@@ -1,7 +1,12 @@
 package com.paymentschedule.utils
 
+import com.paymentschedule.model.PaymentScheduleLine
+import com.paymentschedule.model.ScheduleConfig
 import java.math.BigDecimal
+import java.math.RoundingMode
 import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import kotlin.plus
 
 object CalculatorUtils {
 
@@ -283,4 +288,138 @@ object CalculatorUtils {
         return contractDuration.div(periodicity)
     }
 
+    fun calculateIBRPassifInitial(rents: List<BigDecimal>, config: ScheduleConfig): BigDecimal {
+        return rents.foldIndexed(BigDecimal.ZERO) { index, acc, rent ->
+            val pv = rent.divide((BigDecimal.ONE + config.actualizedRate).pow(index + 1), 8, RoundingMode.HALF_UP)
+            acc + pv
+        }
+    }
+
+    private const val CALCULATION_SCALE = 10
+    private const val DISPLAY_SCALE = 2
+    private val ROUNDING_MODE = RoundingMode.HALF_UP
+
+    fun generateScheduleLinesIBR(
+        rents: List<BigDecimal>,
+        config: ScheduleConfig, // Doit contenir : initialDebt, totalPeriods, periodicity, firstPaymentDate, actualizedRate, rentAmount
+        IBRPassifInitial: BigDecimal
+    ): List<PaymentScheduleLine> {
+
+        // 1. Calcul de l'amortissement linéaire de l'Actif IFRS 16
+        val amortActif = config.initialDebt.divide(
+            BigDecimal(config.totalPeriods),
+            DISPLAY_SCALE,
+            ROUNDING_MODE
+        )
+
+        val results = mutableListOf<PaymentScheduleLine>()
+        var debtBeginningPeriodAmount = IBRPassifInitial
+        val lastPeriod = config.totalPeriods
+
+        // On suppose que le loyer standard est le premier paiement (sans l'option d'achat)
+        val standardRent = rents.first().setScale(DISPLAY_SCALE, ROUNDING_MODE)
+
+        // Si l'option d'achat est incluse, elle est la différence dans le dernier paiement
+        val optionAchat = if (rents.size == lastPeriod) {
+            rents.last().subtract(standardRent).setScale(DISPLAY_SCALE, ROUNDING_MODE)
+        } else {
+            BigDecimal.ZERO
+        }
+
+
+        for (p in 1..lastPeriod) {
+            // Le flux de trésorerie réel de cette période (avec option dans la dernière)
+            val totalCashFlow = rents[p - 1]
+
+            // 2. Calcul des Intérêts financiers
+            val financialInterestAmount = debtBeginningPeriodAmount
+                .multiply(config.actualizedRate)
+                .setScale(DISPLAY_SCALE, ROUNDING_MODE)
+
+            // 3. Montant utilisé pour l'amortissement du passif (Principal)
+            // C'est le paiement de loyer SANS l'option d'achat
+            val effectivePaymentForAmortization = if (p == lastPeriod) {
+                standardRent // Loyer standard pour le calcul du passif
+            } else {
+                totalCashFlow
+            }
+
+            // Amortissement du Passif (Principal remboursé)
+            val amortizationAmount = effectivePaymentForAmortization
+                .subtract(financialInterestAmount)
+                .setScale(DISPLAY_SCALE, ROUNDING_MODE)
+
+            // 4. Calcul du Solde Final de la dette
+            val debtEndPeriodAmount = debtBeginningPeriodAmount
+                .subtract(amortizationAmount)
+                .setScale(DISPLAY_SCALE, ROUNDING_MODE)
+
+            // 5. Charge Totale IFRS 16
+            val chargeIFRS16 = financialInterestAmount
+                .add(amortActif)
+                .setScale(DISPLAY_SCALE, ROUNDING_MODE)
+
+            // 6. Date d'échéance
+            val dueDate = calculatePaymentDate(
+                p,
+                config.periodicity,
+                config.firstPaymentDate
+            ).format(DateTimeFormatter.ISO_LOCAL_DATE)
+
+            // 7. Calcul du flux actualisé (PV) : doit utiliser le totalCashFlow, car c'est le flux réel
+            val factor = BigDecimal.ONE.add(config.actualizedRate).pow(p)
+            val actualizedCashFlowAmount = totalCashFlow.divide(
+                factor,
+                DISPLAY_SCALE,
+                ROUNDING_MODE
+            )
+
+            // Ajout de la ligne au tableau
+            results.add(
+                PaymentScheduleLine(
+                    period = p,
+                    dueDate = dueDate,
+                    // Le repaymentAmount (montant remboursant le passif) est l'amortissement SANS l'option
+                    repaymentAmount = amortizationAmount,
+                    debtBeginningPeriodAmount = debtBeginningPeriodAmount,
+                    debtEndPeriodAmount = debtEndPeriodAmount,
+                    periodRate = config.actualizedRate.setScale(DISPLAY_SCALE, ROUNDING_MODE),
+                    financialInterestAmount = financialInterestAmount,
+                    // rentAmount est le montant du loyer total (Cash flow)
+                    rentAmount = totalCashFlow,
+                    annualReferenceRate = BigDecimal.ZERO.setScale(DISPLAY_SCALE, ROUNDING_MODE),
+                    actualizedCashFlowAmount = actualizedCashFlowAmount,
+                    // Ajout des champs IFRS 16 pour être complet
+//                    amortActif = amortActif,
+//                    chargeIFRS16 = chargeIFRS16
+                )
+            )
+
+            // Mise à jour pour la période suivante
+            debtBeginningPeriodAmount = debtEndPeriodAmount
+        }
+
+        // --- CORRECTION FINALE ---
+        if (results.isNotEmpty()) {
+            val lastIndex = results.lastIndex
+            val lastLine = results[lastIndex]
+
+            // 1. Correction du montant du flux total (rentAmount) pour inclure l'option d'achat
+            // -> C'est déjà fait, car on utilise totalCashFlow
+
+            // 2. Correction de la dette finale pour qu'elle soit ZÉRO.
+            // La dernière ligne doit avoir un Solde Fin de 0, car l'amortissement a été calculé
+            // de manière à l'atteindre avec le loyer standard.
+            results[lastIndex] = lastLine.copy(
+                debtEndPeriodAmount = BigDecimal.ZERO.setScale(DISPLAY_SCALE, ROUNDING_MODE)
+            )
+
+            // 3. OPTIONNEL: Afficher le montant de l'option d'achat à part dans le tableau
+            // ou dans le champ rentAmount (qui est le flux total).
+            // Si vous voulez l'afficher clairement comme "Loyer standard + Option",
+            // vous pouvez ajuster le champ rentAmount de la dernière ligne.
+        }
+
+        return results
+    }
 }

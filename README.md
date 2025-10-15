@@ -5,17 +5,20 @@ Calculateur d'échéancier de paiement pour contrats de location-financement. Ap
 ## 🚀 Technologies
 
 ### Backend
+
 - **Kotlin** - Langage de programmation
 - **Quarkus** - Framework Java/Kotlin léger et rapide
 - **Gradle** (Kotlin DSL) - Build tool
 
 ### Frontend
+
 - **React 19** - UI library
 - **TypeScript** - Typage statique
 - **Vite** - Build tool moderne
 - **SCSS** - Styles avec variables et nesting
 
 ### DevOps
+
 - **NX** - Monorepo tool pour gérer frontend + backend
 - **Docker** - Conteneurisation
 - **Husky** - Git hooks pour qualité du code
@@ -40,35 +43,6 @@ payment-schedule-calculator/
 - **Docker Cpmpose** (optionnel, pour le déploiement)
 
 ### QuickStart
-#### Local
-Pour lancer le dev des deux projets :
-```bash
-npm run dev
-```
-Pour lancer le dev des projets indépendemment l'un de l'autre:
-```bash
-npm run dev:frontend
-npm run dev:backend
-```
-
-##### 🌐 URLs par défaut
-- **Frontend** : 
-    - DEV: http://localhost:3100
-- **Backend API** : 
-    - DEV: http://localhost:9090
-- **API Docs** : http://localhost:9090/q/swagger-ui
-
-#### Docker
-```bash
-npm run deploy:local
-```
-
-##### 🌐 URLs par défaut
-- **Frontend** : 
-    - DOCKER: http://localhost:3101
-- **Backend API** : 
-    - DOCKER: http://localhost:9091
-- **API Docs** : http://localhost:9091/q/swagger-ui
 
 ### Installation
 
@@ -76,6 +50,39 @@ npm run deploy:local
 # Installer les dépendances
 npm install
 ```
+
+#### Local
+
+Pour lancer le dev des deux projets :
+
+```bash
+npm run dev
+```
+
+Pour lancer le dev des projets indépendemment l'un de l'autre dans deux terminaux:
+
+```bash
+npm run dev:frontend
+npm run dev:backend
+```
+
+##### 🌐 URLs par défaut
+
+- **Frontend** : http://localhost:3100
+- **Backend API** : http://localhost:9090
+- **API Docs** : http://localhost:9090/q/swagger-ui
+
+#### Docker
+
+```bash
+npm run deploy:local
+```
+
+##### 🌐 URLs par défaut
+
+- **Frontend** : http://localhost:3101
+- **Backend API** : http://localhost:9091
+- **API Docs** : http://localhost:9091/q/swagger-ui
 
 ### Mode Développement
 
@@ -105,14 +112,18 @@ cd frontend && npm run dev
 #### Développement avec Docker
 
 # Démarrer avec docker-compose
+
 docker-compose up
 
 # En arrière-plan
+
 docker-compose up -d
 
 # Arrêter
+
 docker-compose down
-```
+
+````
 
 #### Build des images Docker avec NX
 
@@ -125,7 +136,7 @@ npx nx docker-build frontend
 
 # Builder les deux
 npx nx run-many -t docker-build
-```
+````
 
 ## 🔧 Commandes NX Utiles
 

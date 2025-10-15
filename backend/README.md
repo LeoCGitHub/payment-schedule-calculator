@@ -83,18 +83,20 @@ npx nx build backend
 Calcule un échéancier de paiement.
 
 **Request Body:**
+
 ```json
 {
   "periodicity": 3,
   "contractDuration": 48,
-  "assetValue": 150000,
-  "purchaseOptionValue": 1500,
+  "assetAmount": 150000,
+  "purchaseOptionAmount": 1500,
   "firstPaymentDate": "17/09/2025",
   "rentAmount": 10000
 }
 ```
 
 **Response:**
+
 ```json
 {
   "paymentScheduleLines": [
@@ -166,13 +168,14 @@ Le backend utilise une méthode de dichotomie (bisection) pour calculer le taux 
 ```kotlin
 fun calculateInternalRateOfReturn(
     rentAmount: BigDecimal,
-    purchaseOptionValue: BigDecimal,
-    assetValue: BigDecimal,
+    purchaseOptionAmount: BigDecimal,
+    assetAmount: BigDecimal,
     contractDuration: Int
 ): BigDecimal
 ```
 
 **Formule NPV** :
+
 ```
 NPV = Σ(loyer_i / (1+r)^i) + (option_achat / (1+r)^n) - valeur_actif = 0
 ```
@@ -208,6 +211,7 @@ docker run -e QUARKUS_PROFILE=prod payment-schedule-calculator-backend
 ## 📚 Documentation API
 
 Swagger UI disponible en mode dev :
+
 - http://localhost:9090/q/swagger-ui
 
 ## 🔍 Debugging
@@ -230,6 +234,7 @@ Puis connecter votre IDE au port 5005.
 ## 🚀 Performance
 
 Quarkus offre :
+
 - **Démarrage rapide** : < 1 seconde
 - **Faible empreinte mémoire** : ~30MB
 - **Hot reload** : modifications instantanées en mode dev

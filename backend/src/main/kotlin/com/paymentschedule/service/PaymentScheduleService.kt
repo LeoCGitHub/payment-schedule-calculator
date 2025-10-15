@@ -2,6 +2,8 @@ package com.paymentschedule.service
 
 import com.paymentschedule.model.*
 import com.paymentschedule.utils.CalculatorUtils
+import com.paymentschedule.utils.CalculatorUtils.calculateIBRPassifInitial
+import com.paymentschedule.utils.CalculatorUtils.generateScheduleLinesIBR
 import jakarta.enterprise.context.ApplicationScoped
 import org.jboss.logging.Logger
 import java.math.BigDecimal
@@ -35,9 +37,24 @@ class PaymentScheduleService {
         log.debugf("Starting schedule calculation for %d periods", request.contractDuration / request.periodicity)
 
         val config = ScheduleConfig.from(request)
-        val lines = generateScheduleLines(config)
-        val purchaseOption = calculatePurchaseOption(config)
-        val totals = calculateTotals(lines, config, purchaseOption)
+        var lines: List<PaymentScheduleLine>;
+        var purchaseOption: PurchaseOptionTotals;
+        var totals: PaymentScheduleTotals;
+
+        if (request.marginalDebtRate == null) {
+            lines = generateScheduleLines(config)
+            purchaseOption = calculatePurchaseOption(config)
+            totals = calculateTotals(lines, config, purchaseOption)
+        } else {
+            var rents = List(config.totalPeriods) { config.rentAmount }
+//            rents = rents.plus(config.rentAmount.add(config.purchaseOptionAmount))
+
+            val IBRPassifInitial = calculateIBRPassifInitial(rents, config)
+            lines = generateScheduleLinesIBR(rents, config, IBRPassifInitial)
+            purchaseOption = calculatePurchaseOption(config)
+
+            totals = calculateTotals(lines, config, purchaseOption)
+        }
 
         log.debugf("Schedule calculation completed: %d lines generated", lines.size)
 

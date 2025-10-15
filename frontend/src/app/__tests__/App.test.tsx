@@ -67,9 +67,7 @@ describe('App', () => {
   it('should display Toast on API error', async () => {
     const mockError = new Error('API Error');
     vi.mocked(
-      paymentScheduleApiService.calculateSchedule.bind(
-        paymentScheduleApiService
-      )
+      paymentScheduleApiService.calculateSchedule
     ).mockRejectedValueOnce(mockError);
 
     const user = userEvent.setup();
@@ -114,9 +112,7 @@ describe('App', () => {
     };
 
     vi.mocked(
-      paymentScheduleApiService.calculateSchedule.bind(
-        paymentScheduleApiService
-      )
+      paymentScheduleApiService.calculateSchedule
     ).mockResolvedValueOnce(mockSchedule);
 
     const user = userEvent.setup();
@@ -148,9 +144,7 @@ describe('App', () => {
     };
 
     vi.mocked(
-      paymentScheduleApiService.calculateSchedule.bind(
-        paymentScheduleApiService
-      )
+      paymentScheduleApiService.calculateSchedule
     ).mockResolvedValueOnce(mockSchedule);
 
     const user = userEvent.setup();
@@ -174,9 +168,7 @@ describe('App', () => {
   it('should close Toast when close button is clicked', async () => {
     const mockError = new Error('Test Error');
     vi.mocked(
-      paymentScheduleApiService.calculateSchedule.bind(
-        paymentScheduleApiService
-      )
+      paymentScheduleApiService.calculateSchedule
     ).mockRejectedValueOnce(mockError);
 
     const user = userEvent.setup();
@@ -200,11 +192,7 @@ describe('App', () => {
   });
 
   it('should show loading state during API call', async () => {
-    vi.mocked(
-      paymentScheduleApiService.calculateSchedule.bind(
-        paymentScheduleApiService
-      )
-    ).mockImplementation(
+    vi.mocked(paymentScheduleApiService.calculateSchedule).mockImplementation(
       () => new Promise(resolve => setTimeout(resolve, 1000))
     );
 
@@ -223,9 +211,7 @@ describe('App', () => {
 
   it('should handle non-Error exceptions', async () => {
     vi.mocked(
-      paymentScheduleApiService.calculateSchedule.bind(
-        paymentScheduleApiService
-      )
+      paymentScheduleApiService.calculateSchedule
     ).mockRejectedValueOnce('String error');
 
     const user = userEvent.setup();
