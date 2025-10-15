@@ -22,7 +22,8 @@ class PaymentScheduleServiceTest {
             assetAmount = BigDecimal("150000"),
             purchaseOptionAmount = BigDecimal("1500"),
             firstPaymentDate = LocalDate.of(2025, 9, 17),
-            rentAmount = BigDecimal("10000")
+            rentAmount = BigDecimal("10000"),
+            marginalDebtRate = null
         )
 
         val response = paymentScheduleService.calculateSchedule(request)
@@ -42,7 +43,8 @@ class PaymentScheduleServiceTest {
             assetAmount = BigDecimal("50000"),
             purchaseOptionAmount = BigDecimal("500"),
             firstPaymentDate = LocalDate.of(2025, 1, 1),
-            rentAmount = BigDecimal("4500")
+            rentAmount = BigDecimal("4500"),
+            marginalDebtRate = null
         )
 
         val response = paymentScheduleService.calculateSchedule(request)
@@ -58,7 +60,8 @@ class PaymentScheduleServiceTest {
             assetAmount = BigDecimal("150000"),
             purchaseOptionAmount = BigDecimal("1500"),
             firstPaymentDate = LocalDate.of(2025, 9, 17),
-            rentAmount = BigDecimal("10000")
+            rentAmount = BigDecimal("10000"),
+            marginalDebtRate = null
         )
 
         val response = paymentScheduleService.calculateSchedule(request)
@@ -77,7 +80,8 @@ class PaymentScheduleServiceTest {
             assetAmount = BigDecimal("150000"),
             purchaseOptionAmount = BigDecimal("1500"),
             firstPaymentDate = LocalDate.of(2025, 9, 17),
-            rentAmount = BigDecimal("10000")
+            rentAmount = BigDecimal("10000"),
+            marginalDebtRate = null
         )
 
         val response = paymentScheduleService.calculateSchedule(request)
@@ -100,7 +104,8 @@ class PaymentScheduleServiceTest {
             assetAmount = assetAmount,
             purchaseOptionAmount = BigDecimal("1500"),
             firstPaymentDate = LocalDate.of(2025, 9, 17),
-            rentAmount = BigDecimal("10000")
+            rentAmount = BigDecimal("10000"),
+            marginalDebtRate = null
         )
 
         val response = paymentScheduleService.calculateSchedule(request)
@@ -122,7 +127,8 @@ class PaymentScheduleServiceTest {
             assetAmount = BigDecimal("150000"),
             purchaseOptionAmount = purchaseOption,
             firstPaymentDate = LocalDate.of(2025, 9, 17),
-            rentAmount = BigDecimal("10000")
+            rentAmount = BigDecimal("10000"),
+            marginalDebtRate = null
         )
 
         val response = paymentScheduleService.calculateSchedule(request)
@@ -145,7 +151,8 @@ class PaymentScheduleServiceTest {
             assetAmount = BigDecimal("50000"),
             purchaseOptionAmount = BigDecimal("500"),
             firstPaymentDate = firstDate,
-            rentAmount = BigDecimal("12000")
+            rentAmount = BigDecimal("12000"),
+            marginalDebtRate = null
         )
 
         val response = paymentScheduleService.calculateSchedule(request)
@@ -165,7 +172,8 @@ class PaymentScheduleServiceTest {
             assetAmount = BigDecimal("150000"),
             purchaseOptionAmount = BigDecimal("1500"),
             firstPaymentDate = LocalDate.of(2025, 9, 17),
-            rentAmount = rentAmount
+            rentAmount = rentAmount,
+            marginalDebtRate = null
         )
 
         val response = paymentScheduleService.calculateSchedule(request)
@@ -187,7 +195,8 @@ class PaymentScheduleServiceTest {
             assetAmount = BigDecimal("150000"),
             purchaseOptionAmount = BigDecimal("1500"),
             firstPaymentDate = LocalDate.of(2025, 9, 17),
-            rentAmount = BigDecimal("10000")
+            rentAmount = BigDecimal("10000"),
+            marginalDebtRate = null
         )
 
         val response = paymentScheduleService.calculateSchedule(request)
@@ -210,7 +219,8 @@ class PaymentScheduleServiceTest {
             assetAmount = BigDecimal("150000"),
             purchaseOptionAmount = BigDecimal("1500"),
             firstPaymentDate = LocalDate.of(2025, 9, 17),
-            rentAmount = BigDecimal("10000")
+            rentAmount = BigDecimal("10000"),
+            marginalDebtRate = null
         )
 
         val response = paymentScheduleService.calculateSchedule(request)
@@ -229,7 +239,8 @@ class PaymentScheduleServiceTest {
             assetAmount = BigDecimal("50000"),
             purchaseOptionAmount = BigDecimal("500"),
             firstPaymentDate = LocalDate.of(2025, 1, 1),
-            rentAmount = BigDecimal("4500")
+            rentAmount = BigDecimal("4500"),
+            marginalDebtRate = null
         )
 
         // Test monthly (1)
@@ -261,7 +272,8 @@ class PaymentScheduleServiceTest {
             assetAmount = BigDecimal("150000"),
             purchaseOptionAmount = purchaseOption,
             firstPaymentDate = LocalDate.of(2025, 9, 17),
-            rentAmount = BigDecimal("10000")
+            rentAmount = BigDecimal("10000"),
+            marginalDebtRate = null
         )
 
         val response = paymentScheduleService.calculateSchedule(request)

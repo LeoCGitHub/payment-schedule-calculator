@@ -21,7 +21,8 @@ class PaymentScheduleRequestValidationTest {
         assetAmount = BigDecimal("150000"),
         purchaseOptionAmount = BigDecimal("1500"),
         firstPaymentDate = LocalDate.now().plusDays(1),
-        rentAmount = BigDecimal("10000")
+        rentAmount = BigDecimal("10000"),
+        marginalDebtRate = null
     )
 
     private fun <T> assertViolation(
@@ -217,7 +218,7 @@ class PaymentScheduleRequestValidationTest {
         val violations = validator.validate(request)
 
         assertFalse(violations.isEmpty())
-        assertViolation(violations, "purchaseOptionAmount", "Purchase option amount cannot be negative")
+        assertViolation(violations, "purchaseOptionAmount", "Purchase option amount must be greater than or equal to 0")
     }
 
     @Test
@@ -327,7 +328,8 @@ class PaymentScheduleRequestValidationTest {
             assetAmount = BigDecimal("-150000"),
             purchaseOptionAmount = BigDecimal("-1500"),
             firstPaymentDate = LocalDate.now().minusYears(1),
-            rentAmount = BigDecimal("-10000")
+            rentAmount = BigDecimal("-10000"),
+            marginalDebtRate = null
         )
 
         val violations = validator.validate(request)
@@ -344,7 +346,8 @@ class PaymentScheduleRequestValidationTest {
             assetAmount = BigDecimal("0.01"),
             purchaseOptionAmount = BigDecimal.ZERO,
             firstPaymentDate = LocalDate.now(),
-            rentAmount = BigDecimal("0.01")
+            rentAmount = BigDecimal("0.01"),
+            marginalDebtRate = null
         )
 
         val violations = validator.validate(request)
@@ -359,7 +362,8 @@ class PaymentScheduleRequestValidationTest {
             assetAmount = BigDecimal("250000"),
             purchaseOptionAmount = BigDecimal("2500"),
             firstPaymentDate = LocalDate.of(2025, 9, 17),
-            rentAmount = BigDecimal("15000")
+            rentAmount = BigDecimal("15000"),
+            marginalDebtRate = null
         )
 
         val violations = validator.validate(request)

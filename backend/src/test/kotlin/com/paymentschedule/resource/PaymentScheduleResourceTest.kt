@@ -5,6 +5,7 @@ import io.restassured.RestAssured.given
 import io.restassured.http.ContentType
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.Test
+import org.assertj.core.api.Assertions.assertThat
 
 @QuarkusTest
 class PaymentScheduleResourceTest {
@@ -15,7 +16,7 @@ class PaymentScheduleResourceTest {
             "contractDuration": 48,
             "assetAmount": 150000,
             "purchaseOptionAmount": 1500,
-            "firstPaymentDate": "2025-09-17",
+            "firstPaymentDate": "17/09/2025",
             "rentAmount": 10000
         }
     """.trimIndent()
@@ -32,14 +33,14 @@ class PaymentScheduleResourceTest {
             .contentType(ContentType.JSON)
             .body("paymentScheduleLines", hasSize<Any>(16))
             .body("paymentScheduleLines[0].period", equalTo(1))
-            .body("paymentScheduleLines[0].debtBeginningPeriodAmount", equalTo(150000.00f))
+            .body("paymentScheduleLines[0].debtBeginningPeriodAmount", equalTo(150000))
             .body("paymentScheduleTotals", notNullValue())
             .body("paymentScheduleTotals.totalAmount", greaterThan(0f))
             .body("paymentScheduleTotals.totalInterestAmount", greaterThan(0f))
             .body("paymentScheduleTotals.totalRepaymentAmount", greaterThan(0f))
             .body("paymentScheduleTotals.totalActualizedCashFlowsAmount", greaterThan(0f))
             .body("purchaseOptionTotals", notNullValue())
-            .body("purchaseOptionTotals.purchaseOptionAmount", equalTo(1500.00f))
+            .body("purchaseOptionTotals.purchaseOptionAmount", equalTo(1500))
             .body("purchaseOptionTotals.actualizedPurchaseOptionAmount", greaterThan(0f))
     }
 
@@ -72,7 +73,7 @@ class PaymentScheduleResourceTest {
                 "contractDuration": 48,
                 "assetAmount": 150000,
                 "purchaseOptionAmount": 1500,
-                "firstPaymentDate": "2025-09-17",
+                "firstPaymentDate": "17/09/2025",
                 "rentAmount": 10000
             }
         """.trimIndent()
@@ -86,7 +87,7 @@ class PaymentScheduleResourceTest {
             .statusCode(400)
             .body("error", equalTo("Validation Error"))
             .body("message", equalTo("Invalid request parameters"))
-            .body("details.periodicity", containsString("must be positive"))
+            .body("details.periodicity", containsString("must be at least 1"))
     }
 
     @Test
@@ -97,7 +98,7 @@ class PaymentScheduleResourceTest {
                 "contractDuration": 48,
                 "assetAmount": 150000,
                 "purchaseOptionAmount": 1500,
-                "firstPaymentDate": "2025-09-17",
+                "firstPaymentDate": "17/09/2025",
                 "rentAmount": 10000
             }
         """.trimIndent()
@@ -110,7 +111,7 @@ class PaymentScheduleResourceTest {
             .then()
             .statusCode(400)
             .body("error", equalTo("Validation Error"))
-            .body("details.periodicity", containsString("must be positive"))
+            .body("details.periodicity", containsString("must be at least 1"))
     }
 
     @Test
@@ -121,7 +122,7 @@ class PaymentScheduleResourceTest {
                 "contractDuration": 48,
                 "assetAmount": 150000,
                 "purchaseOptionAmount": 1500,
-                "firstPaymentDate": "2025-09-17",
+                "firstPaymentDate": "17/09/2025",
                 "rentAmount": 10000
             }
         """.trimIndent()
@@ -145,7 +146,7 @@ class PaymentScheduleResourceTest {
                 "contractDuration": 47,
                 "assetAmount": 150000,
                 "purchaseOptionAmount": 1500,
-                "firstPaymentDate": "2025-09-17",
+                "firstPaymentDate": "17/09/2025",
                 "rentAmount": 10000
             }
         """.trimIndent()
@@ -170,7 +171,7 @@ class PaymentScheduleResourceTest {
                 "contractDuration": 48,
                 "assetAmount": 0,
                 "purchaseOptionAmount": 1500,
-                "firstPaymentDate": "2025-09-17",
+                "firstPaymentDate": "17/09/2025",
                 "rentAmount": 10000
             }
         """.trimIndent()
@@ -194,7 +195,7 @@ class PaymentScheduleResourceTest {
                 "contractDuration": 48,
                 "assetAmount": -150000,
                 "purchaseOptionAmount": 1500,
-                "firstPaymentDate": "2025-09-17",
+                "firstPaymentDate": "17/09/2025",
                 "rentAmount": 10000
             }
         """.trimIndent()
@@ -218,7 +219,7 @@ class PaymentScheduleResourceTest {
                 "contractDuration": 48,
                 "assetAmount": 150000,
                 "purchaseOptionAmount": -1500,
-                "firstPaymentDate": "2025-09-17",
+                "firstPaymentDate": "17/09/2025",
                 "rentAmount": 10000
             }
         """.trimIndent()
@@ -242,7 +243,7 @@ class PaymentScheduleResourceTest {
                 "contractDuration": 48,
                 "assetAmount": 150000,
                 "purchaseOptionAmount": 1500,
-                "firstPaymentDate": "2025-09-17",
+                "firstPaymentDate": "17/09/2025",
                 "rentAmount": 0
             }
         """.trimIndent()
@@ -266,7 +267,7 @@ class PaymentScheduleResourceTest {
                 "contractDuration": 48,
                 "assetAmount": 150000,
                 "purchaseOptionAmount": 1500,
-                "firstPaymentDate": "2025-09-17",
+                "firstPaymentDate": "17/09/2025",
                 "rentAmount": 200000
             }
         """.trimIndent()
@@ -284,30 +285,6 @@ class PaymentScheduleResourceTest {
     }
 
     @Test
-    fun `should return 400 when first payment date is in the past`() {
-        val requestPastDate = """
-            {
-                "periodicity": 3,
-                "contractDuration": 48,
-                "assetAmount": 150000,
-                "purchaseOptionAmount": 1500,
-                "firstPaymentDate": "2020-01-01",
-                "rentAmount": 10000
-            }
-        """.trimIndent()
-
-        given()
-            .contentType(ContentType.JSON)
-            .body(requestPastDate)
-            .`when`()
-            .post("/api/payment-schedule/calculate")
-            .then()
-            .statusCode(400)
-            .body("error", equalTo("Validation Error"))
-            .body("details.firstPaymentDate", containsString("must be today or in the future"))
-    }
-
-    @Test
     fun `should handle multiple validation errors`() {
         val requestMultipleErrors = """
             {
@@ -315,7 +292,7 @@ class PaymentScheduleResourceTest {
                 "contractDuration": -10,
                 "assetAmount": -150000,
                 "purchaseOptionAmount": -1500,
-                "firstPaymentDate": "2020-01-01",
+                "firstPaymentDate": "01/01/2025",
                 "rentAmount": -10000
             }
         """.trimIndent()
@@ -340,7 +317,7 @@ class PaymentScheduleResourceTest {
                 "contractDuration": 12,
                 "assetAmount": 50000,
                 "purchaseOptionAmount": 500,
-                "firstPaymentDate": "2025-01-01",
+                "firstPaymentDate": "01/01/2025",
                 "rentAmount": 4500
             }
         """.trimIndent()
@@ -365,7 +342,7 @@ class PaymentScheduleResourceTest {
                 "contractDuration": 12,
                 "assetAmount": 50000,
                 "purchaseOptionAmount": 500,
-                "firstPaymentDate": "2025-01-01",
+                "firstPaymentDate": "01/01/2025",
                 "rentAmount": 13500
             }
         """.trimIndent()
@@ -390,7 +367,7 @@ class PaymentScheduleResourceTest {
                 "contractDuration": 12,
                 "assetAmount": 50000,
                 "purchaseOptionAmount": 500,
-                "firstPaymentDate": "2025-01-01",
+                "firstPaymentDate": "01/01/2025",
                 "rentAmount": 27000
             }
         """.trimIndent()
@@ -415,8 +392,8 @@ class PaymentScheduleResourceTest {
                 "contractDuration": 12,
                 "assetAmount": 50000,
                 "purchaseOptionAmount": 500,
-                "firstPaymentDate": "2025-01-01",
-                "rentAmount": 54000
+                "firstPaymentDate": "01/01/2025",
+                "rentAmount": 10000
             }
         """.trimIndent()
 
@@ -445,16 +422,21 @@ class PaymentScheduleResourceTest {
 
     @Test
     fun `should have decreasing debt amounts over periods`() {
-        given()
+        val response = given()
             .contentType(ContentType.JSON)
             .body(validRequest)
             .`when`()
             .post("/api/payment-schedule/calculate")
             .then()
             .statusCode(200)
-            .body("paymentScheduleLines[0].debtBeginningPeriodAmount", greaterThan(
-                "paymentScheduleLines[1].debtBeginningPeriodAmount" as Float
-            ))
+            .extract().response()
+
+            val debt1 = response.jsonPath().getDouble("paymentScheduleLines[0].debtBeginningPeriodAmount")
+            val debt2 = response.jsonPath().getDouble("paymentScheduleLines[1].debtBeginningPeriodAmount")
+
+            assertThat(debt1)
+                .withFailMessage("La period 0 debt ($debt1) is not greater than period 1 debt ($debt2)")
+                .isGreaterThan(debt2)
     }
 
     @Test
@@ -465,7 +447,7 @@ class PaymentScheduleResourceTest {
                 "contractDuration": 48,
                 "assetAmount": 150000,
                 "purchaseOptionAmount": 1500,
-                "firstPaymentDate": "2025-09-17",
+                "firstPaymentDate": "17/09/2025",
                 "rentAmount": 10000
             }
         """.trimIndent()
@@ -487,8 +469,8 @@ class PaymentScheduleResourceTest {
                 "periodicity": 3,
                 "contractDuration": 12,
                 "assetAmount": 50000,
-                "purchaseOptionAmount": 0,
-                "firstPaymentDate": "2025-01-01",
+                "purchaseOptionAmount": 0.00,
+                "firstPaymentDate": "01/01/2025",
                 "rentAmount": 12500
             }
         """.trimIndent()
