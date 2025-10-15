@@ -3,7 +3,7 @@ $primary-color: #646cff;
 $primary-hover: #535bf2;
 $bg-dark: #242424;
 $bg-light: #ffffff;
-$text-dark: rgba(255, 255, 255, 0.87);
+$text-dark: #242424;
 $text-light: #213547;
 $scrollbar-track: #f1f1f1;
 $scrollbar-thumb: #888;
@@ -14,7 +14,6 @@ $scrollbar-thumb-hover: #555;
   line-height: 1.5;
   font-weight: 400;
 
-  color-scheme: light dark;
   color: $text-dark;
   background-color: $bg-dark;
 

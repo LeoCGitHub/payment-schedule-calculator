@@ -34,11 +34,11 @@ data class PaymentScheduleRequest(
     val assetAmount: BigDecimal,
 
     @field:NotNull(message = "Purchase option amount is required")
-    @field:DecimalMin(value = "0.00", inclusive = true, message = "Purchase option amount cannot be negative")
+    @field:DecimalMin(value = "0.00", inclusive = true, message = "Purchase option amount must be greater than or equal to 0")
     val purchaseOptionAmount: BigDecimal,
 
     @field:NotNull(message = "First payment date is required")
-    @param:JsonFormat(pattern = "dd/MM/yyyy")
+    @param:JsonFormat(pattern = "yyyy-MM-dd")
     val firstPaymentDate: LocalDate,
 
     @field:NotNull(message = "Rent amount is required")

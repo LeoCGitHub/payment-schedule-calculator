@@ -9,7 +9,6 @@ import { useTranslation } from 'react-i18next';
 import { PaymentScheduleFormData } from '../types/PaymentScheduleFormData';
 import { PaymentScheduleFormErrors } from '../types/PaymentScheduleFormErrors';
 import { PaymentScheduleFormService } from '@/containers/PaymentSchedule/Form/services/PaymentScheduleFormService';
-import { convertFromISO } from '@/utils/formatter/DateFormatter';
 import { translateError } from '@/i18n/translateError';
 import { DEFAULT_FORM_DATA } from '../constants/formConfig';
 
@@ -145,10 +144,6 @@ export function usePaymentScheduleForm({
       const { name, value } = e.target;
 
       let processedValue = value;
-
-      if (name === 'firstPaymentDate' && value) {
-        processedValue = convertFromISO(value, locale);
-      }
 
       if (name === 'marginalDebtRate' && parseInt(value) > 100) {
         processedValue = '100';

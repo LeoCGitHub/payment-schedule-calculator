@@ -30,7 +30,7 @@ class CalculatorUtilsTest {
             rentAmount = BigDecimal("10000.0"),
             purchaseOptionAmount = BigDecimal("1500.0"),
             assetAmount = BigDecimal("150000.0"),
-            period = 16
+            totalPeriods = 16
         )
         println("Method 2 - Discount rate found: $rate")
 

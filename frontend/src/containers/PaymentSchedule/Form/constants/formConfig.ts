@@ -12,7 +12,7 @@ export const DEFAULT_FORM_DATA: PaymentScheduleFormData = {
   contractDuration: '48',
   assetAmount: '150000',
   purchaseOptionAmount: '1500',
-  firstPaymentDate: '17/09/2025',
+  firstPaymentDate: '2025-07-15',
   rentAmount: '10000',
   marginalDebtRate: undefined,
 };

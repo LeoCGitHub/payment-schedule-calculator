@@ -1,6 +1,5 @@
 import './PaymentScheduleForm.scss';
 import { useTranslation } from 'react-i18next';
-import { convertToISO } from '../../../utils/formatter/DateFormatter';
 import { PaymentScheduleFormService } from '@/containers/PaymentSchedule/Form/services/PaymentScheduleFormService';
 import { PaymentScheduleFormProps } from './types/PaymentScheduleFormProps';
 import { usePaymentScheduleForm } from './hooks/usePaymentScheduleForm';
@@ -50,7 +49,7 @@ export default function PaymentScheduleForm({
           label={t('form.firstPaymentDate.label')}
           placeholder={t('form.firstPaymentDate.placeholder')}
           type="date"
-          value={convertToISO(formData.firstPaymentDate)}
+          value={formData.firstPaymentDate}
           onChange={handleChange}
           disabled={loading}
           error={errors.firstPaymentDate}

@@ -55,9 +55,6 @@ $shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 
 .app-main {
   height: 94vh;
-  display: flex;
-  width: 100%;
-  max-width: 100vw;
   padding: 1rem;
   box-sizing: border-box;
   overflow: auto;
@@ -76,17 +73,17 @@ $shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 
 .form-section {
   height: 100%;
-  // flex: 0 0 400px;
   max-width: 400px;
   position: sticky;
   top: 70px;
   align-self: flex-start;
   overflow-y: auto;
+  width: 30%;
 }
 
 .table-section {
   height: 100%;
-  width: 100%;
+  width: 70%;
   flex: 1;
   min-width: 0;
   background: $white;
@@ -149,15 +146,25 @@ $shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     max-width: 100%;
     position: static;
     max-height: none;
-    overflow-y: visible;
+    width: 100%;
+  }
+
+  .form-group label,
+  .form-group input {
+    font-size: 0.8rem;
   }
 
   .payment-form {
     height: 100%;
+
+    h2 {
+      padding: 0.5rem;
+    }
   }
 
   .table-section {
     min-height: 500px;
+    width: 100%;
   }
 
   .app-main {

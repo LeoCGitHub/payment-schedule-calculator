@@ -20,9 +20,9 @@
     "docker:build": "nx run-many --target=docker:build --all --parallel=2",
     "docker:build:frontend": "nx docker:build frontend",
     "docker:build:backend": "nx docker:build backend",
-    "docker:up": "docker-compose up -d",
-    "docker:down": "docker-compose down",
-    "docker:logs": "docker-compose logs -f",
+    "docker:up": "docker compose up -d",
+    "docker:down": "docker compose down",
+    "docker:logs": "docker compose logs -f",
     "deploy:local": "npm run build && npm run docker:build && npm run docker:up"
   },
   "repository": {
