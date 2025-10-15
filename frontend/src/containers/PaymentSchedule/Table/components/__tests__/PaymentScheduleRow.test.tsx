@@ -11,7 +11,7 @@ describe('PaymentScheduleRow', () => {
     periodRate: 0.01,
     annualReferenceRate: 0.12,
     financialInterestAmount: 1500,
-    repaymentAmount: 8500,
+    amortizedAmount: 8500,
     debtBeginningPeriodAmount: 150000,
     debtEndPeriodAmount: 141500,
     actualizedCashFlowAmount: 9850,

@@ -24,7 +24,7 @@ describe('PaymentScheduleApi', () => {
         totalAmount: 480000,
         totalActualizedCashFlowsAmount: 148500,
         totalInterestAmount: 331500,
-        totalRepaymentAmount: 480000,
+        totalAmortizedAmount: 480000,
       },
       purchaseOptionTotals: {
         purchaseOptionAmount: 1500,
@@ -120,7 +120,7 @@ describe('PaymentScheduleApi', () => {
           totalAmount: 0,
           totalActualizedCashFlowsAmount: 0,
           totalInterestAmount: 0,
-          totalRepaymentAmount: 0,
+          totalAmortizedAmount: 0,
         },
         purchaseOptionTotals: {
           purchaseOptionAmount: 0,

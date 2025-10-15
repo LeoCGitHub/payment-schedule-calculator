@@ -52,10 +52,12 @@
       "periodRate": "Rate",
       "annualReferenceRate": "Annual Rate",
       "financialInterestAmount": "Financial Interest",
-      "repaymentAmount": "Repayment",
+      "amortizedAmount": "Repayment",
       "debtBeginningPeriodAmount": "Debt Beginning Period",
       "debtEndPeriodAmount": "Debt End Period",
-      "actualizedCashFlowAmount": "Discounted Cash Flow"
+      "actualizedCashFlowAmount": "Discounted Cash Flow",
+      "linearAmortizationAmount": "Linear Amortization Amount",
+      "ifrs16Expense": "IFRS16 Charge"
     },
     "purchaseOption": "Purchase Option",
     "total": "Total",
@@ -64,7 +66,7 @@
       "title": "⚠️ Warning: a negative implicit rate has been calculated",
       "subtitle": "A negative implicit rate may occur in certain cases:",
       "reasonsLabel": "Common reasons:",
-      "reasons": "Rental payments are too low compared to the financed asset amount\nPurchase option is very low, reducing the present value\nError in the payment frequency or contract duration\nEconomic environment with negative interest rates",
+      "reasons": "Rental payments are too low compared to the financed asset amount\nPurchase option is very low, reducing the present value\nError in the payment frequency or contract duration",
       "solutionsLabel": "Possible solutions:",
       "solutionsToCheck": "Please verify and adjust the rental and purchase option amounts if necessary\nConfirm the consistency of the contract duration and payment frequency.",
       "solutions": "\n\nIf everything is correct, please send us your marginal debt ratio so we can recalculate the payment schedule"

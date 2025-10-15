@@ -37,7 +37,7 @@ class PaymentScheduleResourceTest {
             .body("paymentScheduleTotals", notNullValue())
             .body("paymentScheduleTotals.totalAmount", greaterThan(0f))
             .body("paymentScheduleTotals.totalInterestAmount", greaterThan(0f))
-            .body("paymentScheduleTotals.totalRepaymentAmount", greaterThan(0f))
+            .body("paymentScheduleTotals.totalAmortizedAmount", greaterThan(0f))
             .body("paymentScheduleTotals.totalActualizedCashFlowsAmount", greaterThan(0f))
             .body("purchaseOptionTotals", notNullValue())
             .body("purchaseOptionTotals.purchaseOptionAmount", equalTo(1500))

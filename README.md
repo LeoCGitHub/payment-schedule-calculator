@@ -51,7 +51,7 @@ payment-schedule-calculator/
 npm install
 ```
 
-#### Local
+### Mode Développement Local
 
 Pour lancer le dev des deux projets :
 
@@ -84,103 +84,11 @@ npm run deploy:local
 - **Backend API** : http://localhost:9091
 - **API Docs** : http://localhost:9091/q/swagger-ui
 
-### Mode Développement
+### NX
 
-#### Option 1 : Démarrer les deux applications avec NX
-
-```bash
-# Démarrer backend + frontend simultanément
-npx nx run-many -t serve
-
-# Ou individuellement
-npx nx serve backend    # Backend sur http://localhost:9090
-npx nx serve frontend   # Frontend sur http://localhost:3100
-```
-
-#### Option 2 : Commandes directes
-
-```bash
-# Backend uniquement
-cd backend && ./gradlew quarkusDev
-
-# Frontend uniquement
-cd frontend && npm run dev
-```
-
-### Mode Docker
-
-#### Développement avec Docker
-
-# Démarrer avec docker-compose
-
-docker-compose up
-
-# En arrière-plan
-
-docker-compose up -d
-
-# Arrêter
-
-docker-compose down
-
-````
-
-#### Build des images Docker avec NX
-
-```bash
-# Builder le backend
-npx nx docker-build backend
-
-# Builder le frontend
-npx nx docker-build frontend
-
-# Builder les deux
-npx nx run-many -t docker-build
-````
-
-## 🔧 Commandes NX Utiles
-
-### Tests
-
-```bash
-# Lancer tous les tests
-npx nx run-many -t test
-
-# Tests backend uniquement
-npx nx test backend
-
-# Tests frontend uniquement (si configuré)
-npx nx test frontend
-```
-
-### Build
-
-```bash
-# Builder les deux projets
-npx nx run-many -t build
-
-# Build backend (JAR)
-npx nx build backend
-
-# Build frontend (assets statiques)
-npx nx build frontend
-```
-
-### Qualité du code
-
-```bash
-# Linter frontend
-npx nx lint frontend
-
-# Format (Prettier)
-cd frontend && npm run format
-```
-
-### Visualiser le graphe de dépendances
-
-```bash
-npx nx graph
-```
+[Pour consulter les commandes NX du projet](./nx.json)
+[Pour consulter les commandes NX du frontend](./frontend/project.json)
+[Pour consulter les commandes NX du backend](./backend/project.json)
 
 ## 📚 Documentation
 

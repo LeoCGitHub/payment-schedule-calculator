@@ -93,7 +93,7 @@ describe('App', () => {
           periodRate: 0.01,
           annualReferenceRate: 0.12,
           financialInterestAmount: 1500,
-          repaymentAmount: 8500,
+          amortizedAmount: 8500,
           debtBeginningPeriodAmount: 150000,
           debtEndPeriodAmount: 141500,
           actualizedCashFlowAmount: 9850,
@@ -102,7 +102,7 @@ describe('App', () => {
       paymentScheduleTotals: {
         totalAmount: 10000,
         totalInterestAmount: 1500,
-        totalRepaymentAmount: 8500,
+        totalAmortizedAmount: 8500,
         totalActualizedCashFlowsAmount: 9850,
       },
       purchaseOptionTotals: {
@@ -134,7 +134,7 @@ describe('App', () => {
       paymentScheduleTotals: {
         totalAmount: 0,
         totalInterestAmount: 0,
-        totalRepaymentAmount: 0,
+        totalAmortizedAmount: 0,
         totalActualizedCashFlowsAmount: 0,
       },
       purchaseOptionTotals: {

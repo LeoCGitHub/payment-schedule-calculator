@@ -6,12 +6,14 @@ package com.paymentschedule.model
  * @property paymentScheduleLines
  * @property paymentScheduleTotals
  * @property purchaseOptionTotals
+ * @property ibrNeeded
  * @constructor Create empty Payment schedule response
  */
 data class PaymentScheduleResponse(
     val paymentScheduleLines: List<PaymentScheduleLine>,
+    val purchaseOptionTotals: PurchaseOptionTotals,
     val paymentScheduleTotals: PaymentScheduleTotals,
-    val purchaseOptionTotals: PurchaseOptionTotals
+    val ibrNeeded: Boolean,
 )
 
 

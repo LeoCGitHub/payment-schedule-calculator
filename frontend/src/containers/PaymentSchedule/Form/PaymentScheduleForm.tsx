@@ -12,7 +12,7 @@ export default function PaymentScheduleForm({
   loading,
   initialData,
   onDataChange,
-  rateNegativ,
+  IBRNeeded,
   onReset,
 }: PaymentScheduleFormProps): React.JSX.Element {
   const { t } = useTranslation();
@@ -121,7 +121,7 @@ export default function PaymentScheduleForm({
           step="1"
         />
 
-        {rateNegativ ? (
+        {IBRNeeded ? (
           <div className="form-input-with-beta-flag">
             <div className="flag-beta">{t('form.marginalDebtRate.flag')}</div>
             <FormInput

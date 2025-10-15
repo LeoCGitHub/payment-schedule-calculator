@@ -1,6 +1,6 @@
 package com.paymentschedule.model
 
-import com.paymentschedule.utils.CalculatorUtils
+import com.paymentschedule.utils.financial.CalculatorUtils
 import java.math.BigDecimal
 import java.time.LocalDate
 
@@ -21,13 +21,14 @@ import java.time.LocalDate
  */
 data class ScheduleConfig(
     val totalPeriods: Int,
-    val actualizedRate: BigDecimal,
-    val annualReferenceRate: BigDecimal,
+    var actualizedRate: BigDecimal = BigDecimal.ZERO,
+    var annualReferenceRate: BigDecimal = BigDecimal.ZERO,
     val rentAmount: BigDecimal,
     val purchaseOptionAmount: BigDecimal,
     val firstPaymentDate: LocalDate,
     val periodicity: Int,
-    val initialDebt: BigDecimal
+    val initialDebt: BigDecimal,
+    var linearAmortizationAmount: BigDecimal = BigDecimal.ZERO
 ) {
     companion object {
         /**
@@ -47,26 +48,8 @@ data class ScheduleConfig(
                 request.periodicity
             )
 
-            var actualizedRate = request.marginalDebtRate;
-
-            if (actualizedRate == null) {
-                actualizedRate = CalculatorUtils.calculateInternalRateOfReturn(
-                    rentAmount = request.rentAmount,
-                    purchaseOptionAmount = request.purchaseOptionAmount,
-                    assetAmount = request.assetAmount,
-                    totalPeriods = totalPeriods
-                )
-            }
-
-            val annualReferenceRate = CalculatorUtils.calculateAnnualReferenceRate(
-                request.periodicity,
-                actualizedRate
-            )
-
             return ScheduleConfig(
                 totalPeriods = totalPeriods,
-                actualizedRate = actualizedRate,
-                annualReferenceRate = annualReferenceRate,
                 rentAmount = request.rentAmount,
                 purchaseOptionAmount = request.purchaseOptionAmount,
                 firstPaymentDate = request.firstPaymentDate,

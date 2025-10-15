@@ -7,7 +7,7 @@ describe('TotalsRow', () => {
   const mockTotals: PaymentScheduleTotals = {
     totalAmount: 480000,
     totalInterestAmount: 331500,
-    totalRepaymentAmount: 148500,
+    totalAmortizedAmount: 148500,
     totalActualizedCashFlowsAmount: 450000,
   };
 
@@ -128,7 +128,7 @@ describe('TotalsRow', () => {
     const zeroTotals: PaymentScheduleTotals = {
       totalAmount: 0,
       totalInterestAmount: 0,
-      totalRepaymentAmount: 0,
+      totalAmortizedAmount: 0,
       totalActualizedCashFlowsAmount: 0,
     };
 
@@ -177,7 +177,7 @@ describe('TotalsRow', () => {
     const largeTotals: PaymentScheduleTotals = {
       totalAmount: 10000000,
       totalInterestAmount: 5000000,
-      totalRepaymentAmount: 5000000,
+      totalAmortizedAmount: 5000000,
       totalActualizedCashFlowsAmount: 9500000,
     };
 

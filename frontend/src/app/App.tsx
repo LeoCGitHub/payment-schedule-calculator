@@ -14,7 +14,7 @@ function App(): React.JSX.Element {
   const [schedule, setSchedule] = useState<PaymentScheduleResponse | null>(
     null
   );
-  const [rateNegativ, setRateNegativ] = useState<boolean>(false);
+  const [IBRNeeded, setIBRNeeded] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -23,12 +23,12 @@ function App(): React.JSX.Element {
   ): Promise<void> => {
     setLoading(true);
     setError(null);
-    setRateNegativ(false);
+    setIBRNeeded(false);
 
     try {
       const result = await paymentScheduleApiService.calculateSchedule(request);
       setSchedule(result as unknown as PaymentScheduleResponse);
-      setRateNegativ(result.paymentScheduleTotals.totalInterestAmount < 0);
+      setIBRNeeded(result.ibrNeeded);
     } catch (err) {
       const errorMessage =
         err instanceof Error ? err.message : t('errors.general');
@@ -40,7 +40,7 @@ function App(): React.JSX.Element {
 
   const handleReset = () => {
     setSchedule(null);
-    setRateNegativ(false); // <<< C'EST ICI QUE LE RATE NEGATIV EST RESETÉ
+    setIBRNeeded(false);
     setError(null);
   };
 
@@ -60,16 +60,13 @@ function App(): React.JSX.Element {
               onSubmit={handleSubmit}
               onReset={handleReset}
               loading={loading}
-              rateNegativ={rateNegativ}
+              IBRNeeded={IBRNeeded}
             />
           </div>
 
           <div className="table-section">
             {schedule ? (
-              <PaymentScheduleTable
-                schedule={schedule}
-                rateNegativ={rateNegativ}
-              />
+              <PaymentScheduleTable schedule={schedule} IBRNeeded={IBRNeeded} />
             ) : (
               <div className="placeholder">
                 <div className="placeholder-icon">📊</div>

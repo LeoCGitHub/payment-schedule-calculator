@@ -5,6 +5,7 @@ import TableCell from '@/components/Table/TableCell/TableCell';
 
 interface TotalsRowProps {
   totals: PaymentScheduleTotals;
+  IBRNeeded: boolean;
 }
 
 // Map i18next language code to locale
@@ -14,6 +15,7 @@ const getLocale = (language: string): string => {
 
 export default function TotalsRow({
   totals,
+  IBRNeeded,
 }: TotalsRowProps): React.JSX.Element {
   const { t, i18n } = useTranslation();
   const locale = getLocale(i18n.language);
@@ -32,13 +34,23 @@ export default function TotalsRow({
         {formatCurrency(totals.totalInterestAmount, locale)}
       </TableCell>
       <TableCell className="amount totals-row-value highlight">
-        {formatCurrency(totals.totalRepaymentAmount, locale)}
+        {formatCurrency(totals.totalAmortizedAmount, locale)}
       </TableCell>
       <TableCell className="amount">{t('table.emptyCell')}</TableCell>
       <TableCell className="amount">{t('table.emptyCell')}</TableCell>
       <TableCell className="amount totals-row-value highlight">
         {formatCurrency(totals.totalActualizedCashFlowsAmount, locale)}
       </TableCell>
+      {IBRNeeded ? (
+        <TableCell className="amount totals-row-value highlight">
+          {formatCurrency(totals.totalLinearAmortizedAmount, locale)}
+        </TableCell>
+      ) : null}
+      {IBRNeeded ? (
+        <TableCell className="amount totals-row-value highlight">
+          {formatCurrency(totals.totalIsfsr16Charge, locale)}
+        </TableCell>
+      ) : null}
     </tr>
   );
 }

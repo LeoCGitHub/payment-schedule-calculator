@@ -1,6 +1,8 @@
 export interface PaymentScheduleTotals {
   totalAmount: number;
   totalInterestAmount: number;
-  totalRepaymentAmount: number;
+  totalAmortizedAmount: number;
   totalActualizedCashFlowsAmount: number;
+  totalLinearAmortizedAmount: number;
+  totalIsfsr16Charge: number;
 }

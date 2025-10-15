@@ -13,7 +13,7 @@ describe('PaymentScheduleTable', () => {
         periodRate: 0.01,
         annualReferenceRate: 0.12,
         financialInterestAmount: 1500,
-        repaymentAmount: 8500,
+        amortizedAmount: 8500,
         debtBeginningPeriodAmount: 150000,
         debtEndPeriodAmount: 141500,
         actualizedCashFlowAmount: 9850,
@@ -25,7 +25,7 @@ describe('PaymentScheduleTable', () => {
         periodRate: 0.01,
         annualReferenceRate: 0.12,
         financialInterestAmount: 1415,
-        repaymentAmount: 8585,
+        amortizedAmount: 8585,
         debtBeginningPeriodAmount: 141500,
         debtEndPeriodAmount: 132915,
         actualizedCashFlowAmount: 9750,
@@ -34,7 +34,7 @@ describe('PaymentScheduleTable', () => {
     paymentScheduleTotals: {
       totalAmount: 20000,
       totalInterestAmount: 2915,
-      totalRepaymentAmount: 17085,
+      totalAmortizedAmount: 17085,
       totalActualizedCashFlowsAmount: 19600,
     },
     purchaseOptionTotals: {
@@ -69,7 +69,7 @@ describe('PaymentScheduleTable', () => {
       screen.getByText('table.headers.financialInterestAmount')
     ).toBeInTheDocument();
     expect(
-      screen.getByText('table.headers.repaymentAmount')
+      screen.getByText('table.headers.amortizedAmount')
     ).toBeInTheDocument();
     expect(
       screen.getByText('table.headers.debtBeginningPeriodAmount')
@@ -149,7 +149,7 @@ describe('PaymentScheduleTable', () => {
       paymentScheduleTotals: {
         totalAmount: 0,
         totalInterestAmount: 0,
-        totalRepaymentAmount: 0,
+        totalAmortizedAmount: 0,
         totalActualizedCashFlowsAmount: 0,
       },
       purchaseOptionTotals: {

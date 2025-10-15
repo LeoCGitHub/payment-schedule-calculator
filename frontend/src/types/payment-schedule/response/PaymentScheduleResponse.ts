@@ -6,4 +6,5 @@ export interface PaymentScheduleResponse {
   paymentScheduleLines: PaymentScheduleLine[];
   paymentScheduleTotals: PaymentScheduleTotals;
   purchaseOptionTotals: PurchaseOptionTotals;
+  ibrNeeded: boolean;
 }

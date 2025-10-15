@@ -9,6 +9,7 @@ import TableCell from '@/components/Table/TableCell/TableCell';
 
 interface PaymentScheduleRowProps {
   line: PaymentScheduleLine;
+  IBRNeeded: boolean;
 }
 
 // Map i18next language code to locale
@@ -18,6 +19,7 @@ const getLocale = (language: string): string => {
 
 export default function PaymentScheduleRow({
   line,
+  IBRNeeded,
 }: PaymentScheduleRowProps): React.JSX.Element {
   const { i18n } = useTranslation();
   const locale = getLocale(i18n.language);
@@ -39,7 +41,7 @@ export default function PaymentScheduleRow({
         {formatCurrency(line.financialInterestAmount, locale)}
       </TableCell>
       <TableCell className="amount">
-        {formatCurrency(line.repaymentAmount, locale)}
+        {formatCurrency(line.amortizedAmount, locale)}
       </TableCell>
       <TableCell className="amount">
         {formatCurrency(line.debtBeginningPeriodAmount, locale)}
@@ -50,6 +52,16 @@ export default function PaymentScheduleRow({
       <TableCell className="amount">
         {formatCurrency(line.actualizedCashFlowAmount, locale)}
       </TableCell>
+      {IBRNeeded ? (
+        <TableCell className="amount">
+          {formatCurrency(line.linearAmortizationAmount, locale)}
+        </TableCell>
+      ) : null}
+      {IBRNeeded ? (
+        <TableCell className="amount">
+          {formatCurrency(line.ifrs16Expense, locale)}
+        </TableCell>
+      ) : null}
     </tr>
   );
 }

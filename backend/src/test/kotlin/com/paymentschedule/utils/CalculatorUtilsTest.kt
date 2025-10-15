@@ -1,5 +1,6 @@
 package com.paymentschedule.utils
 
+import com.paymentschedule.utils.financial.CalculatorUtils
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import java.math.BigDecimal

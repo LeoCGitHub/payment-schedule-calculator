@@ -81,11 +81,7 @@ class PaymentScheduleResource {
 
         request.validateBusinessRules()
 
-        val startTime = System.currentTimeMillis()
         val response = paymentScheduleService.calculateSchedule(request)
-        val duration = System.currentTimeMillis() - startTime
-
-        log.infof("Schedule calculated in %dms with %d lines", duration, response.paymentScheduleLines.size)
 
         return response
     }

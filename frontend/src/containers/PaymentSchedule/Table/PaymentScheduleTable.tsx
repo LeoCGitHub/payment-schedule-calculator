@@ -4,17 +4,17 @@ import './PaymentScheduleTable.scss';
 import PaymentScheduleRow from './components/PaymentScheduleRow';
 import PurchaseOptionRow from './components/PurchaseOptionRow';
 import TotalsRow from './components/TotalsRow';
-import { TABLE_COLUMNS } from './constants/tableConfig';
+import { IBR_COLUMNS, IRR_COLUMNS, TableColumn } from './constants/tableConfig';
 import PaymentScheduleWarning from './components/PaymentScheduleWarning';
 
 export interface PaymentScheduleTableProps {
   schedule: PaymentScheduleResponse | null;
-  rateNegativ: boolean;
+  IBRNeeded: boolean;
 }
 
 export default function PaymentScheduleTable({
   schedule,
-  rateNegativ,
+  IBRNeeded,
 }: PaymentScheduleTableProps): React.JSX.Element | null {
   const { t } = useTranslation();
 
@@ -22,15 +22,19 @@ export default function PaymentScheduleTable({
     return null;
   }
 
+  const finalColumns: TableColumn[] = IBRNeeded
+    ? [...IRR_COLUMNS, ...IBR_COLUMNS]
+    : IRR_COLUMNS;
+
   return (
     <div className="schedule-container">
-      {rateNegativ ? <PaymentScheduleWarning /> : null}
+      {IBRNeeded ? <PaymentScheduleWarning /> : null}
       <div className="schedule-table-wrapper">
         <div className="table-responsive">
           <table className="schedule-table">
             <thead>
               <tr>
-                {TABLE_COLUMNS.map(column => (
+                {finalColumns.map(column => (
                   <th key={column.key} className={column.className}>
                     {t(`table.headers.${column.key}`)}
                   </th>
@@ -39,14 +43,22 @@ export default function PaymentScheduleTable({
             </thead>
             <tbody>
               {schedule.paymentScheduleLines.map(line => (
-                <PaymentScheduleRow key={line.period} line={line} />
+                <PaymentScheduleRow
+                  key={line.period}
+                  line={line}
+                  IBRNeeded={IBRNeeded}
+                />
               ))}
             </tbody>
             <tfoot>
               <PurchaseOptionRow
                 purchaseOptionTotals={schedule.purchaseOptionTotals}
+                IBRNeeded={IBRNeeded}
               />
-              <TotalsRow totals={schedule.paymentScheduleTotals} />
+              <TotalsRow
+                totals={schedule.paymentScheduleTotals}
+                IBRNeeded={IBRNeeded}
+              />
             </tfoot>
           </table>
         </div>

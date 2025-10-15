@@ -7,13 +7,15 @@ import java.math.BigDecimal
  *
  * @property totalAmount
  * @property totalInterestAmount
- * @property totalRepaymentAmount
+ * @property totalAmortizedAmount
  * @property totalActualizedCashFlowsAmount
  * @constructor Create empty Payment schedule totals
  */
 data class PaymentScheduleTotals(
     val totalAmount: BigDecimal,
     val totalInterestAmount: BigDecimal,
-    val totalRepaymentAmount: BigDecimal,
-    val totalActualizedCashFlowsAmount: BigDecimal
+    val totalAmortizedAmount: BigDecimal,
+    val totalActualizedCashFlowsAmount: BigDecimal,
+    val totalLinearAmortizedAmount: BigDecimal = BigDecimal.ZERO,
+    val totalIsfsr16Charge: BigDecimal = BigDecimal.ZERO,
 )

@@ -1,7 +1,7 @@
 export interface PaymentScheduleLine {
   period: number;
   dueDate: string;
-  repaymentAmount: number;
+  amortizedAmount: number;
   debtBeginningPeriodAmount: number;
   debtEndPeriodAmount: number;
   periodRate: number;
@@ -9,4 +9,6 @@ export interface PaymentScheduleLine {
   rentAmount: number;
   annualReferenceRate: number;
   actualizedCashFlowAmount: number;
+  linearAmortizationAmount: number;
+  ifrs16Expense: number;
 }

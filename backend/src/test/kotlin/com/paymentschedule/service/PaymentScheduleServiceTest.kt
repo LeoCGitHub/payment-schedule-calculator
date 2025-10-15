@@ -68,7 +68,7 @@ class PaymentScheduleServiceTest {
 
         val totals = response.paymentScheduleTotals
         assertTrue(totals.totalInterestAmount > BigDecimal.ZERO, "Total interest should be positive")
-        assertTrue(totals.totalRepaymentAmount > BigDecimal.ZERO, "Total repayment should be positive")
+        assertTrue(totals.totalAmortizedAmount > BigDecimal.ZERO, "Total repayment should be positive")
         assertTrue(totals.totalActualizedCashFlowsAmount > BigDecimal.ZERO, "Total actualized amount should be positive")
     }
 
@@ -202,7 +202,7 @@ class PaymentScheduleServiceTest {
         val response = paymentScheduleService.calculateSchedule(request)
 
         response.paymentScheduleLines.forEach { line ->
-            val sum = line.repaymentAmount.add(line.financialInterestAmount)
+            val sum = line.amortizedAmount.add(line.financialInterestAmount)
             assertEquals(
                 line.rentAmount,
                 sum.setScale(0),
