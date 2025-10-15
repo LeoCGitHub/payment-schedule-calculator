@@ -44,7 +44,10 @@
     "reset": "Reset"
   },
   "table": {
-    "title": "Payment Schedule",
+    "title": {
+      "irr": "Payment Schedule (IRR)",
+      "ibr": "Payment Schedule (IBR)"
+    },
     "headers": {
       "period": "Period",
       "dueDate": "Due Date",

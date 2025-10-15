@@ -61,7 +61,6 @@ $letter-spacing: 0.5px;
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: $spacing-lg;
 }
 
 .schedule-table-wrapper {
@@ -178,7 +177,7 @@ $letter-spacing: 0.5px;
   padding: 1rem;
   border-radius: 12px;
   max-width: 600px;
-  margin: 24px auto;
+  margin: 1rem auto 0 auto;
 
   h2 {
     font-size: 1.2rem;

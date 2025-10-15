@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test
 import java.math.BigDecimal
 
 class CalculatorUtilsTest {
-
+//TODO LCG TU + ailleurs
     @Test
     fun testFindActualizedRateWithMethod1() {
         val rate = CalculatorUtils.calculateInternalRateOfReturn(

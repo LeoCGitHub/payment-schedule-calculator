@@ -31,6 +31,7 @@ export default function PaymentScheduleTable({
       {IBRNeeded ? <PaymentScheduleWarning /> : null}
       <div className="schedule-table-wrapper">
         <div className="table-responsive">
+          <h3> {IBRNeeded ? t(`table.title.ibr`) : t(`table.title.irr`)}</h3>
           <table className="schedule-table">
             <thead>
               <tr>

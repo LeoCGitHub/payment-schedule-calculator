@@ -44,7 +44,10 @@
     "reset": "Réinitialiser"
   },
   "table": {
-    "title": "Échéancier de Paiement",
+    "title": {
+      "irr": "Échéancier de paiment (IRR)",
+      "ibr": "Échéancier de paiment (IBR)"
+    },
     "headers": {
       "period": "Période",
       "dueDate": "Date d'échéance",
@@ -69,7 +72,7 @@
       "reasons": "Montants des loyers trop faibles par rapport au capital financé\n Option d'achat très basse réduisant la valeur actualisée\n Erreur dans la périodicité ou la durée du contrat",
       "solutionsLabel": "Solutions possibles :",
       "solutionsToCheck": "Veuillez vérifier et ajuster si nécessaire les montants des loyers et de l'option d'achat\nVeuillez vérifier la cohérence de la durée et périodicité du contrat.",
-      "solutions": "\n\nSi tout est conforme, merci de nous transmettre votre Taux d'endettement marginal afin que nous recalculions l'échéancier (BÊTA)"
+      "solutions": "\n\nSi tout est conforme, merci de nous transmettre votre Taux d'emprunt marginal (IBR) afin que nous recalculions l'échéancier (BÊTA)"
     }
   },
   "errors": {

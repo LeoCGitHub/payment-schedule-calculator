@@ -82,7 +82,7 @@ describe('TotalsRow', () => {
     );
 
     const valueCells = container.querySelectorAll('.totals-row-value');
-    expect(valueCells.length).toBe(5); // Total label + 4 amount cells
+    expect(valueCells.length).toBe(9);
   });
 
   it('should render empty cells with dash', () => {

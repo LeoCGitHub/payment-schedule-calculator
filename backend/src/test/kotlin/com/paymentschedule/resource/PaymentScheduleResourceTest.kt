@@ -16,7 +16,7 @@ class PaymentScheduleResourceTest {
             "contractDuration": 48,
             "assetAmount": 150000,
             "purchaseOptionAmount": 1500,
-            "firstPaymentDate": "17/09/2025",
+            "firstPaymentDate": "2025-09-17",
             "rentAmount": 10000
         }
     """.trimIndent()
@@ -73,7 +73,7 @@ class PaymentScheduleResourceTest {
                 "contractDuration": 48,
                 "assetAmount": 150000,
                 "purchaseOptionAmount": 1500,
-                "firstPaymentDate": "17/09/2025",
+                "firstPaymentDate": "2025-09-17",
                 "rentAmount": 10000
             }
         """.trimIndent()
@@ -98,7 +98,7 @@ class PaymentScheduleResourceTest {
                 "contractDuration": 48,
                 "assetAmount": 150000,
                 "purchaseOptionAmount": 1500,
-                "firstPaymentDate": "17/09/2025",
+                "firstPaymentDate": "2025-09-17",
                 "rentAmount": 10000
             }
         """.trimIndent()
@@ -122,7 +122,7 @@ class PaymentScheduleResourceTest {
                 "contractDuration": 48,
                 "assetAmount": 150000,
                 "purchaseOptionAmount": 1500,
-                "firstPaymentDate": "17/09/2025",
+                "firstPaymentDate": "2025-09-17",
                 "rentAmount": 10000
             }
         """.trimIndent()
@@ -146,7 +146,7 @@ class PaymentScheduleResourceTest {
                 "contractDuration": 47,
                 "assetAmount": 150000,
                 "purchaseOptionAmount": 1500,
-                "firstPaymentDate": "17/09/2025",
+                "firstPaymentDate": "2025-09-17",
                 "rentAmount": 10000
             }
         """.trimIndent()
@@ -171,7 +171,7 @@ class PaymentScheduleResourceTest {
                 "contractDuration": 48,
                 "assetAmount": 0,
                 "purchaseOptionAmount": 1500,
-                "firstPaymentDate": "17/09/2025",
+                "firstPaymentDate": "2025-09-17",
                 "rentAmount": 10000
             }
         """.trimIndent()
@@ -195,7 +195,7 @@ class PaymentScheduleResourceTest {
                 "contractDuration": 48,
                 "assetAmount": -150000,
                 "purchaseOptionAmount": 1500,
-                "firstPaymentDate": "17/09/2025",
+                "firstPaymentDate": "2025-09-17",
                 "rentAmount": 10000
             }
         """.trimIndent()
@@ -219,7 +219,7 @@ class PaymentScheduleResourceTest {
                 "contractDuration": 48,
                 "assetAmount": 150000,
                 "purchaseOptionAmount": -1500,
-                "firstPaymentDate": "17/09/2025",
+                "firstPaymentDate": "2025-09-17",
                 "rentAmount": 10000
             }
         """.trimIndent()
@@ -243,7 +243,7 @@ class PaymentScheduleResourceTest {
                 "contractDuration": 48,
                 "assetAmount": 150000,
                 "purchaseOptionAmount": 1500,
-                "firstPaymentDate": "17/09/2025",
+                "firstPaymentDate": "2025-09-17",
                 "rentAmount": 0
             }
         """.trimIndent()
@@ -267,7 +267,7 @@ class PaymentScheduleResourceTest {
                 "contractDuration": 48,
                 "assetAmount": 150000,
                 "purchaseOptionAmount": 1500,
-                "firstPaymentDate": "17/09/2025",
+                "firstPaymentDate": "2025-09-17",
                 "rentAmount": 200000
             }
         """.trimIndent()
@@ -292,7 +292,7 @@ class PaymentScheduleResourceTest {
                 "contractDuration": -10,
                 "assetAmount": -150000,
                 "purchaseOptionAmount": -1500,
-                "firstPaymentDate": "01/01/2025",
+                "firstPaymentDate": "2025-01-01",
                 "rentAmount": -10000
             }
         """.trimIndent()
@@ -317,7 +317,7 @@ class PaymentScheduleResourceTest {
                 "contractDuration": 12,
                 "assetAmount": 50000,
                 "purchaseOptionAmount": 500,
-                "firstPaymentDate": "01/01/2025",
+                "firstPaymentDate": "2025-01-01",
                 "rentAmount": 4500
             }
         """.trimIndent()
@@ -342,7 +342,7 @@ class PaymentScheduleResourceTest {
                 "contractDuration": 12,
                 "assetAmount": 50000,
                 "purchaseOptionAmount": 500,
-                "firstPaymentDate": "01/01/2025",
+                "firstPaymentDate": "2025-01-01",
                 "rentAmount": 13500
             }
         """.trimIndent()
@@ -367,7 +367,7 @@ class PaymentScheduleResourceTest {
                 "contractDuration": 12,
                 "assetAmount": 50000,
                 "purchaseOptionAmount": 500,
-                "firstPaymentDate": "01/01/2025",
+                "firstPaymentDate": "2025-01-01",
                 "rentAmount": 27000
             }
         """.trimIndent()
@@ -392,7 +392,7 @@ class PaymentScheduleResourceTest {
                 "contractDuration": 12,
                 "assetAmount": 50000,
                 "purchaseOptionAmount": 500,
-                "firstPaymentDate": "01/01/2025",
+                "firstPaymentDate": "2025-01-01",
                 "rentAmount": 10000
             }
         """.trimIndent()
@@ -447,7 +447,7 @@ class PaymentScheduleResourceTest {
                 "contractDuration": 48,
                 "assetAmount": 150000,
                 "purchaseOptionAmount": 1500,
-                "firstPaymentDate": "17/09/2025",
+                "firstPaymentDate": "2025-09-17",
                 "rentAmount": 10000
             }
         """.trimIndent()
@@ -470,7 +470,7 @@ class PaymentScheduleResourceTest {
                 "contractDuration": 12,
                 "assetAmount": 50000,
                 "purchaseOptionAmount": 0.00,
-                "firstPaymentDate": "01/01/2025",
+                "firstPaymentDate": "2025-01-01",
                 "rentAmount": 12500
             }
         """.trimIndent()

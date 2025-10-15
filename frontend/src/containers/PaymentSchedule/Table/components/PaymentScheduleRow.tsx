@@ -12,7 +12,6 @@ interface PaymentScheduleRowProps {
   IBRNeeded: boolean;
 }
 
-// Map i18next language code to locale
 const getLocale = (language: string): string => {
   return language === 'en' ? 'en-US' : 'fr-FR';
 };
@@ -24,44 +23,93 @@ export default function PaymentScheduleRow({
   const { i18n } = useTranslation();
   const locale = getLocale(i18n.language);
 
+  const cellConfig = [
+    { content: line.period, type: 'number', className: '', condition: true },
+    { content: line.dueDate, type: 'date', className: '', condition: true },
+    {
+      content: line.rentAmount,
+      type: 'currency',
+      className: 'amount',
+      condition: true,
+    },
+    {
+      content: line.periodRate,
+      type: 'percentage',
+      className: 'amount',
+      condition: true,
+    },
+    {
+      content: line.annualReferenceRate,
+      type: 'percentage',
+      className: 'amount',
+      condition: true,
+    },
+    {
+      content: line.financialInterestAmount,
+      type: 'currency',
+      className: 'amount interest',
+      condition: true,
+    },
+    {
+      content: line.amortizedAmount,
+      type: 'currency',
+      className: 'amount',
+      condition: true,
+    },
+    {
+      content: line.debtBeginningPeriodAmount,
+      type: 'currency',
+      className: 'amount',
+      condition: true,
+    },
+    {
+      content: line.debtEndPeriodAmount,
+      type: 'currency',
+      className: 'amount balance',
+      condition: true,
+    },
+    {
+      content: line.actualizedCashFlowAmount,
+      type: 'currency',
+      className: 'amount',
+      condition: true,
+    },
+    {
+      content: line.linearAmortizationAmount,
+      type: 'currency',
+      className: 'amount',
+      condition: IBRNeeded,
+    },
+    {
+      content: line.ifrs16Expense,
+      type: 'currency',
+      className: 'amount',
+      condition: IBRNeeded,
+    },
+  ];
+
+  const renderCellContent = (cell: (typeof cellConfig)[0]) => {
+    switch (cell.type) {
+      case 'currency':
+        return formatCurrency(cell.content as number, locale);
+      case 'percentage':
+        return formatPercentage(cell.content as number, locale);
+      case 'date':
+        return formatDateShort(cell.content as string, locale);
+      default:
+        return cell.content;
+    }
+  };
+
   return (
     <tr>
-      <TableCell>{line.period}</TableCell>
-      <TableCell>{formatDateShort(line.dueDate, locale)}</TableCell>
-      <TableCell className="amount">
-        {formatCurrency(line.rentAmount, locale)}
-      </TableCell>
-      <TableCell className="amount">
-        {formatPercentage(line.periodRate, locale)}
-      </TableCell>
-      <TableCell className="amount">
-        {formatPercentage(line.annualReferenceRate, locale)}
-      </TableCell>
-      <TableCell className="amount interest">
-        {formatCurrency(line.financialInterestAmount, locale)}
-      </TableCell>
-      <TableCell className="amount">
-        {formatCurrency(line.amortizedAmount, locale)}
-      </TableCell>
-      <TableCell className="amount">
-        {formatCurrency(line.debtBeginningPeriodAmount, locale)}
-      </TableCell>
-      <TableCell className="amount balance">
-        {formatCurrency(line.debtEndPeriodAmount, locale)}
-      </TableCell>
-      <TableCell className="amount">
-        {formatCurrency(line.actualizedCashFlowAmount, locale)}
-      </TableCell>
-      {IBRNeeded ? (
-        <TableCell className="amount">
-          {formatCurrency(line.linearAmortizationAmount, locale)}
-        </TableCell>
-      ) : null}
-      {IBRNeeded ? (
-        <TableCell className="amount">
-          {formatCurrency(line.ifrs16Expense, locale)}
-        </TableCell>
-      ) : null}
+      {cellConfig
+        .filter(cell => cell.condition)
+        .map((cell, index) => (
+          <TableCell key={index} className={cell.className}>
+            {renderCellContent(cell)}
+          </TableCell>
+        ))}
     </tr>
   );
 }

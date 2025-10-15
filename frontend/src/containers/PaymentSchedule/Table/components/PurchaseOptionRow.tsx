@@ -1,3 +1,4 @@
+import React from 'react';
 import { PurchaseOptionTotals } from '@/types/payment-schedule/response/PurchaseOptionsTotals';
 import { useTranslation } from 'react-i18next';
 import { formatCurrency } from '@/utils/formatter/NumberFormatter';
@@ -8,7 +9,6 @@ interface PurchaseOptionRowProps {
   IBRNeeded: boolean;
 }
 
-// Map i18next language code to locale
 const getLocale = (language: string): string => {
   return language === 'en' ? 'en-US' : 'fr-FR';
 };
@@ -20,34 +20,100 @@ export default function PurchaseOptionRow({
   const { t, i18n } = useTranslation();
   const locale = getLocale(i18n.language);
 
+  const purchaseOptionCellsConfig = [
+    {
+      content: t('table.purchaseOption'),
+      type: 'text',
+      colSpan: 2,
+      className: 'purchase-option-label',
+      isCurrency: false,
+      condition: true,
+    },
+    {
+      content: purchaseOptionTotals.purchaseOptionAmount,
+      type: 'currency',
+      className: 'amount',
+      isCurrency: true,
+      condition: true,
+    },
+    {
+      content: t('table.emptyCell'),
+      className: 'amount',
+      isCurrency: false,
+      condition: true,
+    },
+    {
+      content: t('table.emptyCell'),
+      className: 'amount',
+      isCurrency: false,
+      condition: true,
+    },
+    {
+      content: t('table.emptyCell'),
+      className: 'amount',
+      isCurrency: false,
+      condition: true,
+    },
+    {
+      content: purchaseOptionTotals.purchaseOptionAmount,
+      type: 'currency',
+      className: 'amount',
+      isCurrency: true,
+      condition: true,
+    },
+    {
+      content: t('table.emptyCell'),
+      className: 'amount',
+      isCurrency: false,
+      condition: true,
+    },
+    {
+      content: t('table.emptyCell'),
+      className: 'amount',
+      isCurrency: false,
+      condition: true,
+    },
+    {
+      content: purchaseOptionTotals.actualizedPurchaseOptionAmount,
+      type: 'currency',
+      className: 'amount',
+      isCurrency: true,
+      condition: true,
+    },
+    {
+      content: t('table.emptyCell'),
+      className: 'amount',
+      isCurrency: false,
+      condition: IBRNeeded,
+    },
+    {
+      content: t('table.emptyCell'),
+      className: 'amount',
+      isCurrency: false,
+      condition: IBRNeeded,
+    },
+  ];
+
+  const renderCellContent = (cell: (typeof purchaseOptionCellsConfig)[0]) => {
+    if (cell.isCurrency) {
+      return formatCurrency(cell.content as number, locale);
+    }
+    return cell.content;
+  };
+
   return (
     <tr className="purchase-option-line">
-      <TableCell colSpan={2} className="purchase-option-label">
-        {t('table.purchaseOption')}
-      </TableCell>
-      <TableCell className="amount">
-        {formatCurrency(purchaseOptionTotals.purchaseOptionAmount, locale)}
-      </TableCell>
-      <TableCell className="amount">{t('table.emptyCell')}</TableCell>
-      <TableCell className="amount">{t('table.emptyCell')}</TableCell>
-      <TableCell className="amount">{t('table.emptyCell')}</TableCell>
-      <TableCell className="amount">
-        {formatCurrency(purchaseOptionTotals.purchaseOptionAmount, locale)}
-      </TableCell>
-      <TableCell className="amount">{t('table.emptyCell')}</TableCell>
-      <TableCell className="amount">{t('table.emptyCell')}</TableCell>
-      <TableCell className="amount">
-        {formatCurrency(
-          purchaseOptionTotals.actualizedPurchaseOptionAmount,
-          locale
-        )}
-      </TableCell>
-      {IBRNeeded ? (
-        <TableCell className="amount">{t('table.emptyCell')}</TableCell>
-      ) : null}
-      {IBRNeeded ? (
-        <TableCell className="amount">{t('table.emptyCell')}</TableCell>
-      ) : null}
+      {purchaseOptionCellsConfig
+        .filter(cell => cell.condition)
+        .map((cell, index) => (
+          <TableCell
+            key={index}
+            colSpan={cell.colSpan}
+            className={`${cell.className || ''}`}
+          >
+            {renderCellContent(cell)}
+          </TableCell>
+        ))}
     </tr>
   );
 }

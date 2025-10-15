@@ -1,3 +1,4 @@
+import React from 'react';
 import { PaymentScheduleTotals } from '@/types/payment-schedule/response/PaymentScheduleTotals';
 import { useTranslation } from 'react-i18next';
 import { formatCurrency } from '@/utils/formatter/NumberFormatter';
@@ -8,7 +9,7 @@ interface TotalsRowProps {
   IBRNeeded: boolean;
 }
 
-// Map i18next language code to locale
+// Map i18next language code to standard locale format (rendu plus robuste)
 const getLocale = (language: string): string => {
   return language === 'en' ? 'en-US' : 'fr-FR';
 };
@@ -20,37 +21,104 @@ export default function TotalsRow({
   const { t, i18n } = useTranslation();
   const locale = getLocale(i18n.language);
 
+  const totalCellsConfig = [
+    {
+      content: t('table.total'),
+      type: 'text',
+      colSpan: 2,
+      className: 'highlight',
+      isCurrency: false,
+      condition: true,
+    },
+    {
+      content: totals.totalAmount,
+      type: 'currency',
+      className: 'highlight amount',
+      isCurrency: true,
+      condition: true,
+    },
+    {
+      content: t('table.emptyCell'),
+      className: 'amount',
+      isCurrency: false,
+      condition: true,
+    },
+    {
+      content: t('table.emptyCell'),
+      className: 'amount',
+      isCurrency: false,
+      condition: true,
+    },
+    {
+      content: totals.totalInterestAmount,
+      type: 'currency',
+      className: 'highlight amount',
+      isCurrency: true,
+      condition: true,
+    },
+    {
+      content: totals.totalAmortizedAmount,
+      type: 'currency',
+      className: 'highlight amount',
+      isCurrency: true,
+      condition: true,
+    },
+    {
+      content: t('table.emptyCell'),
+      className: 'amount',
+      isCurrency: false,
+      condition: true,
+    },
+    {
+      content: t('table.emptyCell'),
+      className: 'amount',
+      isCurrency: false,
+      condition: true,
+    },
+    {
+      content: totals.totalActualizedCashFlowsAmount,
+      type: 'currency',
+      className: 'highlight amount',
+      isCurrency: true,
+      condition: true,
+    },
+    {
+      content: totals.totalLinearAmortizedAmount,
+      type: 'currency',
+      className: 'highlight amount',
+      isCurrency: true,
+      condition: IBRNeeded,
+    },
+    {
+      content: totals.totalIsfsr16Charge,
+      type: 'currency',
+      className: 'highlight amount',
+      isCurrency: true,
+      condition: IBRNeeded,
+    },
+  ];
+
+  const renderCellContent = (cell: (typeof totalCellsConfig)[0]) => {
+    if (cell.isCurrency) {
+      return formatCurrency(cell.content as number, locale);
+    }
+
+    return cell.content;
+  };
+
   return (
     <tr className="totals-row-line">
-      <TableCell colSpan={2} className="totals-row-value highlight">
-        {t('table.total')}
-      </TableCell>
-      <TableCell className="amount totals-row-value highlight">
-        {formatCurrency(totals.totalAmount, locale)}
-      </TableCell>
-      <TableCell className="amount">{t('table.emptyCell')}</TableCell>
-      <TableCell className="amount">{t('table.emptyCell')}</TableCell>
-      <TableCell className="amount totals-row-value highlight">
-        {formatCurrency(totals.totalInterestAmount, locale)}
-      </TableCell>
-      <TableCell className="amount totals-row-value highlight">
-        {formatCurrency(totals.totalAmortizedAmount, locale)}
-      </TableCell>
-      <TableCell className="amount">{t('table.emptyCell')}</TableCell>
-      <TableCell className="amount">{t('table.emptyCell')}</TableCell>
-      <TableCell className="amount totals-row-value highlight">
-        {formatCurrency(totals.totalActualizedCashFlowsAmount, locale)}
-      </TableCell>
-      {IBRNeeded ? (
-        <TableCell className="amount totals-row-value highlight">
-          {formatCurrency(totals.totalLinearAmortizedAmount, locale)}
-        </TableCell>
-      ) : null}
-      {IBRNeeded ? (
-        <TableCell className="amount totals-row-value highlight">
-          {formatCurrency(totals.totalIsfsr16Charge, locale)}
-        </TableCell>
-      ) : null}
+      {totalCellsConfig
+        .filter(cell => cell.condition)
+        .map((cell, index) => (
+          <TableCell
+            key={index}
+            colSpan={cell.colSpan}
+            className={`totals-row-value ${cell.className || ''}`}
+          >
+            {renderCellContent(cell)}
+          </TableCell>
+        ))}
     </tr>
   );
 }
