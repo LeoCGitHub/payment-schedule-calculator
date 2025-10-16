@@ -18,8 +18,21 @@
       "dependsOn": ["^build"],
       "inputs": ["production", "^production"]
     },
+    "build:native": {
+      "cache": true,
+      "inputs": ["production", "^production"]
+    },
     "test": {
       "cache": true,
+      "inputs": ["default", "^production"]
+    },
+    "lint": {
+      "cache": true,
+      "inputs": ["default", "^production"]
+    },
+    "coverage": {
+      "cache": true,
+      "dependsOn": ["test"],
       "inputs": ["default", "^production"]
     },
     "dev": {
@@ -30,16 +43,14 @@
       "dependsOn": ["build"],
       "inputs": ["production", "^production"]
     },
-    "docker:up": {
-      "cache": false,
-      "dependsOn": ["docker:build"]
+    "docker:build-native": {
+      "cache": true,
+      "dependsOn": ["build:native"],
+      "inputs": ["production", "^production"]
     },
-    "docker:down": {
-      "cache": false
-    },
-    "deploy": {
+    "native:full": {
       "cache": false,
-      "dependsOn": ["build", "test", "lint"]
+      "dependsOn": ["build:native", "docker:build-native"]
     }
   },
   "plugins": []

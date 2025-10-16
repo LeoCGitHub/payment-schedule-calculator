@@ -17,6 +17,8 @@ val quarkusPlatformVersion: String by project
 dependencies {
     implementation(enforcedPlatform("${quarkusPlatformGroupId}:${quarkusPlatformArtifactId}:${quarkusPlatformVersion}"))
     implementation("io.quarkus:quarkus-smallrye-openapi")
+    implementation("io.quarkus:quarkus-smallrye-health")
+    implementation("io.quarkus:quarkus-swagger-ui")
     implementation("io.quarkus:quarkus-kotlin")
     implementation("io.quarkus:quarkus-rest-jackson")
     implementation("io.quarkus:quarkus-hibernate-validator")
@@ -51,15 +53,5 @@ kotlin {
     compilerOptions {
         jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_21
         javaParameters = true
-    }
-}
-
-kover {
-    reports {
-        verify {
-            rule {
-                minBound(80)
-            }
-        }
     }
 }

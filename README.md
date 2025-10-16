@@ -70,7 +70,7 @@ npm run dev:backend
 
 - **Frontend** : http://localhost:3100
 - **Backend API** : http://localhost:9090
-- **API Docs** : http://localhost:9090/q/swagger-ui
+- **API Docs** : http://localhost:9090/swagger-ui/
 
 #### Docker
 
@@ -82,7 +82,7 @@ npm run deploy:local
 
 - **Frontend** : http://localhost:3101
 - **Backend API** : http://localhost:9091
-- **API Docs** : http://localhost:9091/q/swagger-ui
+- **API Docs** : http://localhost:9091/swagger-ui/
 
 ### NX
 

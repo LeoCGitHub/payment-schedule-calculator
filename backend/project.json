@@ -54,11 +54,26 @@
         "cwd": "backend"
       }
     },
+    "build:native": {
+      "executor": "nx:run-commands",
+      "outputs": ["{projectRoot}/build/*-runner"],
+      "options": {
+        "commands": [
+          "./gradlew clean build -Dquarkus.native.enabled=true -Dquarkus.native.container-build=true -Dquarkus.profile=native -Dquarkus.package.jar.enabled=false -x test"
+        ],
+        "cwd": "backend",
+        "parallel": false
+      }
+    },
     "docker:build-native": {
       "executor": "nx:run-commands",
+      "dependsOn": ["build:native"],
       "options": {
-        "command": "docker build -t payment-schedule-calculator-backend:latest -f Dockerfile.native .",
-        "cwd": "backend"
+        "commands": [
+          "docker build -f Dockerfile.native -t payment-schedule-calculator-backend:native ."
+        ],
+        "cwd": "backend",
+        "parallel": false
       }
     },
     "docker:run": {
@@ -73,6 +88,40 @@
       "options": {
         "command": "docker stop payment-schedule-calculator-backend && docker rm payment-schedule-calculator-backend",
         "cwd": "backend"
+      }
+    },
+    "docker:run-native": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "docker run -p 8080:8080 --name payment-schedule-calculator-backend-native payment-schedule-calculator-backend:native",
+        "cwd": "backend"
+      }
+    },
+    "docker:stop-native": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "docker stop payment-schedule-calculator-backend-native && docker rm payment-schedule-calculator-backend-native",
+        "cwd": "backend"
+      }
+    },
+    "native:full": {
+      "executor": "nx:run-commands",
+      "dependsOn": ["build:native", "docker:build-native"],
+      "options": {
+        "commands": [
+          "docker images | grep payment-schedule-calculator-backend | grep -E '(native)'"
+        ],
+        "cwd": "backend",
+        "parallel": false
+      }
+    },
+    "coverage": {
+      "executor": "nx:run-commands",
+      "outputs": ["{projectRoot}/build/reports/kover"],
+      "options": {
+        "commands": ["./gradlew clean test koverHtmlReport koverVerify"],
+        "cwd": "backend",
+        "parallel": false
       }
     }
   }

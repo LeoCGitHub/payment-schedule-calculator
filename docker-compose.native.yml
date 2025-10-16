@@ -1,7 +1,7 @@
 services:
   backend:
-    image: payment-schedule-calculator-backend:latest
-    container_name: payment-schedule-calculator-backend
+    image: payment-schedule-calculator-backend:native
+    container_name: payment-schedule-calculator-backend-native
     environment:
       QUARKUS_HTTP_PORT: 8080
       QUARKUS_HTTP_CORS_ORIGINS: http://localhost:3101
