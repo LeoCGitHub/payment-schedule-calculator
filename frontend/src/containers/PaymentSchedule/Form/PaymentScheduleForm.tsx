@@ -1,11 +1,21 @@
 import './PaymentScheduleForm.scss';
 import { useTranslation } from 'react-i18next';
 import { PaymentScheduleFormService } from '@/containers/PaymentSchedule/Form/services/PaymentScheduleFormService';
-import { PaymentScheduleFormProps } from './types/PaymentScheduleFormProps';
 import { usePaymentScheduleForm } from './hooks/usePaymentScheduleForm';
 import FormInput from '@/components/Form/FormInput/FormInput';
 import FormSelect from '@/components/Form/FormSelect/FormSelect';
 import { PERIODICITY_OPTIONS } from './constants/formConfig';
+import { PaymentScheduleRequest } from '@/types/payment-schedule/request/PaymentScheduleRequest';
+import { PaymentScheduleFormData } from './types/PaymentScheduleFormData';
+
+export interface PaymentScheduleFormProps {
+  onSubmit: (request: PaymentScheduleRequest) => Promise<void>;
+  loading: boolean;
+  initialData?: PaymentScheduleFormData;
+  onDataChange?: (data: PaymentScheduleFormData) => void;
+  IBRNeeded?: boolean;
+  onReset: () => void;
+}
 
 export default function PaymentScheduleForm({
   onSubmit,
@@ -52,7 +62,7 @@ export default function PaymentScheduleForm({
           value={formData.firstPaymentDate}
           onChange={handleChange}
           disabled={loading}
-          error={errors.firstPaymentDate}
+          error={errors.firstPaymentDate && t(errors.firstPaymentDate)}
         />
 
         <FormSelect
@@ -63,7 +73,7 @@ export default function PaymentScheduleForm({
           options={PERIODICITY_OPTIONS}
           onChange={handleChange}
           disabled={loading}
-          error={errors.periodicity}
+          error={errors.periodicity && t(errors.periodicity)}
         />
 
         <FormInput
@@ -75,7 +85,7 @@ export default function PaymentScheduleForm({
           value={formData.contractDuration}
           onChange={handleChange}
           disabled={loading}
-          error={errors.contractDuration}
+          error={errors.contractDuration && t(errors.contractDuration)}
           min="1"
         />
 
@@ -88,7 +98,7 @@ export default function PaymentScheduleForm({
           value={formData.assetAmount}
           onChange={handleChange}
           disabled={loading}
-          error={errors.assetAmount}
+          error={errors.assetAmount && t(errors.assetAmount)}
           min="0"
           step="1"
         />
@@ -102,7 +112,7 @@ export default function PaymentScheduleForm({
           value={formData.rentAmount}
           onChange={handleChange}
           disabled={loading}
-          error={errors.rentAmount}
+          error={errors.rentAmount && t(errors.rentAmount)}
           min="0"
           step="1"
         />
@@ -116,7 +126,7 @@ export default function PaymentScheduleForm({
           value={formData.purchaseOptionAmount}
           onChange={handleChange}
           disabled={loading}
-          error={errors.purchaseOptionAmount}
+          error={errors.purchaseOptionAmount && t(errors.purchaseOptionAmount)}
           min="0"
           step="1"
         />
@@ -133,7 +143,7 @@ export default function PaymentScheduleForm({
               value={formData.marginalDebtRate || ''}
               onChange={handleChange}
               disabled={loading}
-              error={errors.marginalDebtRate}
+              error={errors.marginalDebtRate && t(errors.marginalDebtRate)}
               min="0"
               max="100"
               step="0.1"

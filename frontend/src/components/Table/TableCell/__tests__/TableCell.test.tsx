@@ -89,7 +89,7 @@ describe('TableCell', () => {
     );
 
     const td = container.querySelector('td');
-    expect(td?.colSpan).toBe(1); // Default value
+    expect(td?.colSpan).toBe(1);
   });
 
   it('should render with both className and colSpan', () => {

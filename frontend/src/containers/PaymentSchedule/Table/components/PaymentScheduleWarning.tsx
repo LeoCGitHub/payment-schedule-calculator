@@ -10,7 +10,6 @@ export default function PaymentScheduleWarning(): React.JSX.Element {
     <div role="alert" className="payment-schedule-warning">
       <h2>{t('table.warning.title')}</h2>
       <p>{t('table.warning.subtitle')}</p>
-      {/* TODO LCG */}
       <section>
         <h3>{t('table.warning.reasonsLabel')}</h3>
         <ul>

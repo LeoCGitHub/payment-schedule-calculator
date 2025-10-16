@@ -9,13 +9,7 @@ import { useTranslation } from 'react-i18next';
 import { PaymentScheduleFormData } from '../types/PaymentScheduleFormData';
 import { PaymentScheduleFormErrors } from '../types/PaymentScheduleFormErrors';
 import { PaymentScheduleFormService } from '@/containers/PaymentSchedule/Form/services/PaymentScheduleFormService';
-import { translateError } from '@/i18n/translateError';
 import { DEFAULT_FORM_DATA } from '../constants/formConfig';
-
-// Map i18next language code to locale
-const getLocale = (language: string): string => {
-  return language === 'en' ? 'en-US' : 'fr-FR';
-};
 
 interface UsePaymentScheduleFormProps {
   initialData?: PaymentScheduleFormData;
@@ -37,15 +31,14 @@ export function usePaymentScheduleForm({
   onDataChange,
   onSubmit,
 }: UsePaymentScheduleFormProps): UsePaymentScheduleFormReturn {
-  const { t, i18n } = useTranslation();
-  const locale = getLocale(i18n.language);
+  const { t } = useTranslation();
 
   const [formData, setFormData] = useState<PaymentScheduleFormData>(
     initialData || DEFAULT_FORM_DATA
   );
   const [errors, setErrors] = useState<PaymentScheduleFormErrors>({});
 
-  const validateFieldWithTranslation = useCallback(
+  const validateFields = useCallback(
     (
       fieldName: keyof PaymentScheduleFormData,
       currentFormData: PaymentScheduleFormData,
@@ -57,12 +50,12 @@ export function usePaymentScheduleForm({
         currentFormData
       );
       if (error) {
-        newErrors[fieldName] = translateError(error, t);
+        newErrors[fieldName] = error;
       } else {
         delete newErrors[fieldName];
       }
     },
-    [t]
+    []
   );
 
   const revalidateDependentFields = useCallback(
@@ -74,24 +67,23 @@ export function usePaymentScheduleForm({
       newErrors: PaymentScheduleFormErrors
     ) => {
       if (currentField === fieldName && currentFormData[dependantName]) {
-        validateFieldWithTranslation(dependantName, currentFormData, newErrors);
+        validateFields(dependantName, currentFormData, newErrors);
       } else if (currentField === dependantName && currentFormData[fieldName]) {
-        validateFieldWithTranslation(fieldName, currentFormData, newErrors);
+        validateFields(fieldName, currentFormData, newErrors);
       }
     },
-    [validateFieldWithTranslation]
+    [validateFields]
   );
 
   const validateField = useCallback(
     (name: string, currentFormData: PaymentScheduleFormData): void => {
       const newErrors: PaymentScheduleFormErrors = { ...errors };
 
-      validateFieldWithTranslation(
+      validateFields(
         name as keyof PaymentScheduleFormData,
         currentFormData,
         newErrors
       );
-      //TODO LCG bug here ocdn dynamic langage change, faut recharger page
 
       revalidateDependentFields(
         name as keyof PaymentScheduleFormData,
@@ -111,19 +103,20 @@ export function usePaymentScheduleForm({
 
       setErrors(newErrors);
     },
-    [errors, setErrors, validateFieldWithTranslation, revalidateDependentFields]
+    [errors, setErrors, validateFields, revalidateDependentFields]
   );
 
   const validate = useCallback((): boolean => {
     const rawErrors = PaymentScheduleFormService.validateForm(formData);
     const translatedErrors: PaymentScheduleFormErrors = {};
+
     Object.entries(rawErrors).forEach(([key, value]) => {
       if (value) {
-        translatedErrors[key as keyof PaymentScheduleFormErrors] =
-          translateError(value, t);
+        translatedErrors[key as keyof PaymentScheduleFormErrors] = t(value);
       }
     });
     setErrors(translatedErrors);
+
     return Object.keys(translatedErrors).length === 0;
   }, [formData, setErrors, t]);
 
@@ -164,7 +157,7 @@ export function usePaymentScheduleForm({
         return newFormData;
       });
     },
-    [locale, onDataChange, validateField]
+    [onDataChange, validateField]
   );
 
   const handleSubmit = useCallback(

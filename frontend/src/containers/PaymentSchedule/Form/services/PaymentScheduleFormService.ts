@@ -22,16 +22,18 @@ export class PaymentScheduleFormService {
     switch (name) {
       case 'contractDuration':
         if (!value || parseInt(value) <= 0) {
-          return 'Contract duration is required';
+          return 'errors.contractDuration.required';
         }
+
         if (formData) {
           const duration = parseInt(value);
           const periodicityMonths = parseInt(formData.periodicity);
 
           if (duration % periodicityMonths !== 0) {
-            return `Contract duration must be a multiple of ${periodicityMonths} months for ${formData.periodicity} periodicity`;
+            return 'errors.contractDuration.consistency';
           }
         }
+
         break;
       case 'periodicity':
         if (formData && formData.contractDuration) {
@@ -39,39 +41,46 @@ export class PaymentScheduleFormService {
           const periodicityMonths = parseInt(value);
 
           if (duration > 0 && duration % periodicityMonths !== 0) {
-            return `Contract duration must be a multiple of ${periodicityMonths} months for ${value} periodicity`;
+            return 'errors.contractDuration.consistency';
           }
         }
+
         break;
       case 'assetAmount':
         if (!value || parseFloat(value) <= 0) {
-          return 'Asset amount must be greater than 0';
+          return 'errors.assetAmount.required';
         }
+
         if (formData && formData.rentAmount) {
           if (parseInt(value) < parseInt(formData.rentAmount)) {
-            return 'Asset amount must be greater than Rent amount';
+            return 'errors.assetAmount.consistency';
           }
         }
+
         break;
       case 'rentAmount':
         if (!value || parseFloat(value) <= 0) {
-          return 'Rent amount must be greater than 0';
+          return 'errors.rentAmount.required';
         }
+
         if (formData && formData.assetAmount) {
           if (parseInt(value) > parseInt(formData.assetAmount)) {
-            return 'Rent amount must be lower than Asset amount';
+            return 'errors.rentAmount.consistency';
           }
         }
+
         break;
       case 'firstPaymentDate':
         if (!value) {
-          return 'First payment date is required';
+          return 'errors.firstPaymentDate.required';
         }
+
         break;
       case 'purchaseOptionAmount':
         if (!value) {
-          return 'Purchase option amount is required';
+          return 'errors.purchaseOptionAmount.required';
         }
+
         break;
       default:
         break;
@@ -93,30 +102,30 @@ export class PaymentScheduleFormService {
       !formData.contractDuration ||
       parseInt(formData.contractDuration) <= 0
     ) {
-      errors.contractDuration = 'Contract duration is required';
+      errors.contractDuration = 'errors.contractDuration.required';
     } else {
       const duration = parseInt(formData.contractDuration);
       const periodicityMonths = parseInt(formData.periodicity);
 
       if (duration % periodicityMonths !== 0) {
-        errors.contractDuration = `Contract duration must be a multiple of ${periodicityMonths} months for ${formData.periodicity} periodicity`;
+        errors.contractDuration = `errors.contractDuration.consistency`;
       }
     }
 
     if (!formData.assetAmount || parseFloat(formData.assetAmount) <= 0) {
-      errors.assetAmount = 'Asset value must be greater than 0';
+      errors.assetAmount = 'errors.assetAmount.required';
     }
 
     if (!formData.rentAmount || parseFloat(formData.rentAmount) <= 0) {
-      errors.rentAmount = 'Rent amount must be greater than 0';
+      errors.rentAmount = 'errors.rentAmount.required';
     }
 
     if (!formData.firstPaymentDate) {
-      errors.firstPaymentDate = 'First payment date is required';
+      errors.firstPaymentDate = 'errors.firstPaymentDate.required';
     }
 
     if (!formData.purchaseOptionAmount) {
-      errors.purchaseOptionAmount = 'Purchase option amount is required';
+      errors.purchaseOptionAmount = 'errors.purchaseOptionAmount.required';
     }
 
     return errors;

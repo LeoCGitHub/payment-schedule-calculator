@@ -78,7 +78,7 @@
   "errors": {
     "contractDuration": {
       "required": "Contract duration is required",
-      "consistency": "Contract duration must be a multiple of {{months}} months for {{periodicity}} periodicity"
+      "consistency": "Contract duration must be a multiple of the monthly periodicity"
     },
     "assetAmount": {
       "required": "Asset amount must be greater than 0",

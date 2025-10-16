@@ -78,7 +78,7 @@
   "errors": {
     "contractDuration": {
       "required": "La durée contractuelle est requise",
-      "consistency": "La durée contractuelle doit être un multiple de {{months}} mois pour une périodicité {{periodicity}}"
+      "consistency": "La durée contractuelle doit être un multiple de la périodicité en mois"
     },
     "assetAmount": {
       "required": "Le montant du bien doit être supérieure à 0",
