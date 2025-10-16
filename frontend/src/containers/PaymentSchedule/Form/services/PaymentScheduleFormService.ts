@@ -52,8 +52,14 @@ export class PaymentScheduleFormService {
         }
 
         if (formData && formData.rentAmount) {
-          if (parseInt(value) < parseInt(formData.rentAmount)) {
-            return 'errors.assetAmount.consistency';
+          if (parseFloat(value) < parseFloat(formData.rentAmount)) {
+            return 'errors.assetAmount.consistency.rentAmount';
+          }
+        }
+
+        if (formData && formData.purchaseOptionAmount) {
+          if (parseFloat(value) < parseFloat(formData.purchaseOptionAmount)) {
+            return 'errors.assetAmount.consistency.purchaseOptionAmount';
           }
         }
 
@@ -64,7 +70,7 @@ export class PaymentScheduleFormService {
         }
 
         if (formData && formData.assetAmount) {
-          if (parseInt(value) > parseInt(formData.assetAmount)) {
+          if (parseFloat(value) > parseFloat(formData.assetAmount)) {
             return 'errors.rentAmount.consistency';
           }
         }
@@ -79,6 +85,12 @@ export class PaymentScheduleFormService {
       case 'purchaseOptionAmount':
         if (!value) {
           return 'errors.purchaseOptionAmount.required';
+        }
+
+        if (formData && formData.assetAmount) {
+          if (parseFloat(value) > parseFloat(formData.assetAmount)) {
+            return 'errors.purchaseOptionAmount.consistency';
+          }
         }
 
         break;

@@ -86,7 +86,7 @@ export default function PaymentScheduleForm({
           onChange={handleChange}
           disabled={loading}
           error={errors.contractDuration && t(errors.contractDuration)}
-          min="1"
+          step="1"
         />
 
         <FormInput
@@ -100,7 +100,7 @@ export default function PaymentScheduleForm({
           disabled={loading}
           error={errors.assetAmount && t(errors.assetAmount)}
           min="0"
-          step="1"
+          step="0.01"
         />
 
         <FormInput
@@ -114,7 +114,7 @@ export default function PaymentScheduleForm({
           disabled={loading}
           error={errors.rentAmount && t(errors.rentAmount)}
           min="0"
-          step="1"
+          step="0.01"
         />
 
         <FormInput
@@ -128,7 +128,7 @@ export default function PaymentScheduleForm({
           disabled={loading}
           error={errors.purchaseOptionAmount && t(errors.purchaseOptionAmount)}
           min="0"
-          step="1"
+          step="0.01"
         />
 
         {IBRNeeded ? (
@@ -146,7 +146,7 @@ export default function PaymentScheduleForm({
               error={errors.marginalDebtRate && t(errors.marginalDebtRate)}
               min="0"
               max="100"
-              step="0.1"
+              step="0.01"
             />
           </div>
         ) : null}

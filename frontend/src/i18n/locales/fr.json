@@ -82,7 +82,10 @@
     },
     "assetAmount": {
       "required": "Le montant du bien doit être supérieure à 0",
-      "consistency": "Le montant du bien ne peut être inférieur au montant du loyer"
+      "consistency": {
+        "rentAmount": "Le montant du bien ne peut être inférieur au montant du loyer",
+        "purchaseOptionAmount": "Le montant du bien ne peut être inféreur au montant de l'option d'achat"
+      }
     },
     "rentAmount": {
       "required": "Le montant du loyer doit être supérieur à 0",
@@ -92,7 +95,8 @@
       "required": "La date du premier paiement est requise"
     },
     "purchaseOptionAmount": {
-      "required": "Le montant de l'option d'achat est requis"
+      "required": "Le montant de l'option d'achat est requis",
+      "consistency": "Le montant de l'option d'achat ne peut être supérieur à la valeur de l'actif"
     },
     "general": "Une erreur est survenue lors du calcul de l'échéancier. Veuillez réessayer."
   },

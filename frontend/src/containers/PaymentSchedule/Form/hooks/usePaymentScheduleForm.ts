@@ -101,6 +101,14 @@ export function usePaymentScheduleForm({
         newErrors
       );
 
+      revalidateDependentFields(
+        name as keyof PaymentScheduleFormData,
+        'assetAmount',
+        'purchaseOptionAmount',
+        currentFormData,
+        newErrors
+      );
+
       setErrors(newErrors);
     },
     [errors, setErrors, validateFields, revalidateDependentFields]

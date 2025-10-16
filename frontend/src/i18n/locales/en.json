@@ -82,7 +82,10 @@
     },
     "assetAmount": {
       "required": "Asset amount must be greater than 0",
-      "consistency": "Asset amount must be greater than Rent amount"
+      "consistency": {
+        "rentAmount": "Asset amount must be greater than Rent amount",
+        "purchaseOptionAmount": "Asset amount must be greater than Purchase option amount"
+      }
     },
     "rentAmount": {
       "required": "Rent amount must be greater than 0",
@@ -92,7 +95,8 @@
       "required": "First payment date is required"
     },
     "purchaseOptionAmount": {
-      "required": "Purchase option amount is required"
+      "required": "Purchase option amount is required",
+      "consistency": "Purchase Option amount must be lower than Asset amount"
     },
     "general": "An error occurred while calculating the payment schedule. Please try again."
   },
