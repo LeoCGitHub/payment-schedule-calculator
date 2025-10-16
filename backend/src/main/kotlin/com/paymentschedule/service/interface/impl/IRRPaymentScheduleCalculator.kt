@@ -11,6 +11,18 @@ import jakarta.enterprise.context.ApplicationScoped
 import java.math.BigDecimal
 import java.time.format.DateTimeFormatter
 
+/**
+ * IRR-based payment schedule calculator
+ *
+ * Calculates payment schedules using the Internal Rate of Return (IRR) method.
+ * This is the default calculation method when no marginal debt rate is provided.
+ *
+ * The IRR is calculated using Newton-Raphson method to find the rate where NPV equals zero.
+ * Each period's financial interest is calculated as: debt × IRR
+ *
+ * If total interest is negative, the ibrNeeded flag is set to true, indicating
+ * that Interest-Based Rate calculation should be used instead.
+ */
 @ApplicationScoped
 class IRRPaymentScheduleCalculator : PaymentScheduleCalculator {
     override fun calculateSchedule(config: ScheduleConfig): PaymentScheduleResponse {

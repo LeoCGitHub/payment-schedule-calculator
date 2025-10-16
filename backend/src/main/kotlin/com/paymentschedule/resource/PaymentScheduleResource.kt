@@ -29,6 +29,11 @@ class PaymentScheduleResource {
 
     private val log = Logger.getLogger(PaymentScheduleResource::class.java)
 
+    /**
+     * Payment schedule service injected by CDI
+     *
+     * Handles business logic for calculating payment schedules using IRR or IBR methods
+     */
     @Inject
     lateinit var paymentScheduleService: PaymentScheduleService
 

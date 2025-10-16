@@ -285,4 +285,146 @@ class PaymentScheduleServiceTest {
             "Actualized purchase option should be less than nominal value due to discounting"
         )
     }
+
+    @Test
+    fun `should use IRR calculator when marginal debt rate is null`() {
+        val request = PaymentScheduleRequest(
+            periodicity = 3,
+            contractDuration = 48,
+            assetAmount = BigDecimal("150000"),
+            purchaseOptionAmount = BigDecimal("1500"),
+            firstPaymentDate = LocalDate.of(2025, 9, 17),
+            rentAmount = BigDecimal("10000"),
+            marginalDebtRate = null
+        )
+
+        val response = paymentScheduleService.calculateSchedule(request)
+
+        assertNotNull(response)
+        assertFalse(response.ibrNeeded)
+    }
+
+    @Test
+    fun `should use IBR calculator when marginal debt rate is provided`() {
+        val request = PaymentScheduleRequest(
+            periodicity = 3,
+            contractDuration = 48,
+            assetAmount = BigDecimal("150000"),
+            purchaseOptionAmount = BigDecimal("1500"),
+            firstPaymentDate = LocalDate.of(2025, 9, 17),
+            rentAmount = BigDecimal("10000"),
+            marginalDebtRate = BigDecimal("0.05")
+        )
+
+        val response = paymentScheduleService.calculateSchedule(request)
+
+        assertNotNull(response)
+        assertTrue(response.ibrNeeded)
+    }
+
+    @Test
+    fun `should calculate IFRS16 charges when using IBR mode`() {
+        val request = PaymentScheduleRequest(
+            periodicity = 3,
+            contractDuration = 48,
+            assetAmount = BigDecimal("150000"),
+            purchaseOptionAmount = BigDecimal("1500"),
+            firstPaymentDate = LocalDate.of(2025, 9, 17),
+            rentAmount = BigDecimal("10000"),
+            marginalDebtRate = BigDecimal("0.05")
+        )
+
+        val response = paymentScheduleService.calculateSchedule(request)
+
+        assertTrue(response.ibrNeeded)
+        response.paymentScheduleLines.forEach { line ->
+            assertNotNull(line.ifrs16Expense)
+            assertTrue(line.ifrs16Expense > BigDecimal.ZERO)
+        }
+    }
+
+    @Test
+    fun `should not calculate IFRS16 charges when using IRR mode`() {
+        val request = PaymentScheduleRequest(
+            periodicity = 3,
+            contractDuration = 48,
+            assetAmount = BigDecimal("150000"),
+            purchaseOptionAmount = BigDecimal("1500"),
+            firstPaymentDate = LocalDate.of(2025, 9, 17),
+            rentAmount = BigDecimal("10000"),
+            marginalDebtRate = null
+        )
+
+        val response = paymentScheduleService.calculateSchedule(request)
+
+        assertFalse(response.ibrNeeded)
+        response.paymentScheduleLines.forEach { line ->
+            assertEquals(BigDecimal.ZERO, line.ifrs16Expense)
+        }
+    }
+
+    @Test
+    fun `should have linear amortization in IBR mode`() {
+        val request = PaymentScheduleRequest(
+            periodicity = 3,
+            contractDuration = 48,
+            assetAmount = BigDecimal("150000"),
+            purchaseOptionAmount = BigDecimal("1500"),
+            firstPaymentDate = LocalDate.of(2025, 9, 17),
+            rentAmount = BigDecimal("10000"),
+            marginalDebtRate = BigDecimal("0.05")
+        )
+
+        val response = paymentScheduleService.calculateSchedule(request)
+
+        assertTrue(response.ibrNeeded)
+        response.paymentScheduleLines.forEach { line ->
+            assertNotNull(line.linearAmortizationAmount)
+            assertTrue(line.linearAmortizationAmount > BigDecimal.ZERO)
+        }
+    }
+
+    @Test
+    fun `should not have linear amortization in IRR mode`() {
+        val request = PaymentScheduleRequest(
+            periodicity = 3,
+            contractDuration = 48,
+            assetAmount = BigDecimal("150000"),
+            purchaseOptionAmount = BigDecimal("1500"),
+            firstPaymentDate = LocalDate.of(2025, 9, 17),
+            rentAmount = BigDecimal("10000"),
+            marginalDebtRate = null
+        )
+
+        val response = paymentScheduleService.calculateSchedule(request)
+
+        assertFalse(response.ibrNeeded)
+        response.paymentScheduleLines.forEach { line ->
+            assertEquals(BigDecimal.ZERO, line.linearAmortizationAmount)
+        }
+    }
+
+    @Test
+    fun `should switch between IRR and IBR calculators based on marginal rate`() {
+        val baseRequest = PaymentScheduleRequest(
+            periodicity = 3,
+            contractDuration = 12,
+            assetAmount = BigDecimal("50000"),
+            purchaseOptionAmount = BigDecimal("500"),
+            firstPaymentDate = LocalDate.of(2025, 1, 1),
+            rentAmount = BigDecimal("12000"),
+            marginalDebtRate = null
+        )
+
+        val irrResponse = paymentScheduleService.calculateSchedule(baseRequest)
+
+        val ibrRequest = baseRequest.copy(marginalDebtRate = BigDecimal("0.05"))
+        val ibrResponse = paymentScheduleService.calculateSchedule(ibrRequest)
+        assertTrue(ibrResponse.ibrNeeded)
+
+        assertNotEquals(
+            irrResponse.paymentScheduleLines[0].linearAmortizationAmount,
+            ibrResponse.paymentScheduleLines[0].linearAmortizationAmount
+        )
+    }
 }

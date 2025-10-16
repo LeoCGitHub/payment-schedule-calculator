@@ -149,6 +149,17 @@ object CalculatorUtils {
         return (low + high).divide(BigDecimal.valueOf(2), BigDecimalUtils.MATH_CONTEXT)
     }
 
+    /**
+     * Calculate actualized (discounted) cash flow for a specific period
+     *
+     * Computes the present value of a future cash flow using the formula:
+     * PV = FutureValue / (1 + rate)^period
+     *
+     * @param periodIndex Period number (1-based index)
+     * @param actualizedRate Discount rate per period
+     * @param rentAmount Cash flow amount to discount
+     * @return Present value of the cash flow
+     */
     fun calculateActualizedCashFlow(periodIndex: Int, actualizedRate: BigDecimal, rentAmount: BigDecimal): BigDecimal {
         val onePlusRate = BigDecimal.ONE.add(actualizedRate)
         val discountFactor = BigDecimalUtils.bigDecimalPow(onePlusRate, -periodIndex)
@@ -156,7 +167,18 @@ object CalculatorUtils {
         return rentAmount.multiply(discountFactor, BigDecimalUtils.MATH_CONTEXT)
     }
 
-    fun calculateActualizedCashFLowsAndSum(rents: List<BigDecimal>, config: ScheduleConfig, actualizedCashFlows: MutableList<BigDecimal>): BigDecimal {
+    /**
+     * Calculate actualized cash flows for all rents and return their sum
+     *
+     * Computes the present value of each rent payment and accumulates them.
+     * The actualized values are stored in the provided mutable list.
+     *
+     * @param rents List of rent amounts (including purchase option as last element)
+     * @param config Schedule configuration containing the actualized rate
+     * @param actualizedCashFlows Mutable list to store each period's actualized cash flow
+     * @return Sum of all actualized cash flows (initial liability)
+     */
+    fun calculateActualizedCashFlowsAndSum(rents: List<BigDecimal>, config: ScheduleConfig, actualizedCashFlows: MutableList<BigDecimal>): BigDecimal {
         return rents.foldIndexed(BigDecimal.ZERO) { index, acc, rent ->
             val actualizationPeriod = index + 1
             val pv = calculateActualizedCashFlow(actualizationPeriod, config.actualizedRate, rent)
@@ -224,12 +246,14 @@ object CalculatorUtils {
     }
 
     /**
-     * Calculate annual reference rate
-     * Negative rate authorized
+     * Calculate annual reference rate from periodic rate
      *
-     * @param periodicity
-     * @param actualizedRate
-     * @return
+     * Converts a periodic rate to its equivalent annual rate using compound interest formula:
+     * Annual rate = (1 + periodic rate)^(periods per year) - 1
+     *
+     * @param periodicity Number of months per period (1, 3, 6, or 12)
+     * @param actualizedRate Periodic rate to convert
+     * @return Equivalent annual reference rate
      */
     fun calculateAnnualReferenceRate(periodicity: Int, actualizedRate: BigDecimal): BigDecimal {
         val periodsPerYear = 12.div(periodicity)
@@ -239,34 +263,42 @@ object CalculatorUtils {
     }
 
     /**
-     * Calculate financial interest
+     * Calculate financial interest for a period
      *
-     * @param debtBeginningPeriodAmount
-     * @param rate
-     * @return
+     * Computes interest as: Interest = Debt × Rate
+     *
+     * @param debtBeginningPeriodAmount Outstanding debt at beginning of period
+     * @param rate Interest rate per period
+     * @return Financial interest amount for the period
      */
     fun calculateFinancialInterestAmount(debtBeginningPeriodAmount: BigDecimal, rate: BigDecimal): BigDecimal {
         return debtBeginningPeriodAmount.multiply(rate)
     }
 
     /**
-     * Calculate debt end period
+     * Calculate debt at end of period
      *
-     * @param debtBeginningPeriodAmount
-     * @param amountToSubtract
-     * @return
+     * Computes remaining debt after subtracting amortization:
+     * End debt = Beginning debt - Amortization
+     *
+     * @param debtBeginningPeriodAmount Outstanding debt at beginning of period
+     * @param amountToSubtract Principal amortization amount
+     * @return Remaining debt at end of period
      */
     fun calculateDebtEndPeriodAmount(debtBeginningPeriodAmount: BigDecimal, amountToSubtract: BigDecimal): BigDecimal {
         return debtBeginningPeriodAmount.subtract(amountToSubtract)
     }
 
     /**
-     * Calculate payment date
+     * Calculate payment date for a given period
      *
-     * @param periodIndex
-     * @param periodicity
-     * @param firstPaymentDate
-     * @return
+     * Computes the due date by adding months to the first payment date:
+     * Due date = First payment date + ((period - 1) × periodicity) months
+     *
+     * @param periodIndex Period number (1-based index)
+     * @param periodicity Number of months between payments
+     * @param firstPaymentDate Date of the first payment
+     * @return Due date for the specified period
      */
     fun calculatePaymentDate(periodIndex: Int, periodicity: Int, firstPaymentDate: LocalDate): LocalDate {
         val monthsToAdd = (periodIndex - 1L) * periodicity
@@ -274,44 +306,60 @@ object CalculatorUtils {
     }
 
     /**
-     * Calculate total periods
+     * Calculate total number of payment periods
      *
-     * @param contractDuration
-     * @param periodicity
-     * @return
+     * Divides contract duration by periodicity to get number of payments:
+     * Total periods = Contract duration (months) / Periodicity (months)
+     *
+     * @param contractDuration Total contract duration in months
+     * @param periodicity Payment frequency in months
+     * @return Number of payment periods
      */
     fun calculateTotalPeriods(contractDuration: Int, periodicity: Int): Int {
         return contractDuration.div(periodicity)
     }
 
     /**
-     * Calculate Linear Asset Depreciation
+     * Calculate linear asset amortization per period
      *
-     * @param initialDebt
-     * @param totalPeriods
-     * @return
+     * Computes constant amortization amount for each period:
+     * Linear amortization = Initial debt / Total periods
+     *
+     * Used in IBR calculation for IFRS 16 compliance
+     *
+     * @param initialDebt Initial asset value to amortize
+     * @param totalPeriods Number of periods over which to amortize
+     * @return Linear amortization amount per period
      */
     fun calculateLinearAssetAmortization(initialDebt: BigDecimal, totalPeriods: Int): BigDecimal {
         return initialDebt.divide(BigDecimal(totalPeriods))
     }
 
     /**
-     * Calculate repayment
+     * Calculate principal amortization amount
      *
-     * @param rentAmount
-     * @param financialInterestAmount
-     * @return
+     * Computes the portion of rent payment that goes toward principal:
+     * Amortization = Rent - Interest
+     *
+     * @param rentAmount Total rent payment for the period
+     * @param financialInterestAmount Interest portion of the payment
+     * @return Principal amortization amount
      */
     fun calculateAmortizationAmount(rentAmount: BigDecimal, financialInterestAmount: BigDecimal): BigDecimal {
         return rentAmount.subtract(financialInterestAmount)
     }
 
     /**
-     * Calculate repayment
+     * Calculate IFRS 16 charge for the period
      *
-     * @param rentAmount
-     * @param financialInterestAmount
-     * @return
+     * Computes total IFRS 16 expense by adding:
+     * IFRS 16 charge = Financial interest + Linear asset amortization
+     *
+     * This represents the total lease expense under IFRS 16 accounting standards
+     *
+     * @param financialInterestAmount Interest expense for the period
+     * @param assetAmortization Linear depreciation of the right-of-use asset
+     * @return Total IFRS 16 charge for the period
      */
     fun calculateIfrs16Charge(financialInterestAmount: BigDecimal, assetAmortization: BigDecimal): BigDecimal {
         return financialInterestAmount.add(assetAmortization)

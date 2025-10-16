@@ -4,7 +4,6 @@ import com.paymentschedule.model.*
 import com.paymentschedule.service.`interface`.impl.IBRPaymentScheduleCalculator
 import com.paymentschedule.service.`interface`.impl.IRRPaymentScheduleCalculator
 import jakarta.enterprise.context.ApplicationScoped
-import org.jboss.logging.Logger
 
 /**
  * Payment schedule calculation service
@@ -21,8 +20,6 @@ class PaymentScheduleService(
     private val irrCalculator: IRRPaymentScheduleCalculator,
     private val ibrCalculator: IBRPaymentScheduleCalculator
 ) {
-//TODO LCG
-    private val log = Logger.getLogger(PaymentScheduleService::class.java)
 
     /**
      * Calculate complete payment schedule
@@ -36,7 +33,6 @@ class PaymentScheduleService(
     fun calculateSchedule(request: PaymentScheduleRequest): PaymentScheduleResponse {
         val config = ScheduleConfig.from(request);
 
-//TODO LCG issues
         val paymentScheduleResponse: PaymentScheduleResponse = if (request.marginalDebtRate == null) {
             irrCalculator.calculateSchedule(config)
         } else {

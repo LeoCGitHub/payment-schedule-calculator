@@ -18,7 +18,7 @@ class IBRPaymentScheduleCalculator : PaymentScheduleCalculator {
         var rents = List(config.totalPeriods) { config.rentAmount }
             rents = rents.plus(config.purchaseOptionAmount)
 
-        val initialLiability = CalculatorUtils.calculateActualizedCashFLowsAndSum(rents, config, actualizedCashFlows);
+        val initialLiability = CalculatorUtils.calculateActualizedCashFlowsAndSum(rents, config, actualizedCashFlows);
 
         config.linearAmortizationAmount = CalculatorUtils.calculateLinearAssetAmortization(config.initialDebt , config.totalPeriods)
 
@@ -41,7 +41,7 @@ class IBRPaymentScheduleCalculator : PaymentScheduleCalculator {
         )
     }
 
-    fun generateScheduleLines(
+    private fun generateScheduleLines(
         rents: List<BigDecimal>,
         actualizedCashFlows: List<BigDecimal>,
         config: ScheduleConfig,

@@ -2,6 +2,7 @@ plugins {
     kotlin("jvm") version "2.2.20"
     kotlin("plugin.allopen") version "2.2.20"
     id("io.quarkus")
+    id("org.jetbrains.kotlinx.kover") version "0.9.2"
 }
 
 repositories {
@@ -50,5 +51,15 @@ kotlin {
     compilerOptions {
         jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_21
         javaParameters = true
+    }
+}
+
+kover {
+    reports {
+        verify {
+            rule {
+                minBound(80)
+            }
+        }
     }
 }
