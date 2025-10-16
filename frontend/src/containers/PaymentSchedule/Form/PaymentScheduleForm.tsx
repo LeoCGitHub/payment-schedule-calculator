@@ -86,7 +86,7 @@ export default function PaymentScheduleForm({
           onChange={handleChange}
           disabled={loading}
           error={errors.contractDuration && t(errors.contractDuration)}
-          step="1"
+          min="1"
         />
 
         <FormInput

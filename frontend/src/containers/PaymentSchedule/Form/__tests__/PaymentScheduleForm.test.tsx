@@ -195,10 +195,10 @@ describe('PaymentScheduleForm', () => {
     );
 
     const assetAmountInput = screen.getByLabelText('form.assetAmount.label');
-    expect(assetAmountInput).toHaveAttribute('step', '1');
+    expect(assetAmountInput).toHaveAttribute('step', '0.01');
 
     const rentAmountInput = screen.getByLabelText('form.rentAmount.label');
-    expect(rentAmountInput).toHaveAttribute('step', '1');
+    expect(rentAmountInput).toHaveAttribute('step', '0.01');
   });
 
   it('should call onDataChange when form data changes', async () => {
