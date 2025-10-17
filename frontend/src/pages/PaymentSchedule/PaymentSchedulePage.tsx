@@ -7,10 +7,6 @@ import { useError } from '../../hooks/useError';
 import { PaymentScheduleResponse } from '@/types/payment-schedule/response/PaymentScheduleResponse';
 import { PaymentScheduleRequest } from '@/types/payment-schedule/request/PaymentScheduleRequest';
 
-/**
- * Payment Schedule Calculator Page
- * Main page component that handles the payment schedule calculation form and results
- */
 function PaymentSchedulePage(): React.JSX.Element {
   const { t } = useTranslation();
   const { setError } = useError();
