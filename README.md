@@ -37,10 +37,9 @@ payment-schedule-calculator/
 
 ### Prérequis
 
-- **Node.js** 20+ et npm
 - **Java** 21+ (pour le backend)
 - **Docker** (optionnel, pour le déploiement)
-- **Docker Cpmpose** (optionnel, pour le déploiement)
+- **Docker Compose** (optionnel, pour le déploiement)
 
 ### QuickStart
 
@@ -73,6 +72,16 @@ npm run dev:backend
 - **API Docs** : http://localhost:9090/swagger-ui/
 
 #### Docker
+
+##### Mode natif (conseillé)
+
+```bash
+npm run deploy:native:local
+```
+
+ou
+
+##### Mode JVM
 
 ```bash
 npm run deploy:local

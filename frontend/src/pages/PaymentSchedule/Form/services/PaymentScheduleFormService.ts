@@ -1,5 +1,5 @@
-import { PaymentScheduleFormData } from '@/containers/PaymentSchedule/Form/types/PaymentScheduleFormData';
-import { PaymentScheduleFormErrors } from '@/containers/PaymentSchedule/Form/types/PaymentScheduleFormErrors';
+import { PaymentScheduleFormData } from '@/pages/PaymentSchedule/Form/types/PaymentScheduleFormData';
+import { PaymentScheduleFormErrors } from '@/pages/PaymentSchedule/Form/types/PaymentScheduleFormErrors';
 import { PaymentScheduleRequest } from '@/types/payment-schedule/request/PaymentScheduleRequest';
 
 /**

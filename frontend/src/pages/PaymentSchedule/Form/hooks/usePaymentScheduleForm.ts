@@ -8,7 +8,7 @@ import {
 import { useTranslation } from 'react-i18next';
 import { PaymentScheduleFormData } from '../types/PaymentScheduleFormData';
 import { PaymentScheduleFormErrors } from '../types/PaymentScheduleFormErrors';
-import { PaymentScheduleFormService } from '@/containers/PaymentSchedule/Form/services/PaymentScheduleFormService';
+import { PaymentScheduleFormService } from '@/pages/PaymentSchedule/Form/services/PaymentScheduleFormService';
 import { DEFAULT_FORM_DATA } from '../constants/formConfig';
 
 interface UsePaymentScheduleFormProps {

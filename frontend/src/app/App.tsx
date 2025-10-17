@@ -1,48 +1,15 @@
-import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import PaymentScheduleForm from '../containers/PaymentSchedule/Form/PaymentScheduleForm';
-import PaymentScheduleTable from '../containers/PaymentSchedule/Table/PaymentScheduleTable';
+import { BrowserRouter } from 'react-router-dom';
+import { AppRoutes } from './routes';
 import Toast from '../components/Toast/Toast';
 import { LanguageSelector } from '../components/LanguageSelector/LanguageSelector';
-import { paymentScheduleApiService } from '../api/PaymentScheduleApi';
+import { ErrorProvider } from '../contexts/ErrorContext';
+import { useError } from '../hooks/useError';
 import './App.scss';
-import { PaymentScheduleResponse } from '@/types/payment-schedule/response/PaymentScheduleResponse';
-import { PaymentScheduleRequest } from '@/types/payment-schedule/request/PaymentScheduleRequest';
 
-function App(): React.JSX.Element {
+function AppLayout(): React.JSX.Element {
   const { t } = useTranslation();
-  const [schedule, setSchedule] = useState<PaymentScheduleResponse | null>(
-    null
-  );
-  const [IBRNeeded, setIBRNeeded] = useState<boolean>(false);
-  const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
-
-  const handleSubmit = async (
-    request: PaymentScheduleRequest
-  ): Promise<void> => {
-    setLoading(true);
-    setError(null);
-    setIBRNeeded(false);
-
-    try {
-      const result = await paymentScheduleApiService.calculateSchedule(request);
-      setSchedule(result as unknown as PaymentScheduleResponse);
-      setIBRNeeded(result.ibrNeeded);
-    } catch (err) {
-      const errorMessage =
-        err instanceof Error ? err.message : t('errors.general');
-      setError(errorMessage);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleReset = () => {
-    setSchedule(null);
-    setIBRNeeded(false);
-    setError(null);
-  };
+  const { error, clearError } = useError();
 
   return (
     <div className="app">
@@ -54,39 +21,28 @@ function App(): React.JSX.Element {
       </header>
 
       <main className="app-main">
-        <div className="main-layout">
-          <div className="form-section">
-            <PaymentScheduleForm
-              onSubmit={handleSubmit}
-              onReset={handleReset}
-              loading={loading}
-              IBRNeeded={IBRNeeded}
-            />
-          </div>
-
-          <div className="table-section">
-            {schedule ? (
-              <PaymentScheduleTable schedule={schedule} IBRNeeded={IBRNeeded} />
-            ) : (
-              <div className="placeholder">
-                <div className="placeholder-icon">📊</div>
-                <h3>{t('placeholder.title')}</h3>
-                <p>{t('placeholder.subtitle')}</p>
-              </div>
-            )}
-          </div>
-        </div>
+        <AppRoutes />
       </main>
 
       {error && (
         <Toast
           message={error}
           type="error"
-          onClose={() => setError(null)}
+          onClose={clearError}
           duration={5000}
         />
       )}
     </div>
+  );
+}
+
+function App(): React.JSX.Element {
+  return (
+    <BrowserRouter>
+      <ErrorProvider>
+        <AppLayout />
+      </ErrorProvider>
+    </BrowserRouter>
   );
 }
 

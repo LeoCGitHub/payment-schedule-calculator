@@ -1,6 +1,6 @@
 import './PaymentScheduleForm.scss';
 import { useTranslation } from 'react-i18next';
-import { PaymentScheduleFormService } from '@/containers/PaymentSchedule/Form/services/PaymentScheduleFormService';
+import { PaymentScheduleFormService } from '@/pages/PaymentSchedule/Form/services/PaymentScheduleFormService';
 import { usePaymentScheduleForm } from './hooks/usePaymentScheduleForm';
 import FormInput from '@/components/Form/FormInput/FormInput';
 import FormSelect from '@/components/Form/FormSelect/FormSelect';
