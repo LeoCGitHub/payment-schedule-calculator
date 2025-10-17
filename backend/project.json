@@ -9,13 +9,8 @@
       "executor": "nx:run-commands",
       "outputs": ["{projectRoot}/build"],
       "options": {
-        "command": "./gradlew build -x test",
+        "command": "./gradlew clean build -Dquarkus.profile=jvm -x test",
         "cwd": "backend"
-      },
-      "configurations": {
-        "production": {
-          "command": "./gradlew build"
-        }
       }
     },
     "dev": {
@@ -49,6 +44,7 @@
     },
     "docker:build": {
       "executor": "nx:run-commands",
+      "dependsOn": ["build", "test"],
       "options": {
         "command": "docker build -t payment-schedule-calculator-backend:latest -f Dockerfile .",
         "cwd": "backend"
@@ -58,9 +54,7 @@
       "executor": "nx:run-commands",
       "outputs": ["{projectRoot}/build/*-runner"],
       "options": {
-        "commands": [
-          "./gradlew clean build -Dquarkus.native.enabled=true -Dquarkus.native.container-build=true -Dquarkus.profile=native -Dquarkus.package.jar.enabled=false -x test"
-        ],
+        "commands": ["./gradlew clean build -Dquarkus.profile=native -x test"],
         "cwd": "backend",
         "parallel": false
       }
@@ -106,7 +100,7 @@
     },
     "native:full": {
       "executor": "nx:run-commands",
-      "dependsOn": ["build:native", "docker:build-native"],
+      "dependsOn": ["build:native", "test", "docker:build-native"],
       "options": {
         "commands": [
           "docker images | grep payment-schedule-calculator-backend | grep -E '(native)'"

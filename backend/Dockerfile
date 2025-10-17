@@ -1,36 +1,29 @@
-## Stage 1 : build with gradle builder image
-FROM gradle:8.12-jdk21-alpine AS build
-
-WORKDIR /app
-
-# Copy gradle configuration files
-COPY build.gradle.kts settings.gradle.kts gradle.properties ./
-COPY gradle ./gradle
-
-# Download dependencies
-RUN gradle dependencies --no-daemon || true
-
-# Copy source code
-COPY src ./src
-
-# Build the application
-RUN gradle build -x test --no-daemon
-
-## Stage 2 : create the docker final image
+# --- Stage 1 : Create the final, minimal JVM image ---
+# Utilisation de l'image UBI OpenJDK 21, optimisée pour les déploiements Quarkus.
+# NOTE : Cette image NE CONTIENT PAS le code pour compiler Gradle, uniquement le runtime Java.
 FROM registry.access.redhat.com/ubi8/openjdk-21:1.20
 
-ENV LANGUAGE='en_US:en'
+# Set a language environment variable (Bonne pratique)
+ENV LANG='en_US.UTF-8'
 
-# Copy the application jar and dependencies
-COPY --from=build --chown=185 /app/build/quarkus-app/lib/ /deployments/lib/
-COPY --from=build --chown=185 /app/build/quarkus-app/*.jar /deployments/
-COPY --from=build --chown=185 /app/build/quarkus-app/app/ /deployments/app/
-COPY --from=build --chown=185 /app/build/quarkus-app/quarkus/ /deployments/quarkus/
+# Définition du répertoire de déploiement standard
+WORKDIR /deployments
 
-EXPOSE 8080
+# COPIE CRUCIALE : 
+# Ces fichiers DOIVENT avoir été générés par une commande Gradle/Quarkus
+# (par exemple : ./gradlew build) AVANT d'exécuter la commande 'docker build'.
+# Nous copions le contenu du dossier de l'hôte (où build/quarkus-app se trouve)
+# vers le dossier /deployments du conteneur.
+# L'utilisateur 185 (jboss) a les permissions nécessaires.
+COPY build/quarkus-app /deployments
+
+# Set user and expose port (Standard pour UBI/Quarkus)
 USER 185
+EXPOSE 8080
 
-ENV JAVA_OPTS_APPEND="-Dquarkus.http.host=0.0.0.0 -Djava.util.logging.manager=org.jboss.logmanager.LogManager"
-ENV JAVA_APP_JAR="/deployments/quarkus-run.jar"
-
-ENTRYPOINT [ "/opt/jboss/container/java/run/run-java.sh" ]
+# Définition de la commande pour lancer l'application (Standard Quarkus)
+# Utilise les propriétés du fichier application.properties inclus dans le build.
+CMD ["java", \
+    "-Dquarkus.http.host=0.0.0.0", \
+    "-Djava.util.logging.manager=org.jboss.logmanager.LogManager", \
+    "-jar", "quarkus-run.jar"]

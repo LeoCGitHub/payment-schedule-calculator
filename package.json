@@ -32,7 +32,7 @@
     "docker:down:native": "docker compose -f docker-compose.native.yml down",
     "docker:logs": "docker compose logs -f",
     "docker:logs:native": "docker compose -f docker-compose.native.yml logs -f",
-    "deploy:local": "npm run build && npm run docker:build && npm run docker:up",
+    "deploy:local": "npm run docker:build && npm run docker:up",
     "deploy:local:native": "npm run build:native && npm run build:frontend && npm run docker:build:frontend && npm run docker:up:native"
   },
   "repository": {
